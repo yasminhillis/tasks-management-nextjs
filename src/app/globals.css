@@ -1,47 +1,47 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
-@theme {
+@theme inline {
   /* Colors */
-  --color-primary:            #063098;
-  --color-primary-container:  #0052CC;
-  --color-surface-highest:    #D7E2FF;
-  --color-surface-low:        #F1F3FF;
-  --color-background:         #F9F9FF;
+  --color-primary: #063098;
+  --color-primary-container: #0052cc;
+  --color-surface-highest: #d7e2ff;
+  --color-surface-low: #f1f3ff;
+  --color-background: #f9f9ff;
 
   /* Slate Neutrals */
-  --color-slate-900:          #041B3C;
-  --color-slate-600:          #4F5F7B;
-  --color-slate-200:          #C3C6D6;
+  --color-slate-900: #041b3c;
+  --color-slate-600: #4f5f7b;
+  --color-slate-200: #c3c6d6;
 
   /* Semantic */
-  --color-success:            #4CAF82;
-  --color-error:              #C0392B;
-  --color-warning:            #F5A623;
+  --color-success: #004e32;
+  --color-error: #c0392b;
+  --color-warning: #f5a623;
 
   /* Typography */
-  --font-sans:                var(--font-inter), sans-serif;
+  --font-sans: var(--font-inter), sans-serif;
 
   /* Border Radius */
-  --radius-sm:                0.25rem;
-  --radius-md:                0.5rem;
-  --radius-lg:                0.75rem;
-  --radius-xl:                1rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
 
   /* Spacing (8pt grid) */
-  --spacing-1:                0.25rem;
-  --spacing-2:                0.5rem;
-  --spacing-3:                0.75rem;
-  --spacing-4:                1rem;
-  --spacing-6:                1.5rem;
-  --spacing-8:                2rem;
-  --spacing-10:               2.5rem;
-  --spacing-12:               3rem;
-  --spacing-16:               4rem;
+  --spacing-1: 0.25rem;
+  --spacing-2: 0.5rem;
+  --spacing-3: 0.75rem;
+  --spacing-4: 1rem;
+  --spacing-6: 1.5rem;
+  --spacing-8: 2rem;
+  --spacing-10: 2.5rem;
+  --spacing-12: 3rem;
+  --spacing-16: 4rem;
 }
 
 body {
   background-color: var(--color-background);
-  font-family:      var(--font-sans);
-  color:            var(--color-slate-900);
+  font-family: var(--font-sans);
+  color: var(--color-slate-900);
   -webkit-font-smoothing: antialiased;
 }

@@ -1,0 +1,199 @@
+'use client';
+import Link from 'next/link';
+import { SignupSchema } from '@/validations/auth';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+
+type FormData = z.infer<typeof SignupSchema>;
+
+export default function SignUpForm() {
+
+  const [apiError, setApiError] = useState('')
+
+  const router = useRouter()
+
+  const {
+    register,
+    watch,
+    formState: { errors, isSubmitting },
+    handleSubmit,
+    reset
+  } = useForm<FormData>({
+    resolver: zodResolver(SignupSchema),
+    mode: 'onChange',
+  });
+
+  const navigateToProjects = () => {
+    router.push('/projects')
+  }
+
+  async function onSubmit(data: FormData){
+    try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/signup`, {
+            method: 'POST', 
+            headers: {
+                'Content-Type': 'application/json',
+                'apiKey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+            }, 
+            body: JSON.stringify({
+                email: data.email, 
+                password: data.password, 
+                data: {
+                    name: data.name, 
+                    department: data.jobTitle
+                }
+            })
+        })
+        if (!res.ok) {
+            const error = await res.json();
+            setApiError(error.msg || 'Something went wrong. Please try again')
+            return;
+        }
+        navigateToProjects()
+        reset()
+    } catch(error) {
+        setApiError('Network error. Please check your connection')
+    }
+  }
+
+  const password = watch("password") ?? ''; 
+  
+  const hasMinLength = password.length >= 8; 
+  const hasMixedCase = /[A-Z]/.test(password) && /[a-z]/.test(password) && /[0-9]/.test(password);
+  const hasSpecialChar = /[^a-zA-Z0-9]/.test(password)
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col space-y-4">
+      <div className="flex flex-col space-y-2">
+        <label className="font-bold text-[10px] uppercase text-slate-600">
+          Name
+        </label>
+        <input
+          {...register('name')}
+          className="bg-surface-highest text-base p-3 rounded-sm text-[#737685] focus:outline-none focus:border focus:border-primary-container"
+          type="text"
+          placeholder="Enter your full name"
+        />
+        <span className="text-slate-200 text-[10px]">
+          3-50 characters, letters only.
+        </span>
+        {errors.name && (
+          <div className="text-red-500">{errors.name.message}</div>
+        )}
+      </div>
+
+      <div className="flex flex-col space-y-2">
+        <label className="font-bold text-[10px] uppercase text-slate-600">
+          Email
+        </label>
+        <input
+          {...register('email')}
+          className="bg-surface-highest text-base p-3 rounded-sm text-[#737685] focus:outline-none focus:border focus:border-primary-container"
+          type="text"
+          placeholder="yourname@company.com"
+        />
+        {errors.email && (
+          <div className="text-red-500">{errors.email.message}</div>
+        )}
+      </div>
+
+      <div className="flex flex-col space-y-2">
+        <label className="font-bold text-[10px] uppercase text-slate-600">
+          JoB Title (Optional)
+        </label>
+        <input
+          {...register('jobTitle')}
+          className="bg-surface-highest text-base p-3 rounded-sm text-[#737685] focus:outline-none focus:border focus:border-primary-container"
+          type="text"
+          placeholder="e.g. Project Manager"
+        />
+        {errors.jobTitle && (
+          <div className="text-red-500">{errors.jobTitle.message}</div>
+        )}
+      </div>
+
+      <div className="md:flex gap-3">
+        <div className="flex flex-col space-y-2 w-full mb-2 md:mb-0">
+          <label className="font-bold text-[10px] uppercase text-slate-600">
+            Password
+          </label>
+          <input
+            {...register('password')}
+            className="bg-surface-highest text-base p-3 rounded-sm text-[#737685] focus:outline-none focus:border focus:border-primary-container"
+            type="password"
+            placeholder="Minimum 8 characters"
+          />
+          {errors.password && (
+            <div className="text-red-500">{errors.password.message}</div>
+          )}
+        </div>
+
+        <div className="flex flex-col space-y-2 w-full">
+          <label className="font-bold text-[10px] uppercase text-slate-600">
+            Cofirm Password
+          </label>
+          <input
+            {...register('confirmPassword')}
+            className="bg-surface-highest text-base p-3 rounded-sm text-[#737685] focus:outline-none focus:border focus:border-primary-container"
+            type="password"
+            placeholder="Repeat your password"
+          />
+          {errors.confirmPassword && (
+            <div className="text-red-500">{errors.confirmPassword.message}</div>
+          )}
+        </div>
+      </div>
+
+      <div className="bg-surface-highest text-[#434654] text-xs font-sans p-4 rounded-md hidden md:block">
+        <ul className="space-y-2">
+          <li className="flex items-center gap-1">
+            <span
+              className={`material-symbols-outlined ${hasMinLength ? 'text-success' : 'text-[#737685]'}`}
+              style={{ fontSize: '14px' }}
+            >
+              {hasMinLength ? 'check_circle' : 'radio_button_unchecked'}
+            </span>
+            At least 8 characters
+          </li>
+
+          <li className="flex items-center gap-1">
+            <span
+              className={`material-symbols-outlined text-xs ${hasMixedCase ? 'text-success' : 'text-[#737685]'}`}
+              style={{ fontSize: '14px' }}
+            >
+              {hasMixedCase ? 'check_circle' : 'radio_button_unchecked'}
+            </span>
+            One uppercase, lowercase, and digit
+          </li>
+
+          <li className="flex items-center gap-1">
+            <span
+              className={`material-symbols-outlined text-xs ${hasSpecialChar ? 'text-success' : 'text-[#737685]'} `}
+              style={{ fontSize: '14px' }}
+            >
+              {hasSpecialChar ? 'check_circle' : 'radio_button_unchecked'}
+            </span>
+            One special character
+          </li>
+        </ul>
+      </div>
+      {apiError && <div className='text-red-600 bg-red-200 p-4'>{apiError}</div>}
+      <button
+        type="submit"
+        disabled={isSubmitting}
+        className="disabled:bg-gray-500 disabled:cursor-not-allowed cursor-pointer text-white font-semibold px-2 py-4 rounded-sm font-sans bg-radial from-[#003D9B] to-[#0052CC] hover:from-[#1259cb] hover:to-[#0657d1] transition-colors"
+      >
+        {isSubmitting ? "Loading..." : "Create Account"}
+      </button>
+      <p className="text-slate-600 text-sm text-center">
+        Already have an account?{' '}
+        <Link href={'/'} className="font-semibold text-[#003D9B]">
+          Log in
+        </Link>
+      </p>
+    </form>
+  );
+}
