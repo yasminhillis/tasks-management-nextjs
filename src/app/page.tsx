@@ -1,9 +1,12 @@
-import Image from 'next/image';
+import { redirect } from 'next/navigation';
+import { cookies } from 'next/headers'
 
-export default function Home() {
-  return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      page
-    </div>
-  );
+export default async function Home() {
+  const cookieStore = await cookies();
+  const token = cookieStore.get('access_token')
+  if (!token) {
+    redirect('/login')
+  } else {
+    redirect('/projects')
+  }
 }

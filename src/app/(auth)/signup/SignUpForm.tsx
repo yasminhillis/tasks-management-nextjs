@@ -1,13 +1,10 @@
 'use client';
 import Link from 'next/link';
-import { SignupSchema } from '@/validations/auth';
+import { SignupSchema, type SignupFormData } from '@/validations/signup.schema';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-
-type FormData = z.infer<typeof SignupSchema>;
 
 export default function SignUpForm() {
 
@@ -21,7 +18,7 @@ export default function SignUpForm() {
     formState: { errors, isSubmitting },
     handleSubmit,
     reset
-  } = useForm<FormData>({
+  } = useForm<SignupFormData>({
     resolver: zodResolver(SignupSchema),
     mode: 'onChange',
   });
@@ -30,13 +27,13 @@ export default function SignUpForm() {
     router.push('/projects')
   }
 
-  async function onSubmit(data: FormData){
+  async function onSubmit(data: SignupFormData){
     try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/signup`, {
             method: 'POST', 
             headers: {
                 'Content-Type': 'application/json',
-                'apiKey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+                'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
             }, 
             body: JSON.stringify({
                 email: data.email, 
@@ -52,8 +49,8 @@ export default function SignUpForm() {
             setApiError(error.msg || 'Something went wrong. Please try again')
             return;
         }
-        navigateToProjects()
         reset()
+        navigateToProjects()
     } catch(error) {
         setApiError('Network error. Please check your connection')
     }
@@ -190,7 +187,7 @@ export default function SignUpForm() {
       </button>
       <p className="text-slate-600 text-sm text-center">
         Already have an account?{' '}
-        <Link href={'/'} className="font-semibold text-[#003D9B]">
+        <Link href="/login" className="font-semibold text-[#003D9B]">
           Log in
         </Link>
       </p>
