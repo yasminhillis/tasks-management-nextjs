@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image"
 import Link  from 'next/link';
 import { useState, useRef, useEffect } from "react";
-
+import { useSearchParams } from "next/navigation";
 
 export default function ForgotPasswordForm(){
     const { register, handleSubmit, setError, reset, formState: { errors, isSubmitting } } = useForm<ForgotPasswordFormData>({
@@ -19,6 +19,8 @@ export default function ForgotPasswordForm(){
     const [resendTrialsLeft, setResendTrialsLeft] = useState<number>(3); 
     const [userEmail, setUserEmail] = useState('');
     const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+    const searchParams = useSearchParams();
+    const urlError = searchParams.get('error');
 
     useEffect(() => {
         return () => stopTimer()
@@ -108,6 +110,7 @@ export default function ForgotPasswordForm(){
     return (
         <>
         <form onSubmit={handleSubmit(onSubmit)} className="bg-white p-8 font-sans rounded-md mb-6 shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
+            { urlError && <div className="text-red-500 bg-red-600/10 p-3 mb-3 rounded-sm">{urlError}</div> }
             <div className="bg-surface-highest w-[48px] mx-auto h-[48px] rounded-lg flex items-center mb-6">
                 <Image className="mx-auto " src="/lock-reset.png" alt="lock rest icon" width={20} height={20}/>
             </div>
@@ -118,8 +121,8 @@ export default function ForgotPasswordForm(){
                 <label className="uppercase font-bold text-xs text-[#434654]" htmlFor="email">Email Address</label>
                 <input className="bg-surface-highest px-4 py-3 rounded-xs text-[#737685] mb-4 focus:outline-none focus:border focus:border-primary-container" {...register("email")} id="email" type="text" placeholder="Enter your email" />
             </div>
-            {errors.email && <div className="text-red-500 px-2 py-3 mb-2 text-center">{errors.email?.message}</div>}
-            {errors.root && <div className="text-red-500">{errors.root?.message}</div>}
+            {errors.email && <div className="text-red-500 px-2 py-3 mb-2 text-center bg-red-600/10 p-3 mb-3 rounded-sm">{errors.email?.message}</div>}
+            {errors.root && <div className="text-red-500 bg-red-600/10 p-3 mb-3 rounded-sm">{errors.root?.message}</div>}
             <button disabled={isSubmitting} className="text-white bg-linear-to-r from-[#003D9B] to-[#0052CC] hover:from-[#1259cb] hover:to-[#0657d1] transition-colors py-3 w-full font-semibold text-sm cursor-pointer mb-10 disabled:opacity-50" type="submit">
                 {isSubmitting ? 'Sending...' : 'Send Reset Link'}
             </button>
