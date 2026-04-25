@@ -52,7 +52,7 @@ export default function LoginForm(){
             <div className="flex flex-col gap-2">
                 <div className="flex items-center justify-between">
                     <label className="uppercase text-xs font-bold" htmlFor="">Password</label>
-                    <Link href="/forget-password" className="text-[#003D9B] text-[11px] font-bold hover:text-[#2b76e8] transition-colors">Forgot?</Link>
+                    <Link href="/forgot-password" className="text-[#003D9B] text-[11px] font-bold hover:text-[#2b76e8] transition-colors">Forgot?</Link>
                 </div>
 
                 <div className="relative">
@@ -63,19 +63,21 @@ export default function LoginForm(){
             </div>
 
             <div className="flex gap-2">
-                <input id="remember-me" type="checkbox" name="" placeholder="Remember Me" className="cursor-pointer"/>
+                <input id="remember-me" {...register("rememberMe")} type="checkbox" placeholder="Remember Me" className="cursor-pointer"/>
                 <label htmlFor="remember-me" className="text-[#434654] text-sm font-medium cursor-pointer">Remember Me</label>
             </div>
 
             {errors.root && <div className="text-red-500">{errors.root.message}</div>}
 
-            <button type="submit" disabled={isSubmitting} className="cursor-pointer bg-linear-to-r from-[#003D9B] to-[#0052CC] hover:from-[#1259cb] hover:to-[#0657d1] transition-colors text-white px-2 py-4 rounded-md sm:rounded-xs mb-8">
+            <button type="submit" disabled={isSubmitting} className="cursor-pointer bg-linear-to-r from-[#003D9B] to-[#0052CC] hover:from-[#1259cb] hover:to-[#0657d1] transition-colors text-white px-2 py-4 rounded-md sm:rounded-xs mb-8 disabled:opacity-50">
 
                   <span className="sm:hidden flex items-center justify-center gap-2">
-                    Sign In
+                   { isSubmitting ? 'Loading...' : 'Sign In' }
+
                     <Image src="/arrow.png" height={13} width={13} alt="arrow icon"/>
+                    
                 </span> <span className="hidden sm:inline">
-                    Log In
+                    { isSubmitting ? 'Loading...' : 'Log In' }
                 </span>
             </button>
 

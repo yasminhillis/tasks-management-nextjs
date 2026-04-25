@@ -181,7 +181,7 @@ export default function SignUpForm() {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="disabled:bg-gray-500 disabled:cursor-not-allowed cursor-pointer text-white font-semibold px-2 py-4 rounded-sm font-sans bg-radial from-[#003D9B] to-[#0052CC] hover:from-[#1259cb] hover:to-[#0657d1] transition-colors"
+        className="disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer text-white font-semibold px-2 py-4 rounded-sm font-sans bg-radial from-[#003D9B] to-[#0052CC] hover:from-[#1259cb] hover:to-[#0657d1] transition-colors"
       >
         {isSubmitting ? "Loading..." : "Create Account"}
       </button>
