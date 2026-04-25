@@ -9,6 +9,8 @@ function isTokenExpired(token: string): boolean {
 export async function middleware(req: NextRequest){
     const accessToken = req.cookies.get('access_token')?.value; 
     const refreshToken = req.cookies.get('refresh_token')?.value; 
+    const rememberMe = req.cookies.get('remember_me')?.value === 'true'
+    const maxAge = 60 * 60 * 24 * 30; 
 
     if (!accessToken || !refreshToken) {
         return NextResponse.redirect(new URL('/login', req.url))
@@ -33,8 +35,8 @@ export async function middleware(req: NextRequest){
     const data = await res.json(); 
     const response = NextResponse.next(); 
 
-    response.cookies.set('access_token', data.access_token, { httpOnly: true, path: '/' })
-    response.cookies.set('refresh_token', data.refresh_token, { httpOnly: true, path: '/' })
+    response.cookies.set('access_token', data.access_token, { httpOnly: true, path: '/', maxAge })
+    response.cookies.set('refresh_token', data.refresh_token, { httpOnly: true, path: '/', maxAge })
 
     return response 
 }

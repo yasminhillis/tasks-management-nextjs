@@ -28,5 +28,10 @@ export async function POST(req: Request){
         path: '/'
     })
 
+    cookieStore.set('remember_me', String(body.rememberMe), {
+        path: '/', 
+        maxAge: 60 * 60 * 24 * 30
+    })
+
     return Response.json({user: data.user})
 }
