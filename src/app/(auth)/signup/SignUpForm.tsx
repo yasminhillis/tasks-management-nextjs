@@ -149,7 +149,7 @@ export default function SignUpForm() {
           <li className="flex items-center gap-1">
             <span
               className={`material-symbols-outlined ${hasMinLength ? 'text-success' : 'text-[#737685]'}`}
-              style={{ fontSize: '14px' }}
+              style={{ fontSize: '14px', fontVariationSettings: "'FILL' 1" }}
             >
               {hasMinLength ? 'check_circle' : 'radio_button_unchecked'}
             </span>
@@ -159,7 +159,7 @@ export default function SignUpForm() {
           <li className="flex items-center gap-1">
             <span
               className={`material-symbols-outlined text-xs ${hasMixedCase ? 'text-success' : 'text-[#737685]'}`}
-              style={{ fontSize: '14px' }}
+              style={{ fontSize: '14px', fontVariationSettings: "'FILL' 1" }}
             >
               {hasMixedCase ? 'check_circle' : 'radio_button_unchecked'}
             </span>
@@ -169,7 +169,7 @@ export default function SignUpForm() {
           <li className="flex items-center gap-1">
             <span
               className={`material-symbols-outlined text-xs ${hasSpecialChar ? 'text-success' : 'text-[#737685]'} `}
-              style={{ fontSize: '14px' }}
+              style={{ fontSize: '14px', fontVariationSettings: "'FILL' 1" }}
             >
               {hasSpecialChar ? 'check_circle' : 'radio_button_unchecked'}
             </span>

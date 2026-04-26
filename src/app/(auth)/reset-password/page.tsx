@@ -1,3 +1,6 @@
+import ResetPasswordForm from './ResetPasswordForm'
 export default function ResetPassword(){
-    return <div>reset password</div>
+    return <div>
+        <ResetPasswordForm />
+    </div>
 }
