@@ -35,7 +35,7 @@ export default function ForgotPasswordForm(){
 
     function startTimer(){
         if (intervalRef.current) clearInterval(intervalRef.current)
-        let time = 30; 
+        let time = 300; 
         setEnableResendButton(false)
         intervalRef.current = setInterval(() => {
             if (time <= 0) {
