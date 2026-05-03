@@ -1,46 +1,57 @@
-import { NextRequest, NextResponse } from 'next/server'; 
+import { NextRequest, NextResponse } from 'next/server';
 
 function isTokenExpired(token: string): boolean {
-    const payload = JSON.parse(atob(token.split('.')[1])); 
-    const now = Math.floor(Date.now() / 1000);
-    return payload.exp < now
+  const payload = JSON.parse(atob(token.split('.')[1]));
+  const now = Math.floor(Date.now() / 1000);
+  return payload.exp < now;
 }
 
-export async function middleware(req: NextRequest){
-    const accessToken = req.cookies.get('access_token')?.value; 
-    const refreshToken = req.cookies.get('refresh_token')?.value; 
-    const rememberMe = req.cookies.get('remember_me')?.value === 'true'
-    const maxAge = 60 * 60 * 24 * 30; 
+export async function middleware(req: NextRequest) {
+  const accessToken = req.cookies.get('access_token')?.value;
+  const refreshToken = req.cookies.get('refresh_token')?.value;
+  const rememberMe = req.cookies.get('remember_me')?.value === 'true';
+  const maxAge = 60 * 60 * 24 * 30;
 
-    if (!accessToken || !refreshToken) {
-        return NextResponse.redirect(new URL('/login', req.url))
+  if (!accessToken || !refreshToken) {
+    return NextResponse.redirect(new URL('/login', req.url));
+  }
+
+  if (!isTokenExpired(accessToken)) {
+    return NextResponse.next();
+  }
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/token?grant_type=refresh_token`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      },
+      body: JSON.stringify({ refresh_token: refreshToken }),
     }
+  );
 
-    if (!isTokenExpired(accessToken)) {
-        return NextResponse.next()
-    }
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/token?grant_type=refresh_token`, {
-        method: 'POST', 
-        headers: {
-            'Content-Type': 'application/json', 
-            'apikey':  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-        },
-        body: JSON.stringify({ refresh_token: refreshToken })
-    })
+  if (!res.ok) {
+    return NextResponse.redirect(new URL('/login', req.url));
+  }
 
-    if (!res.ok) {
-        return NextResponse.redirect(new URL('/login', req.url))
-    }
+  const data = await res.json();
+  const response = NextResponse.next();
 
-    const data = await res.json(); 
-    const response = NextResponse.next(); 
+  response.cookies.set('access_token', data.access_token, {
+    httpOnly: true,
+    path: '/',
+    maxAge,
+  });
+  response.cookies.set('refresh_token', data.refresh_token, {
+    httpOnly: true,
+    path: '/',
+    maxAge,
+  });
 
-    response.cookies.set('access_token', data.access_token, { httpOnly: true, path: '/', maxAge })
-    response.cookies.set('refresh_token', data.refresh_token, { httpOnly: true, path: '/', maxAge })
-
-    return response 
+  return response;
 }
 
 export const config = {
-    matcher: ['/projects/:path*', '/dashboard/:path*']
-}
+  matcher: ['/projects/:path*', '/dashboard/:path*'],
+};

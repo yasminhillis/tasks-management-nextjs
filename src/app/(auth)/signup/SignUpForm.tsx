@@ -7,60 +7,63 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function SignUpForm() {
+  const [apiError, setApiError] = useState('');
 
-  const [apiError, setApiError] = useState('')
-
-  const router = useRouter()
+  const router = useRouter();
 
   const {
     register,
     watch,
     formState: { errors, isSubmitting },
     handleSubmit,
-    reset
+    reset,
   } = useForm<SignupFormData>({
     resolver: zodResolver(SignupSchema),
     mode: 'onChange',
   });
 
   const navigateToProjects = () => {
-    router.push('/projects')
-  }
+    router.push('/projects');
+  };
 
-  async function onSubmit(data: SignupFormData){
+  async function onSubmit(data: SignupFormData) {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/signup`, {
-            method: 'POST', 
-            headers: {
-                'Content-Type': 'application/json',
-                'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-            }, 
-            body: JSON.stringify({
-                email: data.email, 
-                password: data.password, 
-                data: {
-                    name: data.name, 
-                    department: data.jobTitle
-                }
-            })
-        })
-        if (!res.ok) {
-            const error = await res.json();
-            setApiError(error.msg || 'Something went wrong. Please try again')
-            return;
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/signup`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+          },
+          body: JSON.stringify({
+            email: data.email,
+            password: data.password,
+            data: {
+              name: data.name,
+              department: data.jobTitle,
+            },
+          }),
         }
-        reset()
-        navigateToProjects()
-    } catch(error) {
-        setApiError('Network error. Please check your connection')
+      );
+      if (!res.ok) {
+        const error = await res.json();
+        setApiError(error.msg || 'Something went wrong. Please try again');
+        return;
+      }
+      reset();
+      navigateToProjects();
+    } catch (error) {
+      setApiError('Network error. Please check your connection');
     }
   }
 
-  const password = watch("password") ?? ''; 
-  
-  const hasMinLength = password.length >= 8; 
-  const hasMixedCase = /[A-Z]/.test(password) && /[a-z]/.test(password) && /[0-9]/.test(password);
-  const hasSpecialChar = /[^a-zA-Z0-9]/.test(password)
+  const password = watch('password') ?? '';
+
+  const hasMinLength = password.length >= 8;
+  const hasMixedCase =
+    /[A-Z]/.test(password) && /[a-z]/.test(password) && /[0-9]/.test(password);
+  const hasSpecialChar = /[^a-zA-Z0-9]/.test(password);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col space-y-4">
@@ -177,13 +180,15 @@ export default function SignUpForm() {
           </li>
         </ul>
       </div>
-      {apiError && <div className='text-red-600 bg-red-200 p-4'>{apiError}</div>}
+      {apiError && (
+        <div className="text-red-600 bg-red-200 p-4">{apiError}</div>
+      )}
       <button
         type="submit"
         disabled={isSubmitting}
         className="disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer text-white font-semibold px-2 py-4 rounded-sm font-sans bg-radial from-[#003D9B] to-[#0052CC] hover:from-[#1259cb] hover:to-[#0657d1] transition-colors"
       >
-        {isSubmitting ? "Loading..." : "Create Account"}
+        {isSubmitting ? 'Loading...' : 'Create Account'}
       </button>
       <p className="text-slate-600 text-sm text-center">
         Already have an account?{' '}
