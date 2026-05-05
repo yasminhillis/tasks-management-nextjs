@@ -1,4 +1,4 @@
-# Project Management System
+# Tasly - Task Management
 
 A modern, scalable Project Management System built to help teams organize work, track progress, and collaborate efficiently.
 
