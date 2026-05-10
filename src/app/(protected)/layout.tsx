@@ -7,7 +7,7 @@ export default function ProtectedLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex relative">
+    <div className="flex relative min-h-screen">
       <Sidebar />
       <div className="flex flex-col flex-1 relative">
         <Navbar />

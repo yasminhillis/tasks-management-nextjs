@@ -19,14 +19,16 @@ export default function Sidebar() {
         ></div>
       )}
       <div
-        className={`flex flex-col justify-between h-full bg-[#F1F3FF]
+        className={`flex flex-col justify-between bg-[#F1F3FF]
                     ${isSidebarOpen ? 'w-[224px]' : 'w-[70px]'}
                     fixed top-0 left-0 z-50
                     ${isMobileOpen ? 'block' : 'hidden'}
-                   
-                    md:block md:relative md:top-auto md:left-auto md:z-auto min-h-screen `}
+
+                    md:flex md:sticky md:top-0 md:min-h-screen md:z-auto
+                    md:left-auto md:relative-none overflow-y-auto
+                    `}
       >
-        <div className="flex flex-col justify-between min-h-screen">
+        <div className="flex flex-col justify-between h-full">
           <div>
             <header className="pl-7 pb-8 mt-4 pr-4 backdrop-blur-md">
               <Logo isExpanded={isSidebarOpen} />
@@ -56,7 +58,7 @@ export default function Sidebar() {
               ))}
             </div>
           </div>
-          <div className="text-sm font-sans font-medium flex flex-col">
+          <div className="text-sm font-sans font-medium flex flex-col justify-start border-t border-t-[#C3C6D633]">
             <div
               className={`text-slate-900 hidden md:flex md:items-center md:gap-2 md:px-7 md:py-[10px] hover:text-slate-600 transition-colors cursor-pointer ${isSidebarOpen ? '' : 'rotate-180'}`}
               onClick={() => dispatch(toggleSidebar())}
