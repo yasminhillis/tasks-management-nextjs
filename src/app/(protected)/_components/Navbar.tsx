@@ -81,7 +81,7 @@ export default function NavbarClient() {
 
   return (
     <>
-    <header className={`font-sans z-90 flex items-center md:justify-end px-6 py-3 border-b border-b-[#0000001A] bg-[#F9F9FF] w-full`}>
+    <header className={`font-sans z-90 flex items-center justify-between md:justify-end px-5 py-3 md:px-6 md:py-3 border-b border-b-[#0000001A] bg-[#F9F9FF] w-full`}>
       {logoutStatus && <div className={`fixed bottom-5 right-5 max-w-sm px-4 py-3 md:bottom-6 md:right-6 max-md:bottom-16 max-md:right-0 max-md:mx-3 max-md:rounded-lg max-md:left-0 max-md:max-w-full
         ${isLogoutSuccessful ? 'bg-[#82F9BE]/30': 'bg-red-600/7'} ${isLogoutSuccessful ? 'text-[#005235]  border border-green-500': 'text-red-600 border border-red-400'}  flex items-center justify-center rounded-lg gap-2`}>
         <span className="material-symbols-outlined">
@@ -100,7 +100,7 @@ export default function NavbarClient() {
       >
         <span className="material-symbols-outlined">menu</span>
       </button>
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2 md:gap-4">
         <div className="flex flex-col items-end">
           <h1 className="text-slate-900 font-semibold text-sm">{name}</h1>
           <h2 className="text-[#003D9B] uppercase font-bold text-[10px] tracking-[1px]">
