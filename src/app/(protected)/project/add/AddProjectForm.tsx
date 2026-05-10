@@ -31,12 +31,9 @@ export default function AddProjectForm(){
                 method: 'POST',
                 body: JSON.stringify(data)
             })
-            // throw new Error();
+
             if (!res.ok) {
-                // throw new Error();
-                const error = await res.json();
-                console.log(error, 'error11');
-                
+                const error = await res.json();                
                 setError('root', {
                     message: error.message
                 })
@@ -45,10 +42,6 @@ export default function AddProjectForm(){
             setIsAddSuccessful(true)
             reset()
         } catch(error) {
-            // console.log(error.message);
-            // console.log(error instanceof TypeError);
-            // console.log(error.message);
-            
             if (error instanceof TypeError && error.message === 'Failed to fetch') {
                 setError('root', {
                     message: 'Please check your connection and try again'

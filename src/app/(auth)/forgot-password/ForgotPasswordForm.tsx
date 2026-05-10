@@ -76,9 +76,7 @@ export default function ForgotPasswordForm() {
           }),
         }
       );
-      // throw new Error("error here");
-      // const res = { ok: false, json: async () => ({ msg: "Something went wrong" }) }
-
+      
       if (!res.ok) {
         const error = await res.json();
         setError('root', {
