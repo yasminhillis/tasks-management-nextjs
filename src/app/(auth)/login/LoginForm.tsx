@@ -39,7 +39,15 @@ export default function LoginForm() {
       reset();
       router.push('/projects');
     } catch (error) {
-      console.log(error);
+      if (error instanceof TypeError && error.message === 'Failed to fetch') {
+                setError('root', {
+                    message: 'Please check your connection and try again'
+                })
+            } else {
+                setError('root', {
+                    message: 'Something went wrong. Please try again'
+                })
+            }
     }
   }
   return (

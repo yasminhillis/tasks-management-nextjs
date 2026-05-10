@@ -33,7 +33,6 @@ export default function ResetPasswordForm() {
 
   const searchParams = useSearchParams();
   const token = searchParams.get('access_token');
-  // console.log(token, 'token');
 
   async function onSubmit(data: ResetPasswordFormData) {
     try {
@@ -52,8 +51,6 @@ export default function ResetPasswordForm() {
 
       if (!res.ok) {
         const error = await res.json();
-        // console.log(error, 'error');
-
         setError('root', {
           message: error.message || error.msg || 'Something went wrong',
         });
@@ -145,7 +142,6 @@ export default function ResetPasswordForm() {
           <h2 className="uppercase text-slate-600 text-[11px] font-bold tracking-[0.55px] mb-4">
             Security Requirements
           </h2>
-          {/* ["8 - 64 characters", "Uppercase & Lowercase", "At least one digit", "Special character (e.g. !@#$)"] */}
           <ul>
             <li className="flex items-center gap-[6px] text-slate-900 text-[13px] mb-2">
               <span
