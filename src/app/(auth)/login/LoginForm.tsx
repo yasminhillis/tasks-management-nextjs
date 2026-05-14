@@ -37,7 +37,7 @@ export default function LoginForm() {
         return;
       }
       reset();
-      router.push('/projects');
+      router.push('/project');
     } catch (error) {
       if (error instanceof TypeError && error.message === 'Failed to fetch') {
                 setError('root', {

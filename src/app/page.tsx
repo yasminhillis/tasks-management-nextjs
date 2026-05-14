@@ -29,7 +29,7 @@ export default function Home() {
     async function checkAuth() {
       const res = await fetch('/api/auth/me');
       if (res.ok) {
-        router.push('/projects');
+        router.push('/project');
       } else {
         router.push('/login');
       }

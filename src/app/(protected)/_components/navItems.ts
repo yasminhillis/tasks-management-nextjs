@@ -3,7 +3,7 @@ export const navItems = [
       label: 'Projects',
       icon: 'folder_open',
       collapsedIcon: 'grid_view',
-      href: '/projects',
+      href: '/project',
       mobileIcon: 'grid_view',
       mobileLabel: 'Projects',
       mobileIconFilled: true
