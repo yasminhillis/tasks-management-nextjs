@@ -19,8 +19,8 @@ export async function POST(){
         }
     })
 
-    // cookieStore.delete('access_token');
-    // cookieStore.delete('refresh_token');
+    cookieStore.delete('access_token');
+    cookieStore.delete('refresh_token');
     
     if (!res.ok) {
        return Response.json({ message: 'Logout failed, please try again.'}, { status: 400 })

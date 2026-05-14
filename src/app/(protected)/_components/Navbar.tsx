@@ -41,6 +41,7 @@ export default function NavbarClient() {
   // console.log(isMobileOpen, 'isMobileOpen');
 
   function getInitials(name: string) {
+    if (!name) return;
     let nameParts = name.split(' ');
 
     if (nameParts.length >= 2) {
