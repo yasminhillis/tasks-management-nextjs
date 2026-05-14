@@ -114,7 +114,7 @@ export default function AddProjectForm(){
                 <button disabled={isSubmitting} type="submit" className="order-1 md:order-2 text-white px-6 py-4 w-full md:max-w-[161px] rounded-md md:rounded-sm bg-radial from-[#003D9B] to-[#0052CC] hover:from-[#1259cb] hover:to-[#0657d1] transition-colors shadow-btn-primary cursor-pointer disabled:opacity-50">
                     {isSubmitting ? 'Loading...' : 'Create Project'}
                 </button>
-                <button onClick={() => router.push('/projects')} type="button" className="order-1 md:order-1 px-6 py-4 md:py-3 md:max-w-[96px] font-medium text-[#003D9B] w-full cursor-pointer hover:text-[#2b76e8] transition-colors">Back</button>
+                <button onClick={() => router.push('/project')} type="button" className="order-1 md:order-1 px-6 py-4 md:py-3 md:max-w-[96px] font-medium text-[#003D9B] w-full cursor-pointer hover:text-[#2b76e8] transition-colors">Back</button>
             </div>
         </form>
 
