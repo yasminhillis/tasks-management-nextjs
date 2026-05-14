@@ -207,6 +207,7 @@ This project demonstrates real-world engineering skills:
 ### Perfect for showcasing full-stack development ability.
 
 ## Future Improvements
+
 Notifications system
 Comments on tasks
 File attachments
@@ -218,4 +219,5 @@ Team permissions matrix
 Mobile app
 
 ## 👤 Author
-[Yasmin Ayman](https://github.com/yasminhillis) 
+
+[Yasmin Ayman](https://github.com/yasminhillis)

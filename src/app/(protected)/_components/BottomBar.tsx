@@ -14,7 +14,11 @@ export default function BottomBar() {
             key={navItem.label}
             href={navItem.href}
             className={`flex flex-col items-center justify-center max-w-[39px] max-h-[35px] gap-[2px] cursor-pointer ${isActive ? 'text-[#0052CC]' : ''} ${isActive ? 'font-bold' : 'font-normal'} hover:text-[#0052CC] hover:font-bold transition-colors`}
-            style={{fontVariationSettings: navItem.mobileIconFilled ? "'FILL'1" : "'FILL'0"}}
+            style={{
+              fontVariationSettings: navItem.mobileIconFilled
+                ? "'FILL'1"
+                : "'FILL'0",
+            }}
           >
             <span
               className="material-symbols-outlined w-[18px] h-[18px] text-[10px]"

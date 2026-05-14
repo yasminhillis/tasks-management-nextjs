@@ -22,42 +22,41 @@
   --font-sans: var(--font-inter), sans-serif;
 
   /* font size scale */
-  --font-size-display-lg: 3rem;       
-  --font-size-headline-lg: 2rem;       
-  --font-size-title-md: 1.125rem;      
+  --font-size-display-lg: 3rem;
+  --font-size-headline-lg: 2rem;
+  --font-size-title-md: 1.125rem;
   --font-size-body-md: 0.875rem;
   --font-size-body-lg: 1rem;
-  --font-size-btn-label: 1rem; 
-  --font-size-label-sm: 0.6875rem;       
-  --font-size-caption-md: 0.875rem;   
-  --font-size-title-lg: 1.25rem; 
+  --font-size-btn-label: 1rem;
+  --font-size-label-sm: 0.6875rem;
+  --font-size-caption-md: 0.875rem;
+  --font-size-title-lg: 1.25rem;
   --font-size-caption-xs: 0.75rem;
 
   /* line heights */
   --line-height-display-lg: 1.2;
-  --line-height-headline-lg: 2.5rem; 
-  --line-height-title-md: 1.6875rem;   
+  --line-height-headline-lg: 2.5rem;
+  --line-height-title-md: 1.6875rem;
   --line-height-body-md: 1.421875rem;
   --line-height-body-lg: 1.5rem;
   --line-height-btn-label: 1.5rem;
-  --line-height-label-sm: 1.03125rem;   
-  --line-height-caption-md: 1.25rem;   
+  --line-height-label-sm: 1.03125rem;
+  --line-height-caption-md: 1.25rem;
   --line-height-title-lg: 1.75rem;
   --line-height-caption-xs: 1rem;
 
   /* font weights */
-  --font-weight-medium: 500;           
+  --font-weight-medium: 500;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
-  --font-weight-regular: 400; 
+  --font-weight-regular: 400;
 
   /* letter spacing */
   --letter-spacing-tight: -0.02em;
-  --letter-spacing-normal: 0px;        
+  --letter-spacing-normal: 0px;
   --letter-spacing-wide: 0.05em;
-  --letter-spacing-label-sm: 0.06875rem; 
-  --letter-spacing-label-sm-tight: -0.034375rem; 
-
+  --letter-spacing-label-sm: 0.06875rem;
+  --letter-spacing-label-sm-tight: -0.034375rem;
 
   /* Border Radius */
   --radius-xs: 0.125rem;
@@ -76,15 +75,14 @@
   --spacing-10: 2.5rem;
   --spacing-12: 3rem;
   --spacing-16: 4rem;
-
-  
 }
 
 @theme {
-  --shadow-btn-primary: 0px 4px 6px -4px rgba(0,61,155,0.20), 
-                       0px 10px 15px -3px rgba(0,61,155,0.20);
+  --shadow-btn-primary:
+    0px 4px 6px -4px rgba(0, 61, 155, 0.2),
+    0px 10px 15px -3px rgba(0, 61, 155, 0.2);
 
-  --gradient-btn-primary: linear-gradient(135deg, #003D9B, #0052CC);                     
+  --gradient-btn-primary: linear-gradient(135deg, #003d9b, #0052cc);
 }
 
 body {
@@ -95,78 +93,77 @@ body {
 }
 
 @layer components {
-  
   .headline-lg {
-    font-size: var(--font-size-headline-lg);        
-    font-weight: var(--font-weight-semibold);       
-    line-height: var(--line-height-headline-lg);    
-    letter-spacing: var(--letter-spacing-normal);  
+    font-size: var(--font-size-headline-lg);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-headline-lg);
+    letter-spacing: var(--letter-spacing-normal);
     color: var(--color-slate-900);
   }
 
   .title-lg {
     font-size: var(--font-size-title-lg);
-    font-weight: var(--font-weight-semibold);     
+    font-weight: var(--font-weight-semibold);
     line-height: var(--line-height-title-lg);
     letter-spacing: var(--letter-spacing-normal);
     color: var(--color-slate-900);
   }
 
   .title-md {
-    font-size: var(--font-size-title-md);       
-    font-weight: var(--font-weight-medium);     
-    line-height: var(--line-height-title-md);   
+    font-size: var(--font-size-title-md);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-title-md);
     letter-spacing: var(--letter-spacing-normal);
-    color: var(--color-slate-900);              
+    color: var(--color-slate-900);
   }
 
   .body-md {
-    font-size: var(--font-size-body-md);        
-    font-weight: var(--font-weight-regular);    
-    line-height: var(--line-height-body-md);    
-    letter-spacing: var(--letter-spacing-normal); 
-    color: #434654;                             
+    font-size: var(--font-size-body-md);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-body-md);
+    letter-spacing: var(--letter-spacing-normal);
+    color: #434654;
   }
 
   .body-lg {
-    font-size: var(--font-size-body-lg);          
-    font-weight: var(--font-weight-regular);      
-    line-height: var(--line-height-body-lg);      
-    letter-spacing: var(--letter-spacing-normal); 
+    font-size: var(--font-size-body-lg);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-body-lg);
+    letter-spacing: var(--letter-spacing-normal);
     color: #434654;
   }
 
   .label-sm {
     font-size: var(--font-size-label-sm);
-    font-weight: var(--font-weight-bold);       
+    font-weight: var(--font-weight-bold);
     line-height: var(--line-height-label-sm);
-    letter-spacing: var(--letter-spacing-label-sm); 
+    letter-spacing: var(--letter-spacing-label-sm);
     text-transform: uppercase;
-    color: var(--color-slate-900);              
+    color: var(--color-slate-900);
   }
 
   .label-sm-muted {
     font-size: var(--font-size-label-sm);
     font-weight: var(--font-weight-bold);
     line-height: var(--line-height-label-sm);
-    letter-spacing: var(--letter-spacing-label-sm-tight); 
+    letter-spacing: var(--letter-spacing-label-sm-tight);
     text-transform: uppercase;
-    color: #737685;                             
+    color: #737685;
   }
 
   .caption-md {
-    font-size: var(--font-size-caption-md);       
-    font-weight: var(--font-weight-medium);       
-    line-height: var(--line-height-caption-md);  
-    letter-spacing: var(--letter-spacing-normal); 
+    font-size: var(--font-size-caption-md);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-caption-md);
+    letter-spacing: var(--letter-spacing-normal);
     color: #434654;
   }
 
   .caption-xs {
-    font-size: var(--font-size-caption-xs);       
-    font-weight: var(--font-weight-medium);       
-    line-height: var(--line-height-caption-xs);   
-    letter-spacing: var(--letter-spacing-normal); 
+    font-size: var(--font-size-caption-xs);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-caption-xs);
+    letter-spacing: var(--letter-spacing-normal);
     color: #434654;
   }
 
@@ -175,16 +172,16 @@ body {
     align-items: center;
     justify-content: center;
     padding: 10px 24px;
-    border-radius: var(--radius-xs);                
+    border-radius: var(--radius-xs);
     background: var(--gradient-btn-primary);
     box-shadow: var(--shadow-btn-primary);
     color: white;
-    font-weight: var(--font-weight-medium);         
+    font-weight: var(--font-weight-medium);
     letter-spacing: var(--letter-spacing-normal);
     cursor: pointer;
-    font-size: var(--font-size-btn-label);        /* 16px */
-    font-weight: var(--font-weight-semibold);     /* 600 */
-    line-height: var(--line-height-btn-label);    /* 24px */
+    font-size: var(--font-size-btn-label); /* 16px */
+    font-weight: var(--font-weight-semibold); /* 600 */
+    line-height: var(--line-height-btn-label); /* 24px */
     letter-spacing: var(--letter-spacing-normal); /* 0px */
     text-align: center;
     cursor: pointer;

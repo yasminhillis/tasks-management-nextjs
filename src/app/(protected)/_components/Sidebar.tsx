@@ -9,7 +9,7 @@ import { navItems } from './navItems';
 export default function Sidebar() {
   const { isMobileOpen, isSidebarOpen } = useAppSelector((state) => state.ui);
   const dispatch = useAppDispatch();
-  
+
   return (
     <>
       {isMobileOpen && (
@@ -42,7 +42,11 @@ export default function Sidebar() {
                   key={item.label}
                   className={`flex items-center text-[#041B3C99]  py-[10px] cursor-pointer text-sm font-medium focus:bg-white focus:text-[#003D9B] transition-colors rounded-sm hover:text-primary-container ${isSidebarOpen ? 'px-3 gap-2' : 'justify-center px-0'} visited:bg-white md:px-3 md:rounded-sm`}
                   href={item.href}
-                  style={{fontVariationSettings: item.mobileIconFilled ? "'FILL' 1" : "'FILL'0",}}
+                  style={{
+                    fontVariationSettings: item.mobileIconFilled
+                      ? "'FILL' 1"
+                      : "'FILL'0",
+                  }}
                 >
                   {isSidebarOpen ? (
                     <span className="material-symbols-outlined">

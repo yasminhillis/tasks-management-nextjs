@@ -1,7 +1,6 @@
 import { cookies } from 'next/headers';
 export async function GET() {
   const cookieStore = await cookies();
-  console.log(cookieStore, 'kk');
 
   const token = cookieStore.get('access_token');
 
@@ -25,7 +24,6 @@ export async function GET() {
   }
 
   const data = await res.json();
-  // console.log(data, 'data');
 
   return Response.json({
     authenticated: true,

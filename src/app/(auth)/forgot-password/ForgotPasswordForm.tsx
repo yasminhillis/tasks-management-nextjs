@@ -76,7 +76,7 @@ export default function ForgotPasswordForm() {
           }),
         }
       );
-      
+
       if (!res.ok) {
         const error = await res.json();
         setError('root', {
@@ -109,10 +109,6 @@ export default function ForgotPasswordForm() {
   }
 
   async function resendEmail() {
-    console.log(resendTrialsLeft, 'resendTrialsLeft');
-    // if (error instanceof TypeError && error.message === 'Too Many Requests') {
-
-    // }
     if (resendTrialsLeft === 0) return;
     let data = { email: userEmail };
     const success = await sendEmail(data);
@@ -189,35 +185,76 @@ export default function ForgotPasswordForm() {
       </form>
 
       {showSuccessMessage && (
-        <div className="flex flex-col w-[342px]  bg-[#82F9BE]/30 text-[#005235] backdrop-blur-md rounded-sm p-4 border border-[#0052351A] font-sans mb-10">
-          <div className="flex gap-3 mb-3">
-            <span
-              className="material-symbols-outlined items-center"
-              style={{ fontVariationSettings: "'FILL' 1" }}
-            >
-              check_circle
-            </span>
-            <p className="text-[#005235] font-sans text-xs">
-              If an account exists with this email, we've sent a password reset
-              link.
-            </p>
+        <>
+          <div className="flex flex-col w-[342px]  bg-[#82F9BE]/30 text-[#005235] backdrop-blur-md rounded-sm p-4 border border-[#0052351A] font-sans mb-10 md:hidden">
+            <div className="flex gap-3 mb-3">
+              <span
+                className="material-symbols-outlined items-center"
+                style={{ fontVariationSettings: "'FILL' 1" }}
+              >
+                check_circle
+              </span>
+              <p className="text-[#005235] font-sans text-xs">
+                If an account exists with this email, we've sent a password
+                reset link.
+              </p>
+            </div>
+
+            <hr className="text-[#0052351A] mb-3" />
+
+            <div className="flex items-center justify-between">
+              <p className="uppercase font-bold text-[11px] text-[#00523599]">
+                Didn't receive email?
+              </p>
+              <button
+                disabled={!enableResendButton || resendTrialsLeft === 0}
+                onClick={() => resendEmail()}
+                className="text-[#003D9B] uppercase text-[11px] tracking-[1.1px] font-bold cursor-pointer disabled:cursor-not-allowed"
+              >
+                {enableResendButton ? 'Resend' : `Resend in ${showTime}`}
+              </button>
+            </div>
           </div>
 
-          <hr className="text-[#0052351A] mb-3" />
-
-          <div className="flex items-center justify-between">
-            <p className="uppercase font-bold text-[11px] text-[#00523599] ">
-              Didn't receive email?
+          <div className="hidden md:flex flex-col w-[342px]  bg-[#82F9BE]/30 text-[#005235] backdrop-blur-md rounded-sm p-2 border border-[#0052351A] font-sans mb-6">
+            <div className="flex gap-3">
+              <span
+                className="material-symbols-outlined items-center"
+                style={{ fontVariationSettings: "'FILL' 1" }}
+              >
+                check_circle
+              </span>
+              <p className="text-[#005235] font-sans text-xs">
+                If an account exists with this email, we've sent a password
+                reset link.
+              </p>
+            </div>
+          </div>
+          <div className="flex flex-col items-center">
+            <p className="uppercase text-[11px] font-bold leading-[16.5px] tracking-[0.55px] uppercase text-[#434654] mb-3">
+              Didn't receive the email?
             </p>
             <button
               disabled={!enableResendButton || resendTrialsLeft === 0}
               onClick={() => resendEmail()}
-              className="text-[#003D9B] uppercase text-[11px] tracking-[1.1px] font-bold cursor-pointer disabled:cursor-not-allowed"
+              className="bg-[#F1F3FF] w-full flex items-center justify-center gap-1 rounded-sm text-[16px] font-semibold leading-[24px] text-[#737685] w-[366px] h-[48px] mb-10 cursor-pointer disabled:cursor-not-allowed"
             >
-              {enableResendButton ? 'Resend' : `Resend in ${showTime}`}
+              {enableResendButton ? (
+                'Resend'
+              ) : (
+                <>
+                  <span
+                    className="material-symbols-outlined text-[#737685]"
+                    style={{ fontSize: '16px' }}
+                  >
+                    timer
+                  </span>{' '}
+                  <span>Resend in {showTime}</span>
+                </>
+              )}
             </button>
           </div>
-        </div>
+        </>
       )}
     </>
   );
