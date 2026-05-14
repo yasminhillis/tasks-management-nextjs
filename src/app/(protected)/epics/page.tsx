@@ -1,3 +1,3 @@
-export default function Epics(){
-    return <div>epics</div>
+export default function Epics() {
+  return <div>epics</div>;
 }
