@@ -21,14 +21,22 @@ export default function ProjectsList() {
   const [error, setError] = useState('');
   const [showError, setShowError] = useState(false);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+
+  const PAGE_SIZE = 5
+
   const router = useRouter();
 
-  async function fetchProjects() {
+  async function fetchProjects(page: number) {
     try {
       setIsLoading(true);
       setError('');
       setShowError(false);
-      const res = await fetch('/api/projects');
+      const offset = (page - 1) * PAGE_SIZE
+      const res = await fetch(`/api/projects?limit=${PAGE_SIZE}&offset=${offset}`)
+      console.log(res, 'res');
+      
 
       if (res.status === 401) {
         router.push('/login');
@@ -43,9 +51,10 @@ export default function ProjectsList() {
       }
 
       const data = await res.json();
-      console.log(data, 'data');
+      console.log(data, 'data111');
 
-      setProjects(data);
+      setProjects(data.data);
+      setTotalCount(data.totalCount)
       setIsLoading(false);
     } catch (error) {
       setError('Something went wrong. Please try again');
@@ -56,7 +65,7 @@ export default function ProjectsList() {
   }
 
   useEffect(() => {
-    fetchProjects();
+    fetchProjects(1);
   }, []);
 
   function formatDate(dateString: string) {
@@ -67,7 +76,7 @@ export default function ProjectsList() {
     });
   }
 
-  if (error) return <ErrorScreen onRetry={fetchProjects} />;
+  if (error) return <ErrorScreen onRetry={() => fetchProjects(1)} />;
 
   return (
     <div className="px-8">

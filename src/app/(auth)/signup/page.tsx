@@ -3,7 +3,7 @@ import SignUpForm from './SignUpForm';
 
 export default function SignUp() {
   return (
-    <div className="min-h-screen md:w-xl bg-white mx-auto rounded-lg p-12 ">
+    <div className="md:w-xl bg-white mx-auto rounded-lg px-8 py-5 mb-8 shadow-soft-xl">
       <h2 className="text-center font-semibold text-2xl text-slate-900 mb-2">
         Create your workspace
       </h2>

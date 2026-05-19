@@ -11,12 +11,12 @@ export async function POST() {
   }
 
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/logout`,
+    `${process.env.SUPABASE_URL}/auth/v1/logout`,
     {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        apikey: process.env.SUPABASE_ANON_KEY!,
         Authorization: `Bearer ${token}`,
       },
     }

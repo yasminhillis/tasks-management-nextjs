@@ -101,7 +101,7 @@ export default function AddProjectForm() {
         )}
         <div className="flex flex-col mb-6 space-y-3">
           <label
-            htmlFor=""
+            htmlFor="name"
             className="uppercase text-[11px] font-bold leading-[0.55px] flex gap-1 text-[#4F5F7B] "
           >
             Project TITLE
@@ -110,11 +110,13 @@ export default function AddProjectForm() {
           <input
             {...register('name')}
             type="text"
+            id="name"
+            aria-describedby={errors.name ? "name-error" : undefined}
             className={`text-[#041B3C] p-4 md:px-4 md:py-3 w-full rounded-md md:rounded-sm
-                focus:outline-none focus:border focus:border-primary-container ${errors.name ? 'bg-[#FFDAD6]' : 'bg-[#D7E2FF]'} ${errors.name ? 'border border-red-500 focus:outline-none focus:border focus:border-red-500' : 'border-2 border-black/0'}`}
+                focus:outline-none border border-transparent focus:border-primary-container ${errors.name ? 'bg-[#FFDAD6]' : 'bg-[#D7E2FF]'} ${errors.name ? 'border border-red-500 focus:outline-none focus:border-red-500' : 'focus:outline-none border border-transparent'}`}
           />
           {errors?.name && (
-            <div className="flex items-center gap-1 text-[#BA1A1A] font-medium text-xs">
+            <div role="alert" id="name-error" className="flex items-center gap-1 text-[#BA1A1A] font-medium text-xs">
               <span
                 className="material-symbols-outlined"
                 style={{ fontSize: '14px' }}
@@ -128,7 +130,7 @@ export default function AddProjectForm() {
         <div className="flex flex-col gap-3 mb-8">
           <div className="flex items-center justify-between">
             <label
-              htmlFor=""
+              htmlFor="description"
               className="uppercase text-[#434654] font-bold text-[11px] leading-[0.55px]"
             >
               Description
@@ -139,8 +141,10 @@ export default function AddProjectForm() {
           </div>
           <textarea
             {...register('description')}
+            id="description"
+            aria-describedby={errors.description ? "description-error" : undefined}
             placeholder="Provide a high-level overview of the project's architectural objectives and key milestones..."
-            className="bg-[#D7E2FF] resize-none overflow-hidden pt-4 pr-4 pb-22 pl-4 rounded-md placeholder:text-[#4F5F7B80] border-2 border-black/0 focus:outline-none focus:border focus:border-primary-container"
+            className="bg-[#D7E2FF] resize-none overflow-hidden pt-4 pr-4 pb-22 pl-4 rounded-md placeholder:text-[#4F5F7B80] border border-transparent focus:outline-none focus:border focus:border-primary-container"
           ></textarea>
           <span
             className={`flex justify-end text-[11px] font-medium ${descriptionLength && descriptionLength > 500 ? 'text-red-500' : 'text-[#4F5F7B]'}`}
@@ -149,7 +153,7 @@ export default function AddProjectForm() {
             <span className="hidden md:block">&nbsp; characters</span>
           </span>
           {errors?.description && (
-            <div className="flex items-center gap-1 text-[#BA1A1A] font-medium text-xs">
+            <div role="alert" id="description-error" className="flex items-center gap-1 text-[#BA1A1A] font-medium text-xs">
               <span
                 className="material-symbols-outlined"
                 style={{ fontSize: '14px' }}
