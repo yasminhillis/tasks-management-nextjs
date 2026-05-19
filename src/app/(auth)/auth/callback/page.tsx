@@ -2,16 +2,14 @@
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
-export default function Home() {
+export default function AuthCallback() {
   const router = useRouter();
   useEffect(() => {
     const hash = window.location.hash;
-    // console.log(hash, 'hash');
 
     const params = new URLSearchParams(hash.substring(1));
     const accessToken = params.get('access_token');
     const type = params.get('type');
-    // console.log(type, 'type');
 
     const error = params.get('error');
     const errorDescription = params.get('error_description');
@@ -26,21 +24,8 @@ export default function Home() {
       return;
     }
 
-    async function checkAuth() {
-      const res = await fetch('/api/auth/me');
-      if (res.ok) {
-        router.push('/project');
-      } else {
-        router.push('/login');
-      }
-    }
+    router.push('/login');
+}, [router])
 
-    checkAuth();
-  }, []);
-
-  return (
-    <div className="flex justify-center items-center min-h-screen">
-      <p>Loading...</p>
-    </div>
-  );
+return <div></div>
 }

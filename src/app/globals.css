@@ -83,6 +83,10 @@
     0px 10px 15px -3px rgba(0, 61, 155, 0.2);
 
   --gradient-btn-primary: linear-gradient(135deg, #003d9b, #0052cc);
+  --shadow-soft-xl: '0px 24px 48px 0px rgba(4, 27, 60, 0.06)';
+  --shadow-soft: '0 4px 12px rgba(0, 0, 0, 0.1)';
+  --shadow-soft-lg: '0 24px 48px 0px rgba(4, 27, 60, 0.06)';
+  --shadow-blue-md: '0 4px 6px -4px rgba(0,61,155,0.2), 0 10px 15px -3px rgba(0,61,155,0.2)';
 }
 
 body {

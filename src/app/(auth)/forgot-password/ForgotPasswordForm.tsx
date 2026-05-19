@@ -15,7 +15,6 @@ export default function ForgotPasswordForm() {
     register,
     handleSubmit,
     setError,
-    reset,
     formState: { errors, isSubmitting },
   } = useForm<ForgotPasswordFormData>({
     resolver: zodResolver(ForgotPasswordSchema),
@@ -29,6 +28,7 @@ export default function ForgotPasswordForm() {
   const [userEmail, setUserEmail] = useState('');
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const searchParams = useSearchParams();
+  const [disableButton, setDisableButton] = useState(false)
   const urlError = searchParams.get('error');
 
   useEffect(() => {
@@ -62,18 +62,15 @@ export default function ForgotPasswordForm() {
   }
 
   async function sendEmail(data: ForgotPasswordFormData) {
-    try {
+    try {      
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/recover`,
+        '/api/auth/forgot-password',
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
           },
-          body: JSON.stringify({
-            email: data.email,
-          }),
+          body: JSON.stringify(data),
         }
       );
 
@@ -84,12 +81,11 @@ export default function ForgotPasswordForm() {
         });
         return false;
       }
-      reset();
+      setDisableButton(true)
       setShowSuccessMessage(true);
       startTimer();
       return true;
     } catch (error) {
-      console.log(error, 'error');
       if (error instanceof TypeError && error.message === 'Failed to fetch') {
         setError('root', {
           message: 'Network error. Please check your connection and try again.',
@@ -119,10 +115,11 @@ export default function ForgotPasswordForm() {
     <>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-white p-8 font-sans rounded-md mb-6 shadow-[0_4px_12px_rgba(0,0,0,0.1)]"
+        method="POST"
+        className="bg-white p-8 font-sans rounded-md mb-6 shadow-soft"
       >
         {urlError && (
-          <div className="text-red-500 bg-red-600/10 p-3 mb-3 rounded-sm">
+          <div role="alert" className="text-red-500 bg-red-600/10 p-3 mb-3 rounded-sm">
             {urlError}
           </div>
         )}
@@ -150,26 +147,27 @@ export default function ForgotPasswordForm() {
             Email Address
           </label>
           <input
-            className="bg-surface-highest px-4 py-3 rounded-xs text-[#737685] mb-4 focus:outline-none focus:border focus:border-primary-container"
+            className="bg-surface-highest px-4 py-3 rounded-xs text-[#737685] mb-4 border border-transparent focus:outline-none focus:border-primary-container"
             {...register('email')}
             id="email"
+            aria-describedby={errors.email ? 'email-error': undefined}
             type="text"
             placeholder="Enter your email"
           />
         </div>
         {errors.email && (
-          <div className="text-red-500 px-2 py-3 mb-2 text-center bg-red-600/10 p-3 mb-3 rounded-sm">
+          <div role="alert" id="email-error" className="text-red-500 px-2 py-3 mb-2 text-center bg-red-600/10 p-3 mb-3 rounded-sm">
             {errors.email?.message}
           </div>
         )}
         {errors.root && (
-          <div className="text-red-500 bg-red-600/10 p-3 mb-3 rounded-sm">
+          <div role="alert" className="text-red-500 bg-red-600/10 p-3 mb-3 rounded-sm">
             {errors.root?.message}
           </div>
         )}
         <button
-          disabled={isSubmitting}
-          className="text-white bg-linear-to-r from-[#003D9B] to-[#0052CC] hover:from-[#1259cb] hover:to-[#0657d1] transition-colors py-3 w-full font-semibold text-sm cursor-pointer mb-10 disabled:opacity-50"
+          disabled={isSubmitting || disableButton}
+          className="text-white bg-linear-to-r from-[#003D9B] to-[#0052CC] hover:from-[#1259cb] hover:to-[#0657d1] transition-colors py-3 w-full font-semibold text-sm cursor-pointer mb-10 disabled:opacity-50 disabled:cursor-not-allowed"
           type="submit"
         >
           {isSubmitting ? 'Sending...' : 'Send Reset Link'}

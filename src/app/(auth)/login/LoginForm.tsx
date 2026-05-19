@@ -6,20 +6,23 @@ import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { type LoginFormData, LoginSchema } from '@/validations/login.schema';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 export default function LoginForm() {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    setError,
-    reset,
+    setError
   } = useForm<LoginFormData>({
     resolver: zodResolver(LoginSchema),
     mode: 'onChange',
   });
 
   const router = useRouter();
+
+  const [isRedirecting, setIsRedirecting] = useState(false);
+
   async function onSubmit(data: LoginFormData) {
     try {
       const res = await fetch('/api/auth/login', {
@@ -36,7 +39,7 @@ export default function LoginForm() {
         });
         return;
       }
-      reset();
+      setIsRedirecting(true)
       router.push('/project');
     } catch (error) {
       if (error instanceof TypeError && error.message === 'Failed to fetch') {
@@ -50,17 +53,20 @@ export default function LoginForm() {
       }
     }
   }
+  const renderButtonText =  isSubmitting ? 'Loading...' : isRedirecting ? 'Redirecting...' : 'Sign In'
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
+    <form method="POST" onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
       <div className="flex flex-col gap-2">
-        <label className="uppercase text-xs font-bold" htmlFor="">
+        <label className="uppercase text-xs font-bold" htmlFor="email">
           Email Address
         </label>
 
         <div className="relative">
           <input
             {...register('email')}
-            className="focus:outline-none focus:border focus:border-primary-container bg-surface-highest p-4 rounded-md text-[#737685] sm:rounded-xs w-full"
+            id="email"
+            aria-describedby={errors.email ? "email-error" : undefined}
+            className="focus:outline-none border border-transparent focus:border-primary-container bg-surface-highest p-4 rounded-md text-[#737685] sm:rounded-xs w-full"
             placeholder="curator@workspace.com"
           />
           <Image
@@ -72,13 +78,13 @@ export default function LoginForm() {
           />
         </div>
         {errors.email && (
-          <div className="text-red-500">{errors.email.message}</div>
+          <div role="alert" id="email-error" className="text-red-500">{errors.email.message}</div>
         )}
       </div>
 
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
-          <label className="uppercase text-xs font-bold" htmlFor="">
+          <label className="uppercase text-xs font-bold" htmlFor="password">
             Password
           </label>
           <Link
@@ -92,8 +98,10 @@ export default function LoginForm() {
         <div className="relative">
           <input
             {...register('password')}
-            className="w-full focus:outline-none focus:border focus:border-primary-container  bg-surface-highest p-4 rounded-md text-[#737685] sm:rounded-xs"
+            className="w-full focus:outline-none border border-transparent focus:border-primary-container  bg-surface-highest p-4 rounded-md text-[#737685] sm:rounded-xs"
             type="password"
+            id="password"
+            aria-describedby={errors.password ? "password-error" : undefined}
             placeholder="Enter your password"
           />
           <Image
@@ -105,7 +113,7 @@ export default function LoginForm() {
           />
         </div>
         {errors.password && (
-          <div className="text-red-500">{errors.password.message}</div>
+          <div role="alert" id="password-error" className="text-red-500">{errors.password.message}</div>
         )}
       </div>
 
@@ -125,20 +133,20 @@ export default function LoginForm() {
         </label>
       </div>
 
-      {errors.root && <div className="text-red-500">{errors.root.message}</div>}
+      {errors.root && <div role="alert" className="text-red-500">{errors.root.message}</div>}
 
       <button
         type="submit"
-        disabled={isSubmitting}
+        disabled={isSubmitting || isRedirecting}
         className="cursor-pointer bg-linear-to-r from-[#003D9B] to-[#0052CC] hover:from-[#1259cb] hover:to-[#0657d1] transition-colors text-white px-2 py-4 rounded-md sm:rounded-xs mb-8 disabled:opacity-50"
       >
         <span className="sm:hidden flex items-center justify-center gap-2">
-          {isSubmitting ? 'Loading...' : 'Sign In'}
+          {renderButtonText}
 
           <Image src="/arrow.png" height={13} width={13} alt="arrow icon" />
         </span>{' '}
         <span className="hidden sm:inline">
-          {isSubmitting ? 'Loading...' : 'Log In'}
+          {renderButtonText}
         </span>
       </button>
 

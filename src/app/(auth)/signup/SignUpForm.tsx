@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 
 export default function SignUpForm() {
   const [apiError, setApiError] = useState('');
+  const [isRedirecting, setIsRedirecting] = useState(false);
 
   const router = useRouter();
 
@@ -15,35 +16,22 @@ export default function SignUpForm() {
     register,
     watch,
     formState: { errors, isSubmitting },
-    handleSubmit,
-    reset,
+    handleSubmit
   } = useForm<SignupFormData>({
     resolver: zodResolver(SignupSchema),
     mode: 'onChange',
   });
 
-  const navigateToProjects = () => {
-    router.push('/projects');
-  };
-
   async function onSubmit(data: SignupFormData) {
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/signup`,
+        '/api/auth/signup',
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
           },
-          body: JSON.stringify({
-            email: data.email,
-            password: data.password,
-            data: {
-              name: data.name,
-              department: data.jobTitle,
-            },
-          }),
+          body: JSON.stringify(data),
         }
       );
       if (!res.ok) {
@@ -51,8 +39,8 @@ export default function SignUpForm() {
         setApiError(error.msg || 'Something went wrong. Please try again');
         return;
       }
-      reset();
-      navigateToProjects();
+      setIsRedirecting(true);
+      router.push('/project');
     } catch (error) {
       setApiError('Network error. Please check your connection');
     }
@@ -66,83 +54,93 @@ export default function SignUpForm() {
   const hasSpecialChar = /[^a-zA-Z0-9]/.test(password);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col space-y-4">
+    <form method="POST" onSubmit={handleSubmit(onSubmit)} className="flex flex-col space-y-4">
       <div className="flex flex-col space-y-2">
-        <label className="font-bold text-[10px] uppercase text-slate-600">
+        <label htmlFor="name" className="font-bold text-[10px] uppercase text-slate-600">
           Name
         </label>
         <input
           {...register('name')}
-          className="bg-surface-highest text-base p-3 rounded-sm text-[#737685] focus:outline-none focus:border focus:border-primary-container"
+          className="bg-surface-highest text-base p-3 rounded-sm text-[#737685] border border-transparent focus:outline-none focus:border-primary-container"
           type="text"
+          id="name"
+          aria-describedby={errors.name ? "name-error" : undefined}
           placeholder="Enter your full name"
         />
         <span className="text-slate-200 text-[10px]">
           3-50 characters, letters only.
         </span>
         {errors.name && (
-          <div className="text-red-500">{errors.name.message}</div>
+          <div role="alert" id="name-error" className="text-red-500">{errors.name.message}</div>
         )}
       </div>
 
       <div className="flex flex-col space-y-2">
-        <label className="font-bold text-[10px] uppercase text-slate-600">
+        <label htmlFor="email" className="font-bold text-[10px] uppercase text-slate-600">
           Email
         </label>
         <input
           {...register('email')}
-          className="bg-surface-highest text-base p-3 rounded-sm text-[#737685] focus:outline-none focus:border focus:border-primary-container"
+          className="bg-surface-highest text-base p-3 rounded-sm text-[#737685] border border-transparent focus:outline-none focus:border-primary-container"
           type="text"
+          id="email"
+          aria-describedby={errors.email ? "email-error" : undefined}
           placeholder="yourname@company.com"
         />
         {errors.email && (
-          <div className="text-red-500">{errors.email.message}</div>
+          <div role="alert" id="email-error" className="text-red-500">{errors.email.message}</div>
         )}
       </div>
 
       <div className="flex flex-col space-y-2">
-        <label className="font-bold text-[10px] uppercase text-slate-600">
+        <label htmlFor="jobTitle" className="font-bold text-[10px] uppercase text-slate-600">
           JoB Title (Optional)
         </label>
         <input
           {...register('jobTitle')}
-          className="bg-surface-highest text-base p-3 rounded-sm text-[#737685] focus:outline-none focus:border focus:border-primary-container"
+          className="bg-surface-highest text-base p-3 rounded-sm text-[#737685] border border-transparent focus:outline-none focus:border-primary-container"
           type="text"
+          id="jobTitle"
+          aria-describedby={errors.jobTitle ? "job-title-error" : undefined}
           placeholder="e.g. Project Manager"
         />
         {errors.jobTitle && (
-          <div className="text-red-500">{errors.jobTitle.message}</div>
+          <div role="alert" id="job-title-error" className="text-red-500">{errors.jobTitle.message}</div>
         )}
       </div>
 
       <div className="md:flex gap-3">
         <div className="flex flex-col space-y-2 w-full mb-2 md:mb-0">
-          <label className="font-bold text-[10px] uppercase text-slate-600">
+          <label htmlFor="password" className="font-bold text-[10px] uppercase text-slate-600">
             Password
           </label>
           <input
             {...register('password')}
-            className="bg-surface-highest text-base p-3 rounded-sm text-[#737685] focus:outline-none focus:border focus:border-primary-container"
+            className="bg-surface-highest text-base p-3 rounded-sm text-[#737685] border border-transparent focus:outline-none focus:border-primary-container"
             type="password"
+            id="password"
+            aria-describedby={errors.password ? "password-error" : undefined}
             placeholder="Minimum 8 characters"
           />
           {errors.password && (
-            <div className="text-red-500">{errors.password.message}</div>
+            <div role="alert" id="password-error" className="text-red-500">{errors.password.message}</div>
           )}
         </div>
 
         <div className="flex flex-col space-y-2 w-full">
-          <label className="font-bold text-[10px] uppercase text-slate-600">
+          <label htmlFor="confirmPassword" className="font-bold text-[10px] uppercase text-slate-600">
             Cofirm Password
           </label>
           <input
             {...register('confirmPassword')}
-            className="bg-surface-highest text-base p-3 rounded-sm text-[#737685] focus:outline-none focus:border focus:border-primary-container"
+            className="bg-surface-highest text-base p-3 rounded-sm text-[#737685] border border-transparent focus:outline-none focus:border-primary-container"
             type="password"
+            id="confirmPassword"
+            aria-describedby={errors.confirmPassword ? "confirm-password-error" : undefined}
             placeholder="Repeat your password"
           />
           {errors.confirmPassword && (
-            <div className="text-red-500">{errors.confirmPassword.message}</div>
+            <div role="alert" id="confirm-password-error" className="text-red-500">{errors.confirmPassword.message}</div>
           )}
         </div>
       </div>
@@ -185,10 +183,10 @@ export default function SignUpForm() {
       )}
       <button
         type="submit"
-        disabled={isSubmitting}
+        disabled={isSubmitting || isRedirecting}
         className="disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer text-white font-semibold px-2 py-4 rounded-sm font-sans bg-radial from-[#003D9B] to-[#0052CC] hover:from-[#1259cb] hover:to-[#0657d1] transition-colors"
       >
-        {isSubmitting ? 'Loading...' : 'Create Account'}
+        {isSubmitting ? 'Loading...' : isRedirecting ? 'Redirecting...' : 'Create Account'}
       </button>
       <p className="text-slate-600 text-sm text-center">
         Already have an account?{' '}
