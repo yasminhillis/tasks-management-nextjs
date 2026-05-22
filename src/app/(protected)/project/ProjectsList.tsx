@@ -7,6 +7,9 @@ import ErrorScreen from './ErrorScreen';
 import LoadingCard from './_components/LoadingCard';
 import EmptyState from './EmptyState';
 import AddProjectCard from './_components/AddProjectCard';
+import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
+import { fetchProjects, setCurrentPage } from '@/lib/store/slices/projectsSlice';
+import { PAGE_SIZE } from '@/lib/constants';
 
 type Project = {
   id: string;
@@ -16,57 +19,18 @@ type Project = {
 };
 
 export default function ProjectsList() {
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [showError, setShowError] = useState(false);
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalCount, setTotalCount] = useState(0);
-
-  const PAGE_SIZE = 5
+  const dispatch = useAppDispatch()
+  const {  projects, 
+    isLoading, 
+    error, 
+    currentPage, 
+    totalCount, isFetched } = useAppSelector(state => state.projects)
 
   const router = useRouter();
 
-  async function fetchProjects(page: number) {
-    try {
-      setIsLoading(true);
-      setError('');
-      setShowError(false);
-      const offset = (page - 1) * PAGE_SIZE
-      const res = await fetch(`/api/projects?limit=${PAGE_SIZE}&offset=${offset}`)
-      console.log(res, 'res');
-      
-
-      if (res.status === 401) {
-        router.push('/login');
-      }
-      if (!res.ok) {
-        const error = await res.json();
-        console.log(error, 'error');
-
-        setError(error.message || error.msg);
-        setShowError(true);
-        return;
-      }
-
-      const data = await res.json();
-      console.log(data, 'data111');
-
-      setProjects(data.data);
-      setTotalCount(data.totalCount)
-      setIsLoading(false);
-    } catch (error) {
-      setError('Something went wrong. Please try again');
-      setShowError(true);
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
   useEffect(() => {
-    fetchProjects(1);
-  }, []);
+    dispatch(fetchProjects({page: 1, limit: PAGE_SIZE, mode: 'desktop'}));
+  }, [dispatch]);
 
   function formatDate(dateString: string) {
     return new Date(dateString).toLocaleString('en-GB', {
@@ -75,12 +39,12 @@ export default function ProjectsList() {
       year: 'numeric',
     });
   }
-
-  if (error) return <ErrorScreen onRetry={() => fetchProjects(1)} />;
+  
+  if (error) return <ErrorScreen onRetry={() => {dispatch(fetchProjects({ page: currentPage, limit: PAGE_SIZE, mode: 'desktop' }))}} />;
 
   return (
     <div className="px-8">
-      {!isLoading && !error && projects.length === 0 && <EmptyState />}
+      {!isLoading && !error && isFetched && projects.length === 0 && <EmptyState />}
 
       {isLoading && (
         <>
@@ -92,7 +56,7 @@ export default function ProjectsList() {
           </div>
         </>
       )}
-      {!isLoading && !showError && projects.length > 0 && (
+      {!isLoading && !error && projects.length > 0 && (
         <>
           <ProjectHeader loading={isLoading} />
           {
