@@ -1,4 +1,5 @@
-export const navItems = [
+
+export const mainNavItems = [
   {
     label: 'Projects',
     icon: 'folder_open',
@@ -7,12 +8,15 @@ export const navItems = [
     mobileIcon: 'grid_view',
     mobileLabel: 'Projects',
     mobileIconFilled: true,
-  },
+  }
+]
+
+export const projectNavItems = (projectId: string) => [
   {
     label: 'Project Epics',
     icon: 'account_tree',
     collapsedIcon: 'account_tree',
-    href: '/epics',
+    href: `/project/${projectId}/epics`,
     mobileIcon: 'account_tree',
     mobileLabel: 'Epics',
     mobileIconFilled: false,
@@ -21,7 +25,7 @@ export const navItems = [
     label: 'Project Tasks',
     icon: 'checklist',
     collapsedIcon: 'checklist',
-    href: '/tasks',
+    href: `/project/${projectId}/tasks`,
     mobileIcon: 'checklist',
     mobileLabel: 'Tasks',
     mobileIconFilled: false,
@@ -30,7 +34,7 @@ export const navItems = [
     label: 'Project Members',
     icon: 'group',
     collapsedIcon: 'group',
-    href: '/members',
+    href: `/project/${projectId}/members`,
     mobileIcon: 'group',
     mobileLabel: 'Members',
     mobileIconFilled: false,
@@ -39,7 +43,7 @@ export const navItems = [
     label: 'Project Details',
     icon: 'info',
     collapsedIcon: 'info',
-    href: '/details',
+    href: `/project/${projectId}/edit`,
     mobileIcon: 'info',
     mobileLabel: 'Details',
     mobileIconFilled: false,

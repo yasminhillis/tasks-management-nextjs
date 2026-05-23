@@ -4,11 +4,24 @@ import Link from 'next/link';
 import Logo from '@/components/Logo';
 import { useAppSelector, useAppDispatch } from '@/lib/store/hooks';
 import { toggleMobile, toggleSidebar } from '@/lib/store/slices/uiSlice';
-import { navItems } from './navItems';
+import { mainNavItems , projectNavItems } from './navItems';
+import { usePathname } from 'next/navigation';
 
 export default function Sidebar() {
   const { isMobileOpen, isSidebarOpen } = useAppSelector((state) => state.ui);
   const dispatch = useAppDispatch();
+
+  const pathname = usePathname(); 
+
+  // console.log(pathname, 'pathname33');
+  // /project/bb9ac6c6-b4e2-4926-abc6-74400ce4d8ad/epics 
+  // /project 
+  const isOnProjectRoute = pathname.split('/').length < 3
+  // console.log(isOnProjectRoute);
+  const projectId = isOnProjectRoute ? null : pathname.split('/')[2]; 
+  // console.log(projectId, 'projectId');
+  
+  const items = !isOnProjectRoute && projectId ? projectNavItems(projectId) : mainNavItems;
 
   return (
     <>
@@ -37,7 +50,7 @@ export default function Sidebar() {
             <div
               className={`px-4 ${isSidebarOpen ? 'max-w-[224px]' : 'px-0'} flex flex-col gap-4 `}
             >
-              {navItems.map((item) => (
+              {items.map((item) => (
                 <Link
                   key={item.label}
                   className={`flex items-center text-[#041B3C99]  py-[10px] cursor-pointer text-sm font-medium focus:bg-white focus:text-[#003D9B] transition-colors rounded-sm hover:text-primary-container ${isSidebarOpen ? 'px-3 gap-2' : 'justify-center px-0'} visited:bg-white md:px-3 md:rounded-sm`}

@@ -1,4 +1,7 @@
+'use client';
+
 import DotDropDown from './DotDropDown';
+import { useRouter } from 'next/navigation';
 
 type ProjectCardProps = {
   id: string;
@@ -8,16 +11,18 @@ type ProjectCardProps = {
 };
 
 export default function ProjectCard({
-  id,
+  id: projectId,
   name,
   description,
   date,
 }: ProjectCardProps) {
+  const router = useRouter();
+
   return (
-    <div className="bg-white shadow-sm md:shadow-none w-full max-w-[304px] rounded-md p-6">
+    <div onClick={() => router.push(`/project/${projectId}/epics`)} className="bg-white shadow-sm md:shadow-none w-full max-w-[304px] rounded-md p-6 cursor-pointer hover:shadow-sm">
       <div className="flex justify-between">
         <h2 className="title-md mb-3">{name}</h2>
-        <DotDropDown id={id} />
+        <DotDropDown id={projectId} />
       </div>
       <p
         className="body-md min-h-[69px] w-[256px] line-clamp-3"
