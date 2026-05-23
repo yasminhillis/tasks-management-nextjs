@@ -6,7 +6,7 @@ import { fetchProjects } from '@/lib/store/slices/projectsSlice';
 export default function Pagination() {
   const dispatch = useAppDispatch()
 
-  const { currentPage, totalCount } = useAppSelector(state => state.projects)
+  const { currentPage, totalCount, isFetched } = useAppSelector(state => state.projects)
 
   const totalPages = Math.ceil(totalCount / PAGE_SIZE); 
 
@@ -27,8 +27,9 @@ export default function Pagination() {
   }
 
   return ( 
-    <div className="hidden md:flex justify-between items-center pt-12 pr-8 pb-8 pl-8 mb-[121px]">
-      <h3>Showing {PAGE_SIZE} of {totalCount} active projects</h3>
+    
+    isFetched && <div className="hidden md:flex justify-between items-center pt-12 pr-8 pb-8 pl-8 mb-[121px]">
+       <h3>Showing {PAGE_SIZE} of {totalCount} active projects</h3>
       <div className="flex items-center gap-2">
         <button disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)} className="w-[32px] h-[32px] rounded-xs 
         flex items-center justify-center border border-[#C3C6D64D] 
