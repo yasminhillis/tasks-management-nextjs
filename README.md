@@ -164,8 +164,6 @@ Dedicated pages and modals for deeper management:
 
 ## 🛠 Tech Stack
 
-> Update this section based on your actual stack.
-
 - Next.js
 - TypeScript
 - Tailwind CSS
