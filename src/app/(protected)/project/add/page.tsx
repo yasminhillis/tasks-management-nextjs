@@ -1,4 +1,4 @@
-import AddProjectForm from './AddProjectForm';
+import ProjectForm from '../_components/ProjectForm';
 
 export default function AddProject() {
   return (
@@ -20,7 +20,7 @@ export default function AddProject() {
           Invite Member
         </button>
       </div>
-      <AddProjectForm />
+      <ProjectForm mode='add'/>
     </div>
   );
 }

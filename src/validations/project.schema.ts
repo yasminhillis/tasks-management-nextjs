@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const AddProjectSchema = z.object({
+export const ProjectSchema = z.object({
   name: z
     .string()
     .min(3, { message: 'Project name should not be less than 3 characters' })
@@ -12,4 +12,4 @@ export const AddProjectSchema = z.object({
     .transform((val) => (val === '' ? undefined : val)),
 });
 
-export type ADDProjectFormData = z.input<typeof AddProjectSchema>;
+export type ADDProjectFormData = z.input<typeof ProjectSchema>;
