@@ -16,12 +16,15 @@ export default function Sidebar() {
   // console.log(pathname, 'pathname33');
   // /project/bb9ac6c6-b4e2-4926-abc6-74400ce4d8ad/epics 
   // /project 
-  const isOnProjectRoute = pathname.split('/').length < 3
-  // console.log(isOnProjectRoute);
+  const isOnProjectRoute = pathname.split('/').length < 3 && pathname.split('/')[1] === 'project'
+
+  const isOnAddRoute = pathname.split('/')[2] === 'add'
+  
+  console.log(isOnProjectRoute);
   const projectId = isOnProjectRoute ? null : pathname.split('/')[2]; 
   // console.log(projectId, 'projectId');
   
-  const items = !isOnProjectRoute && projectId ? projectNavItems(projectId) : mainNavItems;
+  const items = !isOnProjectRoute && !isOnAddRoute && projectId ? projectNavItems(projectId) : mainNavItems;
 
   return (
     <>
