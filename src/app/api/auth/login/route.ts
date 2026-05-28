@@ -14,7 +14,7 @@ export async function POST(req: Request) {
       body: JSON.stringify(body),
     }
   );
-  
+
   const data = await res.json();
 
   if (!res.ok) {
@@ -28,19 +28,19 @@ export async function POST(req: Request) {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     path: '/',
-    maxAge: data.expires_in
+    maxAge: data.expires_in,
   });
 
   cookieStore.set('refresh_token', data.refresh_token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     path: '/',
-    maxAge: body.rememberMe ? 60 * 60 * 24 * 30 : undefined
+    maxAge: body.rememberMe ? 60 * 60 * 24 * 30 : undefined,
   });
 
   cookieStore.set('remember_me', String(body.rememberMe), {
     path: '/',
-    maxAge: body.rememberMe ? 60 * 60 * 24 * 30 : undefined
+    maxAge: body.rememberMe ? 60 * 60 * 24 * 30 : undefined,
   });
 
   return Response.json({ user: data.user });

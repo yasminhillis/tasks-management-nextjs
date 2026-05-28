@@ -22,9 +22,16 @@ export default function DotDropDown({ id }: DotDropDownProps) {
   }, []);
 
   return (
-    <div onClick={(e) => e.stopPropagation()} ref={menuRef} className="relative hover:bg-[#C3C6D6]/30 flex w-8 h-8 items-center justify-center rounded-full">
+    <div
+      onClick={(e) => e.stopPropagation()}
+      ref={menuRef}
+      className="relative hover:bg-[#C3C6D6]/30 flex w-8 h-8 items-center justify-center rounded-full"
+    >
       <button
-        onClick={(e) => {e.stopPropagation(); setIsOpen((prev) => !prev)}}
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsOpen((prev) => !prev);
+        }}
         className="cursor-pointer flex items-center justify-center"
       >
         <span className="material-symbols-outlined text-[#C3C6D6]">
@@ -34,8 +41,10 @@ export default function DotDropDown({ id }: DotDropDownProps) {
       {isOpen && (
         <div className="absolute top-6 p-2 right-3 w-48 bg-white shadow-sm rounded-sm">
           <button
-          
-            onClick={(e) => {e.stopPropagation(); console.log('edit clicked, id:', id); router.push(`/project/${id}/edit`)}}
+            onClick={(e) => {
+              e.stopPropagation();
+              router.push(`/project/${id}/edit`);
+            }}
             className="cursor-pointer hover:bg-[#e7e7ea] p-2 w-full"
           >
             Edit Project

@@ -1,30 +1,28 @@
 'use client';
-import { useState } from 'react';
 import Link from 'next/link';
 import Logo from '@/components/Logo';
 import { useAppSelector, useAppDispatch } from '@/lib/store/hooks';
 import { toggleMobile, toggleSidebar } from '@/lib/store/slices/uiSlice';
-import { mainNavItems , projectNavItems } from './navItems';
+import { mainNavItems, projectNavItems } from './navItems';
 import { usePathname } from 'next/navigation';
 
 export default function Sidebar() {
   const { isMobileOpen, isSidebarOpen } = useAppSelector((state) => state.ui);
   const dispatch = useAppDispatch();
 
-  const pathname = usePathname(); 
+  const pathname = usePathname();
 
-  // console.log(pathname, 'pathname33');
-  // /project/bb9ac6c6-b4e2-4926-abc6-74400ce4d8ad/epics 
-  // /project 
-  const isOnProjectRoute = pathname.split('/').length < 3 && pathname.split('/')[1] === 'project'
+  const isOnProjectRoute =
+    pathname.split('/').length < 3 && pathname.split('/')[1] === 'project';
 
-  const isOnAddRoute = pathname.split('/')[2] === 'add'
-  
-  console.log(isOnProjectRoute);
-  const projectId = isOnProjectRoute ? null : pathname.split('/')[2]; 
-  // console.log(projectId, 'projectId');
-  
-  const items = !isOnProjectRoute && !isOnAddRoute && projectId ? projectNavItems(projectId) : mainNavItems;
+  const isOnAddRoute = pathname.split('/')[2] === 'add';
+
+  const projectId = isOnProjectRoute ? null : pathname.split('/')[2];
+
+  const items =
+    !isOnProjectRoute && !isOnAddRoute && projectId
+      ? projectNavItems(projectId)
+      : mainNavItems;
 
   return (
     <>

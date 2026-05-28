@@ -20,7 +20,7 @@ export default function AddProject() {
           Invite Member
         </button>
       </div>
-      <ProjectForm mode='add'/>
+      <ProjectForm mode="add" />
     </div>
   );
 }

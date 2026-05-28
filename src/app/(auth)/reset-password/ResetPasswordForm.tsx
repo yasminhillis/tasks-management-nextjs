@@ -38,16 +38,13 @@ export default function ResetPasswordForm() {
 
   async function onSubmit(data: ResetPasswordFormData) {
     try {
-      const res = await fetch(
-        '/api/auth/reset-password',
-        {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ password: data.password ,token: token}),
-        }
-      );
+      const res = await fetch('/api/auth/reset-password', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ password: data.password, token: token }),
+      });
 
       if (!res.ok) {
         const error = await res.json();
@@ -75,7 +72,11 @@ export default function ResetPasswordForm() {
   }
 
   return (
-    <form method="POST" onSubmit={handleSubmit(onSubmit)} className="font-sans relative md:w-[512px] md:bg-white mb-8">
+    <form
+      method="POST"
+      onSubmit={handleSubmit(onSubmit)}
+      className="font-sans relative md:w-[512px] md:bg-white mb-8"
+    >
       {showSuccessMessage && (
         <div className=" bg-[#82F9BE]/30 text-[#005235] backdrop-blur-md rounded-sm p-4 border border-[#0052351A] font-sans mb-10 absolute top-1/4 z-2">
           Your password has been updated successfully. You can now log in
@@ -105,7 +106,7 @@ export default function ResetPasswordForm() {
           <input
             {...register('password')}
             id="password"
-            aria-describedby={errors.password ? "password-error" : undefined}
+            aria-describedby={errors.password ? 'password-error' : undefined}
             className="bg-surface-low px-4 py-3 rounded-xs text-[#737685] w-full focus:outline-none border border-transparent focus:border-primary-container"
             type={showPassword ? 'text' : 'password'}
           />
@@ -118,7 +119,15 @@ export default function ResetPasswordForm() {
             {showPassword ? 'visibility_off' : 'visibility'}
           </button>
         </div>
-        {errors.password && <div role="alert" id="password-error" className='text-red-500 text-sm mb-2'>{errors.password.message}</div>}
+        {errors.password && (
+          <div
+            role="alert"
+            id="password-error"
+            className="text-red-500 text-sm mb-2"
+          >
+            {errors.password.message}
+          </div>
+        )}
 
         <label
           htmlFor="confirmPassword"
@@ -128,12 +137,22 @@ export default function ResetPasswordForm() {
         </label>
         <input
           {...register('confirmPassword')}
-          aria-describedby={errors.confirmPassword ? "confirmPassword-error" : undefined }
+          aria-describedby={
+            errors.confirmPassword ? 'confirmPassword-error' : undefined
+          }
           className="bg-surface-low px-4 py-3 rounded-xs text-[#737685] focus:outline-none border border-transparent focus:border-primary-container"
           id="confirmPassword"
           type="password"
         />
-        {errors.confirmPassword && <div role="alert" id="confirmPassword-error" className='text-red-500 text-sm mt-'>{errors.confirmPassword.message}</div>}
+        {errors.confirmPassword && (
+          <div
+            role="alert"
+            id="confirmPassword-error"
+            className="text-red-500 text-sm mt-"
+          >
+            {errors.confirmPassword.message}
+          </div>
+        )}
 
         <div className="bg-surface-low w-[276px] rounded-sm my-6 p-5 md:w-full border border-[#C3C6D61A]">
           <h2 className="uppercase text-slate-600 text-[11px] font-bold tracking-[0.55px] mb-4">
@@ -187,15 +206,13 @@ export default function ResetPasswordForm() {
                   fontVariationSettings: "'FILL' 1",
                 }}
               >
-                {hasUppercaseLetter
-                  ? 'check_circle'
-                  : 'radio_button_unchecked'}
+                {hasUppercaseLetter ? 'check_circle' : 'radio_button_unchecked'}
               </span>
               <span className={`${hasUppercaseLetter ? '' : 'opacity-50'}`}>
                 Uppercase letter
               </span>
             </li>
-            
+
             <li className="hidden md:flex items-center gap-[6px] text-slate-900 text-[13px] mb-2">
               <span
                 className="material-symbols-outlined"
@@ -205,9 +222,7 @@ export default function ResetPasswordForm() {
                   fontVariationSettings: "'FILL' 1",
                 }}
               >
-                {hasLowerCaseLetter
-                  ? 'check_circle'
-                  : 'radio_button_unchecked'}
+                {hasLowerCaseLetter ? 'check_circle' : 'radio_button_unchecked'}
               </span>
               <span className={`${hasLowerCaseLetter ? '' : 'opacity-50'}`}>
                 Lowercase letter
@@ -229,7 +244,9 @@ export default function ResetPasswordForm() {
                 At least one digit
               </span>
 
-              <span className={`${hasOneDigit ? '' : 'opacity-50'} hidden md:block`}>
+              <span
+                className={`${hasOneDigit ? '' : 'opacity-50'} hidden md:block`}
+              >
                 One digit
               </span>
             </li>
@@ -246,7 +263,7 @@ export default function ResetPasswordForm() {
                 {hasSpecialChar ? 'check_circle' : 'radio_button_unchecked'}
               </span>
               <span className={`${hasSpecialChar ? '' : 'opacity-50'}`}>
-                Special character <span className='md:hidden'>(e.g. !@#$)</span>
+                Special character <span className="md:hidden">(e.g. !@#$)</span>
               </span>
             </li>
           </ul>
@@ -260,7 +277,7 @@ export default function ResetPasswordForm() {
           {isSubmitting ? 'Loading...' : 'Update Password'}
         </button>
 
-        {errors.root && <div role='alert'>{errors.root.message}</div>}
+        {errors.root && <div role="alert">{errors.root.message}</div>}
 
         <Link
           className="text-[#003D9B] text-center text-sm font-medium cursor-pointer hover:text-[#2b76e8] transition-colors"

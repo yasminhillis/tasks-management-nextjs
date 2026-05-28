@@ -4,29 +4,15 @@ import PageWrapper from '../../_components/PageWrapper';
 import MembersTable from './MembersTable';
 import ErrorScreen from '@/app/(protected)/_components/ErrorScreen';
 
-// import { useEffect, useState } from 'react';
-// import type { Members } from '@/lib/types';
-
-export default async function Members({ params}: { params: Promise<{ projectId: string }> }) {
+export default async function Members({
+  params,
+}: {
+  params: Promise<{ projectId: string }>;
+}) {
   const { projectId } = await params;
-  console.log(projectId, 'projectId 77');
-  // const [members, setMembers] = useState([])
+  const result = await getProjectMembers(projectId);
 
-  // async function getProjectMembersByProjectId(){
-    
-  //   return result
-  // } 
-
-  // useEffect(() => {
-  //   const projectMembers = getProjectMembersByProjectId()
-  //   console.log(projectMembers, 'kk');
-    
-  //   // setMembers(projectMembers.data)
-  // }, [projectId])
-  const result = await getProjectMembers(projectId); 
-  console.log(result, 'kk');
-  
-  if (!result.success) return <ErrorScreen message={result.message}/>
+  if (!result.success) return <ErrorScreen message={result.message} />;
   return (
     <PageWrapper>
       <Header
@@ -36,7 +22,7 @@ export default async function Members({ params}: { params: Promise<{ projectId: 
         mobileTitle="Project Members"
         mobileStyles="text-center"
       />
-      <MembersTable data={result.data}/>
+      <MembersTable data={result.data} />
     </PageWrapper>
   );
 }

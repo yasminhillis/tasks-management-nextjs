@@ -1,4 +1,3 @@
-
 export const mainNavItems = [
   {
     label: 'Projects',
@@ -8,8 +7,8 @@ export const mainNavItems = [
     mobileIcon: 'grid_view',
     mobileLabel: 'Projects',
     mobileIconFilled: true,
-  }
-]
+  },
+];
 
 export const projectNavItems = (projectId: string) => [
   {

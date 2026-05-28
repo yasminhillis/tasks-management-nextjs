@@ -133,7 +133,7 @@ body {
 
   .body-sm {
     font-size: var(--font-size-body-sm);
-    font-weight: var(--font-weight-semibold);     
+    font-weight: var(--font-weight-semibold);
     line-height: var(--line-height-body-sm);
     letter-spacing: var(--letter-spacing-normal);
     color: var(--color-slate-900);
