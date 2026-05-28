@@ -1,9 +1,13 @@
 
 type ErrorScreenProps = {
-  onRetry: () => void;
+  onRetry?: () => void;
+  message: string, 
+  buttonElement?: boolean, 
+  extraStyles?: string
+
 };
 
-export default function ErrorScreen({ onRetry }: ErrorScreenProps) {
+export default function ErrorScreen({ onRetry, message, buttonElement, extraStyles }: ErrorScreenProps) {
   return (
     <div className="flex flex-col items-center justify-center min-h-[80vh]">
       <div className="bg-[#FFDAD6] w-10 h-10 flex items-center justify-center rounded-lg mb-3">
@@ -12,16 +16,16 @@ export default function ErrorScreen({ onRetry }: ErrorScreenProps) {
         </span>
       </div>
       <h2 className="title-lg mb-2">Something went wrong</h2>
-      <p className="body-md text-center max-w-xs mb-6">
-        We're having trouble retrieving your projects right now. Please try
-        again in a moment.
+      <p className={`body-md text-center max-w-xs mb-6 ${extraStyles}`}>
+       
+        {message}
       </p>
-      <button
-        onClick={() => onRetry()}
+      {buttonElement ? <button
+        onClick={onRetry ? () => onRetry() : undefined}
         className="px-4 py-[8px] bg-[#0052CC] hover:bg-[#1966e1] transition-colors font-semibold text-white cursor-pointer rounded-xs"
       >
         Retry Connection
-      </button>
+      </button>: null}
     </div>
   );
 }

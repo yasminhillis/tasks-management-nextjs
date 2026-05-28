@@ -4,6 +4,7 @@ import { fetchUser, clearUser } from '@/lib/store/slices/userSlice';
 import { toggleMobile } from '@/lib/store/slices/uiSlice';
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import Initials, { getInitials } from '@/components/Initials';
 
 export default function NavbarClient() {
   const dispatch = useAppDispatch();
@@ -43,18 +44,18 @@ export default function NavbarClient() {
 
   // console.log(isMobileOpen, 'isMobileOpen');
 
-  function getInitials(name: string) {
-    if (!name) return;
-    let nameParts = name.split(' ');
+  // function getInitials(name: string) {
+  //   if (!name) return;
+  //   let nameParts = name.split(' ');
 
-    if (nameParts.length >= 2) {
-      return (
-        nameParts[0].charAt(0).toUpperCase() +
-        nameParts[1].charAt(0).toUpperCase()
-      );
-    }
-    return name.charAt(0).toUpperCase() + name.charAt(1).toUpperCase();
-  }
+  //   if (nameParts.length >= 2) {
+  //     return (
+  //       nameParts[0].charAt(0).toUpperCase() +
+  //       nameParts[1].charAt(0).toUpperCase()
+  //     );
+  //   }
+  //   return name.charAt(0).toUpperCase() + name.charAt(1).toUpperCase();
+  // }
 
   async function logUserOut() {
     try {
@@ -81,6 +82,10 @@ export default function NavbarClient() {
       setLogoutStatus('Please check your network connection and try again.');
       setIsLogoutSuccessful(false);
     }
+  }
+
+  function toggleDropDown(){
+    setDropDownOpen((prev) => !prev)
   }
 
   return (
@@ -115,14 +120,15 @@ export default function NavbarClient() {
             </h2>
           </div>
           <div ref={dropDownRef} className="relative">
-            <div
+            {/* <div
               onClick={() => setDropDownOpen((prev) => !prev)}
               className="cursor-pointer bg-primary-container w-[40px] h-[40px]
                     flex items-center justify-center shadow-sm
                     text-white rounded-md font-bold text-[16px]"
             >
               {getInitials(name)}
-            </div>
+            </div> */}
+            <Initials name={name} onClick={toggleDropDown} extraStyles='cursor-pointer'/>
             {isDropDownOpen && (
               <div className="absolute right-0 top-10 z-70 w-[200px] h-auto py-4 px-4 bg-white border border-gray-400 shadow-sm flex flex-col gap-4 justify-start rounded-lg">
                 <div className="flex gap-2 items-center ">

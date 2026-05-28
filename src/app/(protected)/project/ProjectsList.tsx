@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import ProjectHeader from './_components/ProjectHeader';
 import ProjectCard from './_components/ProjectCard';
-import ErrorScreen from './ErrorScreen';
+import ErrorScreen from '../_components/ErrorScreen';
 import LoadingCard from './_components/LoadingCard';
-import EmptyState from './EmptyState';
+import EmptyState from '../_components/EmptyState';
 import AddProjectCard from './_components/AddProjectCard';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import { fetchProjects, setCurrentPage } from '@/lib/store/slices/projectsSlice';
@@ -40,7 +40,14 @@ export default function ProjectsList() {
     });
   }
   
-  if (error) return <ErrorScreen onRetry={() => {dispatch(fetchProjects({ page: currentPage, limit: PAGE_SIZE, mode: 'desktop' }))}} />;
+  if (error) {
+    console.log(error, 'error 33');
+    
+    return <ErrorScreen message={` We're having trouble retrieving your projects right now. Please try
+        again in a moment.`} 
+        onRetry={() => {dispatch(fetchProjects({ page: currentPage, limit: PAGE_SIZE, mode: 'desktop' }))}}
+        buttonElement={true}
+       />;}
 
   return (
     <div className="px-8">
