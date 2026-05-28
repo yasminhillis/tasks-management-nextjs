@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState, useRef } from 'react';
 
 type DotDropDownProps = {
-  id: string;
+  id?: string;
 };
 
 export default function DotDropDown({ id }: DotDropDownProps) {
