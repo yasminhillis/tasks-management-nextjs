@@ -25,7 +25,7 @@ export default function AuthCallback() {
     }
 
     router.push('/login');
-}, [router])
+  }, [router]);
 
-return <div></div>
+  return <div></div>;
 }

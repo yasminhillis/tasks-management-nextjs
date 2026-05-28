@@ -10,17 +10,14 @@ export async function POST() {
     return Response.json({ success: true });
   }
 
-  const res = await fetch(
-    `${process.env.SUPABASE_URL}/auth/v1/logout`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        apikey: process.env.SUPABASE_ANON_KEY!,
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+  const res = await fetch(`${process.env.SUPABASE_URL}/auth/v1/logout`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      apikey: process.env.SUPABASE_ANON_KEY!,
+      Authorization: `Bearer ${token}`,
+    },
+  });
 
   cookieStore.delete('access_token');
   cookieStore.delete('refresh_token');

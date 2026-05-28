@@ -28,7 +28,7 @@ export default function ForgotPasswordForm() {
   const [userEmail, setUserEmail] = useState('');
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const searchParams = useSearchParams();
-  const [disableButton, setDisableButton] = useState(false)
+  const [disableButton, setDisableButton] = useState(false);
   const urlError = searchParams.get('error');
 
   useEffect(() => {
@@ -62,17 +62,14 @@ export default function ForgotPasswordForm() {
   }
 
   async function sendEmail(data: ForgotPasswordFormData) {
-    try {      
-      const res = await fetch(
-        '/api/auth/forgot-password',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
-        }
-      );
+    try {
+      const res = await fetch('/api/auth/forgot-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
 
       if (!res.ok) {
         const error = await res.json();
@@ -81,7 +78,7 @@ export default function ForgotPasswordForm() {
         });
         return false;
       }
-      setDisableButton(true)
+      setDisableButton(true);
       setShowSuccessMessage(true);
       startTimer();
       return true;
@@ -119,7 +116,10 @@ export default function ForgotPasswordForm() {
         className="bg-white p-8 font-sans rounded-md mb-6 shadow-soft"
       >
         {urlError && (
-          <div role="alert" className="text-red-500 bg-red-600/10 p-3 mb-3 rounded-sm">
+          <div
+            role="alert"
+            className="text-red-500 bg-red-600/10 p-3 mb-3 rounded-sm"
+          >
             {urlError}
           </div>
         )}
@@ -150,18 +150,25 @@ export default function ForgotPasswordForm() {
             className="bg-surface-highest px-4 py-3 rounded-xs text-[#737685] mb-4 border border-transparent focus:outline-none focus:border-primary-container"
             {...register('email')}
             id="email"
-            aria-describedby={errors.email ? 'email-error': undefined}
+            aria-describedby={errors.email ? 'email-error' : undefined}
             type="text"
             placeholder="Enter your email"
           />
         </div>
         {errors.email && (
-          <div role="alert" id="email-error" className="text-red-500 px-2 py-3 mb-2 text-center bg-red-600/10 p-3 mb-3 rounded-sm">
+          <div
+            role="alert"
+            id="email-error"
+            className="text-red-500 px-2 py-3 mb-2 text-center bg-red-600/10 p-3 mb-3 rounded-sm"
+          >
             {errors.email?.message}
           </div>
         )}
         {errors.root && (
-          <div role="alert" className="text-red-500 bg-red-600/10 p-3 mb-3 rounded-sm">
+          <div
+            role="alert"
+            className="text-red-500 bg-red-600/10 p-3 mb-3 rounded-sm"
+          >
             {errors.root?.message}
           </div>
         )}

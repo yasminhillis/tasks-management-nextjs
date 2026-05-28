@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import ProjectHeader from './_components/ProjectHeader';
 import ProjectCard from './_components/ProjectCard';
@@ -8,7 +8,7 @@ import LoadingCard from './_components/LoadingCard';
 import EmptyState from '../_components/EmptyState';
 import AddProjectCard from './_components/AddProjectCard';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
-import { fetchProjects, setCurrentPage } from '@/lib/store/slices/projectsSlice';
+import { fetchProjects } from '@/lib/store/slices/projectsSlice';
 import { PAGE_SIZE } from '@/lib/constants';
 
 type Project = {
@@ -19,17 +19,15 @@ type Project = {
 };
 
 export default function ProjectsList() {
-  const dispatch = useAppDispatch()
-  const {  projects, 
-    isLoading, 
-    error, 
-    currentPage, 
-    totalCount, isFetched } = useAppSelector(state => state.projects)
+  const dispatch = useAppDispatch();
+  const { projects, isLoading, error, currentPage, isFetched } = useAppSelector(
+    (state) => state.projects
+  );
 
   const router = useRouter();
 
   useEffect(() => {
-    dispatch(fetchProjects({page: 1, limit: PAGE_SIZE, mode: 'desktop'}));
+    dispatch(fetchProjects({ page: 1, limit: PAGE_SIZE, mode: 'desktop' }));
   }, [dispatch]);
 
   function formatDate(dateString: string) {
@@ -39,19 +37,30 @@ export default function ProjectsList() {
       year: 'numeric',
     });
   }
-  
-  if (error) {
-    console.log(error, 'error 33');
-    
-    return <ErrorScreen message={` We're having trouble retrieving your projects right now. Please try
-        again in a moment.`} 
-        onRetry={() => {dispatch(fetchProjects({ page: currentPage, limit: PAGE_SIZE, mode: 'desktop' }))}}
+
+  if (error)
+    return (
+      <ErrorScreen
+        message={` We're having trouble retrieving your projects right now. Please try
+        again in a moment.`}
+        onRetry={() => {
+          dispatch(
+            fetchProjects({
+              page: currentPage,
+              limit: PAGE_SIZE,
+              mode: 'desktop',
+            })
+          );
+        }}
         buttonElement={true}
-       />;}
+      />
+    );
 
   return (
     <div className="px-8">
-      {!isLoading && !error && isFetched && projects.length === 0 && <EmptyState />}
+      {!isLoading && !error && isFetched && projects.length === 0 && (
+        <EmptyState />
+      )}
 
       {isLoading && (
         <>

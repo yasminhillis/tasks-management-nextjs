@@ -19,7 +19,10 @@ export default function ProjectCard({
   const router = useRouter();
 
   return (
-    <div onClick={() => router.push(`/project/${projectId}/epics`)} className="bg-white shadow-sm md:shadow-none w-full max-w-[304px] rounded-md p-6 cursor-pointer hover:shadow-sm">
+    <div
+      onClick={() => router.push(`/project/${projectId}/epics`)}
+      className="bg-white shadow-sm md:shadow-none w-full max-w-[304px] rounded-md p-6 cursor-pointer hover:shadow-sm"
+    >
       <div className="flex justify-between">
         <h2 className="title-md mb-3">{name}</h2>
         <DotDropDown id={projectId} />

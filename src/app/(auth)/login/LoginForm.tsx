@@ -13,7 +13,7 @@ export default function LoginForm() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    setError
+    setError,
   } = useForm<LoginFormData>({
     resolver: zodResolver(LoginSchema),
     mode: 'onChange',
@@ -39,7 +39,7 @@ export default function LoginForm() {
         });
         return;
       }
-      setIsRedirecting(true)
+      setIsRedirecting(true);
       router.push('/project');
     } catch (error) {
       if (error instanceof TypeError && error.message === 'Failed to fetch') {
@@ -53,9 +53,17 @@ export default function LoginForm() {
       }
     }
   }
-  const renderButtonText =  isSubmitting ? 'Loading...' : isRedirecting ? 'Redirecting...' : 'Sign In'
+  const renderButtonText = isSubmitting
+    ? 'Loading...'
+    : isRedirecting
+      ? 'Redirecting...'
+      : 'Sign In';
   return (
-    <form method="POST" onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
+    <form
+      method="POST"
+      onSubmit={handleSubmit(onSubmit)}
+      className="flex flex-col gap-6"
+    >
       <div className="flex flex-col gap-2">
         <label className="uppercase text-xs font-bold" htmlFor="email">
           Email Address
@@ -65,7 +73,7 @@ export default function LoginForm() {
           <input
             {...register('email')}
             id="email"
-            aria-describedby={errors.email ? "email-error" : undefined}
+            aria-describedby={errors.email ? 'email-error' : undefined}
             className="focus:outline-none border border-transparent focus:border-primary-container bg-surface-highest p-4 rounded-md text-[#737685] sm:rounded-xs w-full"
             placeholder="curator@workspace.com"
           />
@@ -78,7 +86,9 @@ export default function LoginForm() {
           />
         </div>
         {errors.email && (
-          <div role="alert" id="email-error" className="text-red-500">{errors.email.message}</div>
+          <div role="alert" id="email-error" className="text-red-500">
+            {errors.email.message}
+          </div>
         )}
       </div>
 
@@ -101,7 +111,7 @@ export default function LoginForm() {
             className="w-full focus:outline-none border border-transparent focus:border-primary-container  bg-surface-highest p-4 rounded-md text-[#737685] sm:rounded-xs"
             type="password"
             id="password"
-            aria-describedby={errors.password ? "password-error" : undefined}
+            aria-describedby={errors.password ? 'password-error' : undefined}
             placeholder="Enter your password"
           />
           <Image
@@ -113,7 +123,9 @@ export default function LoginForm() {
           />
         </div>
         {errors.password && (
-          <div role="alert" id="password-error" className="text-red-500">{errors.password.message}</div>
+          <div role="alert" id="password-error" className="text-red-500">
+            {errors.password.message}
+          </div>
         )}
       </div>
 
@@ -133,7 +145,11 @@ export default function LoginForm() {
         </label>
       </div>
 
-      {errors.root && <div role="alert" className="text-red-500">{errors.root.message}</div>}
+      {errors.root && (
+        <div role="alert" className="text-red-500">
+          {errors.root.message}
+        </div>
+      )}
 
       <button
         type="submit"
@@ -145,9 +161,7 @@ export default function LoginForm() {
 
           <Image src="/arrow.png" height={13} width={13} alt="arrow icon" />
         </span>{' '}
-        <span className="hidden sm:inline">
-          {renderButtonText}
-        </span>
+        <span className="hidden sm:inline">{renderButtonText}</span>
       </button>
 
       <p className="text-slate-600 text-sm text-center mb-4">

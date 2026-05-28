@@ -9,13 +9,13 @@ export const fetchUser = createAsyncThunk('user/fetchUser', async () => {
 type UserState = {
   name: string;
   department: string;
-  status: 'idle' | 'loading' | 'succeeded' | 'failed'
+  status: 'idle' | 'loading' | 'succeeded' | 'failed';
 };
 
 const initialState: UserState = {
   name: '',
   department: '',
-  status: 'idle'
+  status: 'idle',
 };
 
 export const userSlice = createSlice({
@@ -25,21 +25,19 @@ export const userSlice = createSlice({
     clearUser: () => initialState,
   },
   extraReducers: (builder) => {
-
     builder.addCase(fetchUser.pending, (state) => {
-      state.status = 'loading'
-    })
+      state.status = 'loading';
+    });
 
     builder.addCase(fetchUser.fulfilled, (state, action) => {
-      state.status = 'succeeded'
+      state.status = 'succeeded';
       state.name = action.payload.name;
       state.department = action.payload.department;
     });
 
     builder.addCase(fetchUser.rejected, (state) => {
-      state.status = 'failed'
-    })
-
+      state.status = 'failed';
+    });
   },
 });
 

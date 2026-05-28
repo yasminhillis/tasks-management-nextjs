@@ -3,23 +3,18 @@ export async function GET() {
   const cookieStore = await cookies();
 
   const token = cookieStore.get('access_token');
-  // console.log(token?.value, 'll');
-  
 
   if (!token) {
     return Response.json({ authenticated: false }, { status: 401 });
   }
 
-  const res = await fetch(
-    `${process.env.SUPABASE_URL}/auth/v1/user`,
-    {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token.value}`,
-        apikey: process.env.SUPABASE_ANON_KEY!,
-      },
-    }
-  );
+  const res = await fetch(`${process.env.SUPABASE_URL}/auth/v1/user`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token.value}`,
+      apikey: process.env.SUPABASE_ANON_KEY!,
+    },
+  });
 
   if (!res.ok) {
     return Response.json({ authenticated: false, status: 401 });

@@ -4,12 +4,11 @@ import { mainNavItems, projectNavItems } from './navItems';
 import Link from 'next/link';
 export default function BottomBar() {
   const pathname = usePathname();
-   // /project/bb9ac6c6-b4e2-4926-abc6-74400ce4d8ad/epics 
-  // /project 
   const isOnProjectRoute = pathname.split('/').length < 3;
   const projectId = isOnProjectRoute ? null : pathname.split('/')[2];
-  const items = !isOnProjectRoute && projectId ? projectNavItems(projectId) : mainNavItems;
-  // console.log(pathname, 'kk');
+  const items =
+    !isOnProjectRoute && projectId ? projectNavItems(projectId) : mainNavItems;
+
   return (
     <div className="fixed bottom-0 md:hidden w-full h-[64px] flex items-center justify-around bg-[#F1F3FF] gap-[39px] text-[#041B3CB2]/90 px-[27px] py-4">
       {items.map((navItem) => {

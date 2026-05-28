@@ -18,7 +18,6 @@ export default function NavbarClient() {
   const dropDownRef = useRef<HTMLDivElement>(null);
 
   const { name, department } = useAppSelector((state) => state.user);
-  const { isMobileOpen } = useAppSelector((state) => state.ui);
 
   useEffect(() => {
     dispatch(fetchUser());
@@ -42,38 +41,19 @@ export default function NavbarClient() {
     return () => clearTimeout(timer);
   }, [logoutStatus]);
 
-  // console.log(isMobileOpen, 'isMobileOpen');
-
-  // function getInitials(name: string) {
-  //   if (!name) return;
-  //   let nameParts = name.split(' ');
-
-  //   if (nameParts.length >= 2) {
-  //     return (
-  //       nameParts[0].charAt(0).toUpperCase() +
-  //       nameParts[1].charAt(0).toUpperCase()
-  //     );
-  //   }
-  //   return name.charAt(0).toUpperCase() + name.charAt(1).toUpperCase();
-  // }
-
   async function logUserOut() {
     try {
       const res = await fetch(`/api/auth/logout`, {
         method: 'POST',
       });
 
-      // throw new Error()
-
       if (!res.ok) {
         const error = await res.json();
-        // console.log(error, 'error');
         setLogoutStatus(error.message);
         setIsLogoutSuccessful(false);
         return;
       }
       const data = await res.json();
-      // console.log(data, 'data');
       setLogoutStatus(data.message);
       setIsLogoutSuccessful(true);
       dispatch(clearUser());
@@ -84,8 +64,8 @@ export default function NavbarClient() {
     }
   }
 
-  function toggleDropDown(){
-    setDropDownOpen((prev) => !prev)
+  function toggleDropDown() {
+    setDropDownOpen((prev) => !prev);
   }
 
   return (
@@ -120,15 +100,11 @@ export default function NavbarClient() {
             </h2>
           </div>
           <div ref={dropDownRef} className="relative">
-            {/* <div
-              onClick={() => setDropDownOpen((prev) => !prev)}
-              className="cursor-pointer bg-primary-container w-[40px] h-[40px]
-                    flex items-center justify-center shadow-sm
-                    text-white rounded-md font-bold text-[16px]"
-            >
-              {getInitials(name)}
-            </div> */}
-            <Initials name={name} onClick={toggleDropDown} extraStyles='cursor-pointer'/>
+            <Initials
+              name={name}
+              onClick={toggleDropDown}
+              extraStyles="cursor-pointer"
+            />
             {isDropDownOpen && (
               <div className="absolute right-0 top-10 z-70 w-[200px] h-auto py-4 px-4 bg-white border border-gray-400 shadow-sm flex flex-col gap-4 justify-start rounded-lg">
                 <div className="flex gap-2 items-center ">
