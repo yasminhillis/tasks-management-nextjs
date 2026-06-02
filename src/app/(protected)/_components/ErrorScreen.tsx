@@ -1,8 +1,13 @@
+'use client';
+
+import { useRouter } from "next/navigation";
+
 type ErrorScreenProps = {
   onRetry?: () => void;
   message: string;
   buttonElement?: boolean;
   extraStyles?: string;
+  pageErrorHappendOn?: string
 };
 
 export default function ErrorScreen({
@@ -10,7 +15,10 @@ export default function ErrorScreen({
   message,
   buttonElement,
   extraStyles,
+  pageErrorHappendOn
 }: ErrorScreenProps) {
+  const router = useRouter();
+
   return (
     <div className="flex flex-col items-center justify-center min-h-[80vh]">
       <div className="bg-[#FFDAD6] w-10 h-10 flex items-center justify-center rounded-lg mb-3">
@@ -24,7 +32,7 @@ export default function ErrorScreen({
       </p>
       {buttonElement ? (
         <button
-          onClick={onRetry ? () => onRetry() : undefined}
+          onClick={pageErrorHappendOn === "projectList" && onRetry ? () => onRetry()  : () => router.refresh()}
           className="px-4 py-[8px] bg-[#0052CC] hover:bg-[#1966e1] transition-colors font-semibold text-white cursor-pointer rounded-xs"
         >
           Retry Connection

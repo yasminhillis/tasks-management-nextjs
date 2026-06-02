@@ -28,7 +28,7 @@ export default function ProjectCard({
         <DotDropDown id={projectId} />
       </div>
       <p
-        className="body-md min-h-[69px] w-[256px] line-clamp-3"
+        className="body-md min-h-[69px] w-auto line-clamp-3"
         style={{
           display: '-webkit-box',
           WebkitLineClamp: 3,

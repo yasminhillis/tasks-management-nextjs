@@ -42,6 +42,7 @@ export async function POST(req: Request) {
     path: '/',
     maxAge: body.rememberMe ? 60 * 60 * 24 * 30 : undefined,
   });
-
+  console.log(data.user, 'user');
+  
   return Response.json({ user: data.user });
 }

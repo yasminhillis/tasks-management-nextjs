@@ -12,7 +12,9 @@ export default async function Members({
   const { projectId } = await params;
   const result = await getProjectMembers(projectId);
 
-  if (!result.success) return <ErrorScreen message={result.message} />;
+  if (!result.success) return <ErrorScreen message={`We're having trouble retrieving your
+ project members right now. Please try
+again in a moment.`} buttonElement={true} />;
   return (
     <PageWrapper>
       <Header
