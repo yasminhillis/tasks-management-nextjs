@@ -105,6 +105,7 @@ export default function NavbarClient() {
               name={name}
               onClick={toggleDropDown}
               extraStyles="cursor-pointer"
+              state="success"
             />
             {isDropDownOpen && (
               <div className="absolute right-0 top-10 z-70 w-[200px] h-auto py-4 px-4 bg-white border border-gray-400 shadow-sm flex flex-col gap-4 justify-start rounded-lg">
