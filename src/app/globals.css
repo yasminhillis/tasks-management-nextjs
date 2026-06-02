@@ -9,9 +9,10 @@
   --color-background: #f9f9ff;
 
   /* Slate Neutrals */
-  --color-slate-900: #041b3c;
-  --color-slate-600: #4f5f7b;
   --color-slate-200: #c3c6d6;
+  --color-slate-500: #434654;
+  --color-slate-600: #4f5f7b;
+  --color-slate-900: #041b3c;
 
   /* Semantic */
   --color-success: #004e32;
@@ -23,6 +24,7 @@
 
   /* font size scale */
   --font-size-display-lg: 3rem;
+  --font-size-display-md: 2.25rem;
   --font-size-headline-lg: 2rem;
   --font-size-title-md: 1.125rem;
   --font-size-body-sm: 0.875rem;
@@ -33,9 +35,11 @@
   --font-size-caption-md: 0.875rem;
   --font-size-title-lg: 1.25rem;
   --font-size-caption-xs: 0.75rem;
+  --font-size-error-sm: 0.6875rem;
 
   /* line heights */
   --line-height-display-lg: 1.2;
+  --line-height-display-md: 2.5rem; 
   --line-height-headline-lg: 2.5rem;
   --line-height-title-md: 1.6875rem;
   --line-height-body-sm: 1.25rem;
@@ -46,6 +50,7 @@
   --line-height-caption-md: 1.25rem;
   --line-height-title-lg: 1.75rem;
   --line-height-caption-xs: 1rem;
+  --line-height-error-sm: 1.03125rem;
 
   /* font weights */
   --font-weight-medium: 500;
@@ -55,10 +60,12 @@
 
   /* letter spacing */
   --letter-spacing-tight: -0.02em;
+  --letter-spacing-display-md: -0.05625rem;
   --letter-spacing-normal: 0px;
   --letter-spacing-wide: 0.05em;
   --letter-spacing-label-sm: 0.06875rem;
   --letter-spacing-label-sm-tight: -0.034375rem;
+  --letter-spacing-error-sm: 0.034375rem;
 
   /* Border Radius */
   --radius-xs: 0.125rem;
@@ -89,6 +96,13 @@
   --shadow-soft: '0 4px 12px rgba(0, 0, 0, 0.1)';
   --shadow-soft-lg: '0 24px 48px 0px rgba(4, 27, 60, 0.06)';
   --shadow-blue-md: '0 4px 6px -4px rgba(0,61,155,0.2), 0 10px 15px -3px rgba(0,61,155,0.2)';
+  --shadow-card: 0px 24px 48px -12px rgba(4, 27, 60, 0.06);
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
 }
 
 body {
@@ -99,6 +113,14 @@ body {
 }
 
 @layer components {
+  .display-md {
+    font-size: var(--font-size-display-md);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-display-md);
+    letter-spacing: var(--letter-spacing-display-md);
+    color: var(--color-slate-900);
+  }
+
   .headline-lg {
     font-size: var(--font-size-headline-lg);
     font-weight: var(--font-weight-semibold);
@@ -154,6 +176,15 @@ body {
     letter-spacing: var(--letter-spacing-label-sm);
     text-transform: uppercase;
     color: var(--color-slate-900);
+  }
+
+  .error-sm {
+    font-size: var(--font-size-error-sm);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-error-sm);
+    letter-spacing: var(--letter-spacing-error-sm);
+    text-transform: uppercase;
+    color: #BA1A1A;
   }
 
   .label-sm-muted {

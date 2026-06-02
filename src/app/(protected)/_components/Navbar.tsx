@@ -101,6 +101,7 @@ export default function NavbarClient() {
           </div>
           <div ref={dropDownRef} className="relative">
             <Initials
+              mode="desktop"
               name={name}
               onClick={toggleDropDown}
               extraStyles="cursor-pointer"

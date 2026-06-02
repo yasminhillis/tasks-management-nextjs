@@ -27,7 +27,10 @@ export default function ProjectsList() {
   const router = useRouter();
 
   useEffect(() => {
-    dispatch(fetchProjects({ page: 1, limit: PAGE_SIZE, mode: 'desktop' }));
+    console.log(window.innerWidth, 'window.innerWidth');
+    
+    const mode = window.innerWidth < 768 ? 'mobile' : 'desktop';
+    dispatch(fetchProjects({ page: 1, limit: PAGE_SIZE, mode }));
   }, [dispatch]);
 
   function formatDate(dateString: string) {
@@ -38,11 +41,14 @@ export default function ProjectsList() {
     });
   }
 
-  if (error)
+  if (error) {
+    console.log(error, 'error');
+    
     return (
       <ErrorScreen
         message={` We're having trouble retrieving your projects right now. Please try
         again in a moment.`}
+        pageErrorHappendOn="projectList" 
         onRetry={() => {
           dispatch(
             fetchProjects({
@@ -55,6 +61,7 @@ export default function ProjectsList() {
         buttonElement={true}
       />
     );
+  }
 
   return (
     <div className="px-8">
@@ -76,7 +83,7 @@ export default function ProjectsList() {
         <>
           <ProjectHeader loading={isLoading} />
           {
-            <div className="grid md:grid-cols-3 justify-items-center gap-6 mb-6 md:mb-10">
+            <div className="grid sm:grid-cols-2 md:grid-cols-3 justify-items-center gap-6 mb-6 md:mb-10">
               {projects.map((project: Project) => (
                 <ProjectCard
                   id={project.id}
