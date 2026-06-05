@@ -10,6 +10,7 @@ import AddProjectCard from './_components/AddProjectCard';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import { fetchProjects } from '@/lib/store/slices/projectsSlice';
 import { PAGE_SIZE } from '@/lib/constants';
+import Pagination from './_components/Paginations';
 
 type Project = {
   id: string;
@@ -63,11 +64,15 @@ export default function ProjectsList() {
     );
   }
 
+  if (!isLoading && !error && isFetched && projects.length === 0) {
+    return  <EmptyState imageSrc="/empty-project.png" imageAlt='empty project list' imageWidth={288} imageHeight={288} imageStyles="mt-8 mb-6 w-[180px] h-[180px] md:w-[220px] md:h-[220px]" title="No Projects" description=" You don’t have any projects yet. Start by defining your first
+        architectural workspace to begin tracking tasks and epics."
+        buttonLabel='Create New Project' materialButtonIcon='add' onButtonClick={() => router.push('/project/add')}
+        />
+  }
+
   return (
-    <div className="px-8">
-      {!isLoading && !error && isFetched && projects.length === 0 && (
-        <EmptyState />
-      )}
+    <div className="px-8">  
 
       {isLoading && (
         <>
@@ -106,6 +111,7 @@ export default function ProjectsList() {
           </div>
         </>
       )}
+      <Pagination />
     </div>
   );
 }

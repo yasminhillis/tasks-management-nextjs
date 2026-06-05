@@ -1,4 +1,4 @@
-export type MemberRole = 'owner' | 'admin' | 'member' | 'viewer' | '';
+export type MemberRole = 'owner' | 'admin' | 'member' | 'viewer' | '' | string;
 
 export type Members = {
   member_id: string;
