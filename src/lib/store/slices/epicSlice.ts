@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import type { Epic } from '@/lib/types';
+import type { Epic } from '@/lib/types/index';
 
 
 type EpicsState = {
