@@ -11,7 +11,7 @@ import EmptyState from '@/app/(protected)/_components/EmptyState';
 import { useRouter } from 'next/navigation';
 import FeatureHintCard from './_components/FeatureHintCard';
 import Pagination from '@/app/(protected)/_components/Pagination';
-import type { Epic } from '@/lib/types';
+import type { Epic } from '@/lib/types/index';
 import MobilePlusButton from '../../_components/MobilePlusButton';
 
 export default function EpicsList({ projectId }: { projectId: string }) {

@@ -10,7 +10,7 @@ export default async function AddNewEpic({params} : {params: Promise<{projectId:
     return <>
     <PageWrapper>
     <h1 className="display-md mb-2">Create New Epic</h1>
-    <p className="body-lg mb-8">Define a major project phase or high-level milestone to group
+    <p className="body-lg mb-8 max-w-[472px]">Define a major project phase or high-level milestone to group
         related tasks and track architectural progress.</p>
     <AddEpicForm members={projectMembers.data} projectId={projectId}/>
     </PageWrapper>
