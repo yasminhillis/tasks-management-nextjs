@@ -1,5 +1,5 @@
 'use client';
-import { PAGE_SIZE } from '@/lib/constants';
+import { PROJECTS_PAGE_SIZE, EPICS_PAGE_SIZE } from '@/lib/constants';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import { fetchEpics } from '@/lib/store/slices/epicSlice';
 import { fetchProjects } from '@/lib/store/slices/projectsSlice';
@@ -19,7 +19,7 @@ export default function InfiniteScroll({ slice }: InfiniteScrollProps) {
   const projectData = useAppSelector((state) => state.projects);
   const { currentPage, totalCount } =
     slice === 'epics' ? epicData : projectData;
-  const pageSize = slice === 'epics' ? epicData.pageSize : PAGE_SIZE;
+  const pageSize = slice === 'epics' ? EPICS_PAGE_SIZE : PROJECTS_PAGE_SIZE;
   const totalPages = Math.ceil(totalCount / pageSize);
   const bottomRef = useRef<HTMLDivElement>(null);
   const isFetchingRef = useRef(false);

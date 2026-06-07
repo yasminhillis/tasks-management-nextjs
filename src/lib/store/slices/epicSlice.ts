@@ -9,7 +9,6 @@ type EpicsState = {
     isFetched: boolean,
     error: string, 
     currentPage: number,
-    pageSize: number, 
     totalCount: number,
     projectId: string
 }
@@ -20,7 +19,6 @@ const initialState: EpicsState = {
     isFetched: false,
     error: '', 
     currentPage: 1, 
-    pageSize: 6,
     totalCount: 0,
     projectId: ''
 }

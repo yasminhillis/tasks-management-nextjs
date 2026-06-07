@@ -9,7 +9,7 @@ import EmptyState from '../_components/EmptyState';
 import AddProjectCard from './_components/AddProjectCard';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import { fetchProjects } from '@/lib/store/slices/projectsSlice';
-import { PAGE_SIZE } from '@/lib/constants';
+import { PROJECTS_PAGE_SIZE } from '@/lib/constants';
 import Pagination from '../_components/Pagination';
 import MobilePlusButton from './_components/MobilePlusButton';
 import Header from './_components/Header';
@@ -33,7 +33,7 @@ export default function ProjectsList() {
     console.log(window.innerWidth, 'window.innerWidth');
 
     const mode = window.innerWidth < 768 ? 'mobile' : 'desktop';
-    dispatch(fetchProjects({ page: 1, limit: PAGE_SIZE, mode }));
+    dispatch(fetchProjects({ page: 1, limit: PROJECTS_PAGE_SIZE, mode }));
   }, [dispatch]);
 
   function formatDate(dateString: string) {
@@ -56,7 +56,7 @@ export default function ProjectsList() {
           dispatch(
             fetchProjects({
               page: currentPage,
-              limit: PAGE_SIZE,
+              limit: PROJECTS_PAGE_SIZE,
               mode: 'desktop',
             })
           );
