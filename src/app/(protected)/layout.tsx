@@ -1,6 +1,6 @@
 import Sidebar from './_components/Sidebar';
 import Navbar from './_components/Navbar';
-// import BottomBar from './_components/BottomBar';
+import BottomBar from './_components/BottomBar';
 export default function ProtectedLayout({
   children,
 }: {
@@ -12,7 +12,7 @@ export default function ProtectedLayout({
       <div className="flex flex-col flex-1 relative">
         <Navbar />
         <main>{children}</main>
-        {/* <BottomBar /> */}
+        <BottomBar />
       </div>
     </div>
   );

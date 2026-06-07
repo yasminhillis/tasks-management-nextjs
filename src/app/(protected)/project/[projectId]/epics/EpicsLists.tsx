@@ -109,7 +109,7 @@ export default function EpicsList({ projectId }: { projectId: string }) {
       </PageWrapper>
     );
 
-  if (loading === 'failed' && error?.length > 0) {
+  if (loading === 'failed' && error?.length > 0 && epics.length === 0) {
     console.log(error, 'here');
     return (
       <ErrorScreen
