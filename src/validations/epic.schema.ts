@@ -21,7 +21,10 @@ import { z } from 'zod'
 export const EpicSchema = z.object({
   title: z.string().min(3, {message: 'Title is required (minimum 3 characters)'}),
   description: z.string().max(500, {message: 'Descriprion must be 500 characters or less'}).optional(),
-  assignee_id: z.uuid().optional(),
+  assignee_id:z.preprocess(
+  (val) => val === '' ? undefined : val, 
+  z.string().uuid().optional()
+),
   deadline: z.string().optional().refine((value) => {
         if (!value) return true;
         const deadline = new Date(value); 
