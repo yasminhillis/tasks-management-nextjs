@@ -1,4 +1,4 @@
-import { shimmer } from "./loadingStyle";
+import { shimmer } from './loadingStyle';
 export default function LoadingCard() {
   return (
     <div className="bg-white border-[#C3C6D61A] shadow-sm w-[304px] rounded-md flex flex-col gap-6 p-6 max-h-[250px]">

@@ -1,24 +1,47 @@
 'use client';
 import { PAGE_SIZE } from '@/lib/constants';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
+import { fetchEpics } from '@/lib/store/slices/epicSlice';
 import { fetchProjects } from '@/lib/store/slices/projectsSlice';
 
-export default function Pagination() {
+type PaginationProps = {
+  slice: 'epics' | 'projects';
+};
+
+export default function Pagination({ slice }: PaginationProps) {
   const dispatch = useAppDispatch();
 
-  const { currentPage, totalCount, isFetched } = useAppSelector(
-    (state) => state.projects
-  );
+  const projectData = useAppSelector((state) => state.projects);
 
-  const totalPages = Math.ceil(totalCount / PAGE_SIZE);
+  const epicData = useAppSelector((state) => state.epics);
+
+  const { currentPage, totalCount, isFetched } =
+    slice === 'epics' ? epicData : projectData;
+  const projectId = slice === 'epics' ? epicData.projectId : '';
+  const pageSize = slice === 'epics' ? epicData.pageSize : PAGE_SIZE;
+
+  const totalPages = Math.ceil(totalCount / pageSize);
 
   const pageButtons = [...Array(totalPages)].map((_, index) => (
     <button
       key={index + 1}
       onClick={() =>
-        dispatch(
-          fetchProjects({ page: index + 1, limit: PAGE_SIZE, mode: 'desktop' })
-        )
+        slice === 'projects'
+          ? dispatch(
+              fetchProjects({
+                page: index + 1,
+                limit: PAGE_SIZE,
+                mode: 'desktop',
+              })
+            )
+          : dispatch(
+              fetchEpics({
+                projectId: projectId!,
+                page: index + 1,
+                limit: pageSize,
+                mode: 'desktop'
+              })
+            )
       }
       className={`w-[32px] h-[32px] rounded-xs flex items-center 
             justify-center border border-[#C3C6D64D] ${currentPage === index + 1 ? 'border border-transparent bg-[#003D9B] text-white' : 'border border-[#C3C6D64D] text-[#434654]'}
@@ -30,14 +53,20 @@ export default function Pagination() {
 
   function handlePageChange(page: number) {
     if (page < 1 || page > totalPages) return;
-    dispatch(fetchProjects({ page: page, limit: PAGE_SIZE, mode: 'desktop' }));
+    if (slice === 'epics') {
+      dispatch(fetchEpics({ projectId: projectId!, page, limit: pageSize, mode: 'desktop' }));
+    } else {
+      dispatch(fetchProjects({ page, limit: pageSize, mode: 'desktop' }));
+    }
   }
 
+  if (totalPages <= 1) return null;
   return (
     isFetched && (
-      <div className="hidden md:flex justify-between items-center pt-12 pr-8 pb-8 pl-8 mb-[121px]">
+      <div className="hidden md:flex justify-between items-center mb-[121px]">
         <h3>
-          Showing {PAGE_SIZE} of {totalCount} active projects
+          Showing {PAGE_SIZE} of {totalCount}{' '}
+          {slice === 'projects' ? 'active projects' : 'epics'}
         </h3>
         <div className="flex items-center gap-2">
           <button

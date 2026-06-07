@@ -1,12 +1,17 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
+import type { Epic } from '@/lib/types';
+
+
 type EpicsState = {
-    epics: [],
+    epics: Epic[],
     loading: 'idle' | 'loading' | 'succeeded' | 'failed', 
     isFetched: boolean,
     error: string, 
-    currentPage: number, 
-    totalCount: number
+    currentPage: number,
+    pageSize: number, 
+    totalCount: number,
+    projectId: string
 }
 
 const initialState: EpicsState = {
@@ -15,11 +20,14 @@ const initialState: EpicsState = {
     isFetched: false,
     error: '', 
     currentPage: 1, 
-    totalCount: 0
+    pageSize: 6,
+    totalCount: 0,
+    projectId: ''
 }
 
-export const fetchEpics = createAsyncThunk('epics/fetchEpics', async(projectId: string, {rejectWithValue}) => {
-    const res = await fetch(`/api/epics?projectId=${projectId}`); 
+export const fetchEpics = createAsyncThunk('epics/fetchEpics', async({projectId, page, limit, mode}: {projectId: string, page: number, limit: number, mode: 'desktop' | 'mobile'}, {rejectWithValue}) => {
+    const offset = (page - 1) * limit;
+    const res = await fetch(`/api/epics?projectId=${projectId}&limit=${limit}&offset=${offset}`); 
     if (!res.ok) {
         const error = await res.json()
         console.log(error, 'error');
@@ -30,7 +38,7 @@ export const fetchEpics = createAsyncThunk('epics/fetchEpics', async(projectId: 
     console.log('status:', res.status);
     console.log(epics, 'epics from think');
     
-    return epics
+    return {...epics, currentPage: page, projectId, mode}
 })
 
  export const epicSlice = createSlice({
@@ -45,10 +53,29 @@ export const fetchEpics = createAsyncThunk('epics/fetchEpics', async(projectId: 
             state.loading = 'loading'; 
         })
         builder.addCase(fetchEpics.fulfilled, (state, action) => {
+            console.log(action.payload, 'action.payload');
+            
+            if (state.projectId !== action.payload.projectId) {
+                state.currentPage = 1
+            }
+            state.projectId = action.payload.projectId;
             state.error = ''; 
             state.isFetched = true; 
             state.loading = 'succeeded'; 
-            state.epics = action.payload.data
+            
+            state.totalCount = action.payload.totalCount;
+            state.currentPage = action.payload.currentPage;
+            console.log(action.payload.mode, 'mode');
+            
+            if (action.payload.mode === 'mobile') {
+                const existingIds = new Set(state.epics.map((epic: Epic) => epic.id));
+                console.log(existingIds, 'existingIds');
+                const newEpics = action.payload.data.filter((epic: Epic) => !existingIds.has(epic.id));
+                state.epics = [...state.epics, ...newEpics]
+                
+            } else {
+                state.epics = action.payload.data;
+            }
         })
 
         builder.addCase(fetchEpics.rejected, (state, action) => {
