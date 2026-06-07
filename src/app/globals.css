@@ -36,6 +36,7 @@
   --font-size-title-lg: 1.25rem;
   --font-size-caption-xs: 0.75rem;
   --font-size-error-sm: 0.6875rem;
+  --font-size-hint: 0.625rem;
 
   /* line heights */
   --line-height-display-lg: 1.2;
@@ -51,6 +52,7 @@
   --line-height-title-lg: 1.75rem;
   --line-height-caption-xs: 1rem;
   --line-height-error-sm: 1.03125rem;
+  --line-height-hint: 0.9375rem;
 
   /* font weights */
   --font-weight-medium: 500;
@@ -230,5 +232,13 @@ body {
     letter-spacing: var(--letter-spacing-normal); /* 0px */
     text-align: center;
     cursor: pointer;
+  }
+
+  .hint {
+    font-size: var(--font-size-hint);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-hint);
+    color: var(--color-slate-500);
+    opacity: 0.6;
   }
 }
