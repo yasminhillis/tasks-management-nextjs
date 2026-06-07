@@ -60,7 +60,7 @@ export const projectsSlice = createSlice({
             state.totalCount = action.payload.totalCount; 
             state.currentPage = action.payload.currentPage
             if (action.payload.mode === 'mobile') {
-                const existingIds = new Set(state.projects.map(p => p.id));                 
+                const existingIds = new Set(state.projects.map((p: Project) => p.id));                 
                 const newProjects = action.payload.data.filter((p: Project) => !existingIds.has(p.id))
                 state.projects = [...state.projects, ...newProjects]
             } else {

@@ -3,31 +3,32 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 type EmptyStateProps = {
-  imageSrc: string, 
-  imageWidth: number, 
-  imageHeight: number,
-  imageAlt: string,
-  imageStyles: string,
-  title: string,
-  description: string, 
-  buttonLabel: string,
-  materialButtonIcon: string,
-  onButtonClick?: () => void,
-  footer?: React.ReactNode, 
-}
+  imageSrc: string;
+  imageWidth: number;
+  imageHeight: number;
+  imageAlt: string;
+  imageStyles: string;
+  title: string;
+  description: string;
+  buttonLabel: string;
+  materialButtonIcon: string;
+  onButtonClick?: () => void;
+  footer?: React.ReactNode;
+};
 
-export default function EmptyState(
-  {imageSrc, 
+export default function EmptyState({
+  imageSrc,
   imageWidth,
   imageHeight,
   imageAlt,
   imageStyles,
-  title, 
+  title,
   description,
   buttonLabel,
   materialButtonIcon,
   onButtonClick,
-  footer}: EmptyStateProps) {
+  footer,
+}: EmptyStateProps) {
   const router = useRouter();
   return (
     <div className="flex flex-col items-center justify-center p-4">
@@ -43,7 +44,7 @@ export default function EmptyState(
       <p className="body-md text-center mb-6 md:mb-12 w-[258px] md:w-[448px]">
         {description}
       </p>
-      
+
       <button
         onClick={onButtonClick}
         type="button"

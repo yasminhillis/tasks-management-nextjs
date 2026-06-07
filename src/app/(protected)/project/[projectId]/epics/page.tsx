@@ -1,3 +1,4 @@
+import InfiniteScroll from "../../../_components/InfiniteScroll";
 import PageWrapper from "../../_components/PageWrapper";
 import EpicsList from "./EpicsLists";
 
@@ -6,6 +7,7 @@ export default async function Epics({ params }: {params: Promise<{projectId: str
   return (
     <PageWrapper>
       <EpicsList projectId={projectId} />
+      <InfiniteScroll slice="epics"/>
     </PageWrapper>
 )
 }
