@@ -78,7 +78,7 @@ export default function Header({
 
         <div className=" flex gap-8 items-center">
           {searchBar}
-          <button onClick={handleBtnClick} className="hidden md:inline-flex rounded-xs items-center gap-2 px-[24px] py-[12px] w-[214px] shadow-blue-md bg-radial from-[#003D9B] to-[#0052CC] text-white text-sm cursor-pointer hover:from-[#1259cb] hover:to-[#0657d1] transition-colors font-bold">
+          <button onClick={handleBtnClick} className="hidden md:inline-flex rounded-xs items-center justify-center gap-2 px-[24px] py-[12px] shadow-blue-md bg-radial from-[#003D9B] to-[#0052CC] text-white text-sm cursor-pointer hover:from-[#1259cb] hover:to-[#0657d1] transition-colors font-bold">
             <span className="material-symbols-outlined">{materialIcon}</span>
             {buttonLabel}
           </button>
