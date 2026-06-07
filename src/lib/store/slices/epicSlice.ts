@@ -48,9 +48,12 @@ export const fetchEpics = createAsyncThunk('epics/fetchEpics', async({projectId,
         
     },
     extraReducers: (builder) => {
-        builder.addCase(fetchEpics.pending, (state) => {
+        builder.addCase(fetchEpics.pending, (state, action) => {
             state.error = ''; 
-            state.loading = 'loading'; 
+            if (action.meta.arg.mode !== 'mobile') {
+                state.loading = 'loading';
+            }
+            // state.loading = 'loading'; 
         })
         builder.addCase(fetchEpics.fulfilled, (state, action) => {
             console.log(action.payload, 'action.payload');
