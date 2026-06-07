@@ -13,17 +13,18 @@ import FeatureHintCard from './_components/FeatureHintCard';
 import Pagination from '@/app/(protected)/_components/Pagination';
 import type { Epic } from '@/lib/types/index';
 import MobilePlusButton from '../../_components/MobilePlusButton';
+import { EPICS_PAGE_SIZE } from '@/lib/constants';
 
 export default function EpicsList({ projectId }: { projectId: string }) {
   const dispatch = useAppDispatch();
-  const { epics, error, loading, currentPage, pageSize } = useAppSelector(
+  const { epics, error, loading, currentPage } = useAppSelector(
     (state) => state.epics
   );
   const router = useRouter();
 
   useEffect(() => {
     const mode = window.innerWidth < 768 ? 'mobile' : 'desktop';
-    dispatch(fetchEpics({ projectId, page: currentPage, limit: pageSize, mode }));
+    dispatch(fetchEpics({ projectId, page: currentPage, limit: EPICS_PAGE_SIZE, mode }));
   }, [dispatch]);
 
   function formatDate(dateString: string) {

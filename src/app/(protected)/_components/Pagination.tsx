@@ -1,5 +1,5 @@
 'use client';
-import { PAGE_SIZE } from '@/lib/constants';
+import { PROJECTS_PAGE_SIZE, EPICS_PAGE_SIZE } from '@/lib/constants';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import { fetchEpics } from '@/lib/store/slices/epicSlice';
 import { fetchProjects } from '@/lib/store/slices/projectsSlice';
@@ -18,7 +18,7 @@ export default function Pagination({ slice }: PaginationProps) {
   const { currentPage, totalCount, isFetched } =
     slice === 'epics' ? epicData : projectData;
   const projectId = slice === 'epics' ? epicData.projectId : '';
-  const pageSize = slice === 'epics' ? epicData.pageSize : PAGE_SIZE;
+  const pageSize = slice === 'epics' ? EPICS_PAGE_SIZE : PROJECTS_PAGE_SIZE;
 
   const totalPages = Math.ceil(totalCount / pageSize);
 
@@ -30,7 +30,7 @@ export default function Pagination({ slice }: PaginationProps) {
           ? dispatch(
               fetchProjects({
                 page: index + 1,
-                limit: PAGE_SIZE,
+                limit: pageSize,
                 mode: 'desktop',
               })
             )
@@ -65,7 +65,7 @@ export default function Pagination({ slice }: PaginationProps) {
     isFetched && (
       <div className="hidden md:flex justify-between items-center mb-[121px]">
         <h3>
-          Showing {PAGE_SIZE} of {totalCount}{' '}
+          Showing {pageSize} of {totalCount}{' '}
           {slice === 'projects' ? 'active projects' : 'epics'}
         </h3>
         <div className="flex items-center gap-2">
