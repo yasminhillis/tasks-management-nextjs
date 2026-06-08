@@ -39,7 +39,7 @@ export default function Pagination({ slice }: PaginationProps) {
                 projectId: projectId!,
                 page: index + 1,
                 limit: pageSize,
-                mode: 'desktop'
+                mode: 'desktop',
               })
             )
       }
@@ -54,7 +54,14 @@ export default function Pagination({ slice }: PaginationProps) {
   function handlePageChange(page: number) {
     if (page < 1 || page > totalPages) return;
     if (slice === 'epics') {
-      dispatch(fetchEpics({ projectId: projectId!, page, limit: pageSize, mode: 'desktop' }));
+      dispatch(
+        fetchEpics({
+          projectId: projectId!,
+          page,
+          limit: pageSize,
+          mode: 'desktop',
+        })
+      );
     } else {
       dispatch(fetchProjects({ page, limit: pageSize, mode: 'desktop' }));
     }

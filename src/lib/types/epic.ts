@@ -1,8 +1,3 @@
-
-
-
-
-
 export type User = {
   name: string;
   email: string;
@@ -19,4 +14,4 @@ export type Epic = {
   id: string;
   project_id: string;
   title: string;
-}; 
+};

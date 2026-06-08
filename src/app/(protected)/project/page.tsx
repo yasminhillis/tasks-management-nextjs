@@ -6,10 +6,10 @@ import ProjectsList from './ProjectsList';
 export default function Project() {
   return (
     // <div className="mb-[88px] md:mb-[162px]">
-      <PageWrapper>
-        <ProjectsList />
-        <InfiniteScroll  slice="projects"/>
-      </PageWrapper>
+    <PageWrapper>
+      <ProjectsList />
+      <InfiniteScroll slice="projects" />
+    </PageWrapper>
     // </div>
   );
 }

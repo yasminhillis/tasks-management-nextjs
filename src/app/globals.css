@@ -40,7 +40,7 @@
 
   /* line heights */
   --line-height-display-lg: 1.2;
-  --line-height-display-md: 2.5rem; 
+  --line-height-display-md: 2.5rem;
   --line-height-headline-lg: 2.5rem;
   --line-height-title-md: 1.6875rem;
   --line-height-body-sm: 1.25rem;
@@ -186,7 +186,7 @@ body {
     line-height: var(--line-height-error-sm);
     letter-spacing: var(--letter-spacing-error-sm);
     text-transform: uppercase;
-    color: #BA1A1A;
+    color: #ba1a1a;
   }
 
   .label-sm-muted {

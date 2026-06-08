@@ -24,7 +24,9 @@ export default function EpicsList({ projectId }: { projectId: string }) {
 
   useEffect(() => {
     const mode = window.innerWidth < 768 ? 'mobile' : 'desktop';
-    dispatch(fetchEpics({ projectId, page: currentPage, limit: EPICS_PAGE_SIZE, mode }));
+    dispatch(
+      fetchEpics({ projectId, page: currentPage, limit: EPICS_PAGE_SIZE, mode })
+    );
   }, [dispatch]);
 
   function formatDate(dateString: string) {
@@ -111,7 +113,6 @@ export default function EpicsList({ projectId }: { projectId: string }) {
     );
 
   if (loading === 'failed' && error?.length > 0 && epics.length === 0) {
-    console.log(error, 'here');
     return (
       <ErrorScreen
         message={`We're having trouble retrieving your
@@ -129,7 +130,9 @@ export default function EpicsList({ projectId }: { projectId: string }) {
           <Header
             desktopTitle="Project Epics"
             buttonLabel="New Epic"
-            handleBtnClick={() => router.push(`/project/${projectId}/epics/new`)}
+            handleBtnClick={() =>
+              router.push(`/project/${projectId}/epics/new`)
+            }
             materialIcon="add"
             mobileTitle=""
             mobileStyles=""
@@ -162,7 +165,11 @@ export default function EpicsList({ projectId }: { projectId: string }) {
               />
             ))}
           </div>
-          <MobilePlusButton handleBtnClick={() => router.push(`/project/${projectId}/epics/new`)}/>
+          <MobilePlusButton
+            handleBtnClick={() =>
+              router.push(`/project/${projectId}/epics/new`)
+            }
+          />
           <Pagination slice="epics" />
         </>
       )}
