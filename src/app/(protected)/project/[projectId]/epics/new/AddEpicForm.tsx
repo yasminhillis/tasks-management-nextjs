@@ -73,7 +73,7 @@ export default function AddEpicForm({projectId, members}: AddEpicFormProps){
             </div>
             <div className="flex flex-col w-full">
                 <textarea {...register("description")} id="description" className={`body-lg pt-[12px] pr-[16px] pb-[84px] pl-[16px] border border-transparent placeholder:text-[#43465466] rounded-[4px] focus:outline-none focus:border-primary-container resize-none md:mb-[6px] ${errors.description ? 'bg-[#FFDAD6]' : 'bg-surface-highest'}`} placeholder="Describe the scope and objectives of this epic..."/>
-                <span className={` ${errors.description ? 'error-sm' : 'text-[10px] text-[#43465499]'} md:inline-flex justify-end font-medium lowercase hidden bg-red-100`}>{`${descriptionLength} / 500 characters`}</span>
+                <span className={` ${errors.description ? 'error-sm' : 'text-[10px] text-[#43465499]'} md:inline-flex justify-end font-medium lowercase hidden`}>{`${descriptionLength} / 500 characters`}</span>
                 { errors.description && <div role="alert" className='error-sm inline-flex items-center gap-[3px]'>
                         <span className='material-symbols-outlined' style={{'fontSize': '14px'}}>info</span>
                         {errors.description.message}
