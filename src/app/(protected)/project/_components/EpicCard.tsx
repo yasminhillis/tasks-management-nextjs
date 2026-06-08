@@ -14,7 +14,7 @@ type EpicCardProps = {
 export default function EpicCard({id, title, assignee, createdBy, createdAt}: EpicCardProps){
     const router = useRouter();
     return (
-        <Card onClick={() => router.push('/edit')} extraStyles="shadow-sm md:border-l-[4px] md:border-l-[#004E32] w-auto">
+        <Card extraStyles="shadow-sm md:border-l-[4px] md:border-l-[#004E32] w-auto">
             <div className="flex justify-between">
                 <CardIdBadge id={id}/>
                 <div className="md:hidden">

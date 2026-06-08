@@ -3,14 +3,14 @@ import { shimmer } from './loadingStyle';
 type HeaderProps = {
   mobileTitle?: string;
   desktopTitle?: string;
-  desktopDescription?: string,
+  desktopDescription?: string;
   mobileDescription?: string;
   buttonLabel?: string;
   materialIcon?: string;
   mobileStyles?: string;
   searchBar?: React.ReactNode;
   loading?: boolean;
-  handleBtnClick?: () => void
+  handleBtnClick?: () => void;
 };
 
 export default function Header({
@@ -23,11 +23,11 @@ export default function Header({
   mobileStyles,
   searchBar,
   loading,
-  handleBtnClick
+  handleBtnClick,
 }: HeaderProps) {
   if (loading) {
     console.log(loading, 'loading');
-    
+
     return (
       <div className="font-sans">
         <div className="md:hidden mb-8">
@@ -36,9 +36,15 @@ export default function Header({
           >
             {mobileTitle}
           </h2>
+
           <p className="text-[#4F5F7B] text-sm">{mobileDescription}</p>
+          {searchBar && (
+            <div
+              className={`mt-4 w-full h-[40px] rounded-[2px] ${shimmer}`}
+            ></div>
+          )}
         </div>
-        <div className="hidden md:block md:flex items-center justify-between mb-10">
+        <div className="hidden md:flex items-center justify-between mb-10">
           <div
             className={`hidden md:block w-[256px] h-[40px] rounded-[4px] ${shimmer}`}
           ></div>
@@ -67,18 +73,22 @@ export default function Header({
           {mobileTitle}
         </h2>
         <p className="text-[#4F5F7B] text-sm md:hidden">{mobileDescription}</p>
+        {searchBar && <div className="mt-4 w-full">{searchBar}</div>}
       </div>
       <div className="hidden md:block md:flex items-center justify-between mb-10">
         <div>
           <h2 className="hidden md:block font-semibold md:text-3xl text-[#041B3C]">
             {desktopTitle}
           </h2>
-          <p className='hidden md:block text-[#434654]'>{desktopDescription}</p>
+          <p className="hidden md:block text-[#434654]">{desktopDescription}</p>
         </div>
 
-        <div className=" flex gap-8 items-center">
+        <div className="flex gap-8 items-center">
           {searchBar}
-          <button onClick={handleBtnClick} className="hidden md:inline-flex rounded-xs items-center justify-center gap-2 px-[24px] py-[12px] shadow-blue-md bg-radial from-[#003D9B] to-[#0052CC] text-white text-sm cursor-pointer hover:from-[#1259cb] hover:to-[#0657d1] transition-colors font-bold">
+          <button
+            onClick={handleBtnClick}
+            className="hidden md:inline-flex rounded-xs items-center justify-center gap-2 px-[24px] py-[12px] shadow-blue-md bg-radial from-[#003D9B] to-[#0052CC] text-white text-sm cursor-pointer hover:from-[#1259cb] hover:to-[#0657d1] transition-colors font-bold"
+          >
             <span className="material-symbols-outlined">{materialIcon}</span>
             {buttonLabel}
           </button>
