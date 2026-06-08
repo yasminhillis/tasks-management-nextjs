@@ -30,8 +30,6 @@ export default function ProjectsList() {
   const router = useRouter();
 
   useEffect(() => {
-    console.log(window.innerWidth, 'window.innerWidth');
-
     const mode = window.innerWidth < 768 ? 'mobile' : 'desktop';
     dispatch(fetchProjects({ page: 1, limit: PROJECTS_PAGE_SIZE, mode }));
   }, [dispatch]);
@@ -45,8 +43,6 @@ export default function ProjectsList() {
   }
 
   if (error) {
-    console.log(error, 'error');
-
     return (
       <ErrorScreen
         message={` We're having trouble retrieving your projects right now. Please try
@@ -88,15 +84,11 @@ export default function ProjectsList() {
     <div className="px-8">
       {isLoading && (
         <>
-            <Header
-                  loading={isLoading}
-        
-          />
+          <Header loading={isLoading} />
           <div className="grid grid-cols-1 md:grid-cols-3 justify-items-center gap-[24px] max-h-[524px]">
             {[...Array(6)].map((_, i) => (
               <LoadingCard key={i} />
             ))}
-
           </div>
         </>
       )}
@@ -104,13 +96,13 @@ export default function ProjectsList() {
       {!isLoading && !error && projects.length > 0 && (
         <>
           <Header
-                    desktopTitle="Projects"
-                    buttonLabel="Create New Project"
-                    desktopDescription="Manage and curate your projects"
-                    materialIcon="add"
-                    mobileTitle=""
-                    mobileStyles=""
-                    handleBtnClick={() => router.push('/project/add')}
+            desktopTitle="Projects"
+            buttonLabel="Create New Project"
+            desktopDescription="Manage and curate your projects"
+            materialIcon="add"
+            mobileTitle=""
+            mobileStyles=""
+            handleBtnClick={() => router.push('/project/add')}
           />
           {
             <div className="grid sm:grid-cols-2 md:grid-cols-3 justify-items-center gap-6 mb-6 md:mb-10">
@@ -127,11 +119,12 @@ export default function ProjectsList() {
             </div>
           }
 
-          <MobilePlusButton handleBtnClick={() => router.push('/project/add')}/>
+          <MobilePlusButton
+            handleBtnClick={() => router.push('/project/add')}
+          />
           <Pagination slice="projects" />
         </>
       )}
-
     </div>
   );
 }

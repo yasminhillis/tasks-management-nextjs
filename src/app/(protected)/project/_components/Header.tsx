@@ -26,8 +26,6 @@ export default function Header({
   handleBtnClick,
 }: HeaderProps) {
   if (loading) {
-    console.log(loading, 'loading');
-
     return (
       <div className="font-sans">
         <div className="md:hidden mb-8">

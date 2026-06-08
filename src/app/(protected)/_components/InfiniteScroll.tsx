@@ -46,7 +46,7 @@ export default function InfiniteScroll({ slice }: InfiniteScrollProps) {
               projectId,
               page: currentPage + 1,
               limit: pageSize,
-              mode: 'mobile'
+              mode: 'mobile',
             })
           ).finally(() => {
             isFetchingRef.current = false;

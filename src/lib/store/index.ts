@@ -9,7 +9,7 @@ export const store = configureStore({
     user: userReducer,
     ui: uiReducer,
     projects: projectsReducer,
-    epics: epicReducer
+    epics: epicReducer,
   },
 });
 
