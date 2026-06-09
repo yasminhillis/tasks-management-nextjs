@@ -37,5 +37,7 @@ export default function EpicModal({ epicId, projectId }: EpicModalProps) {
     };
     fetchEpic();
   }, [epicId]);
-  return <div></div>;
+  return <div>
+    
+  </div>;
 }
