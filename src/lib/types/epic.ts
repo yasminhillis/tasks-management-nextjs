@@ -5,7 +5,7 @@ export type User = {
 };
 
 export type Epic = {
-  assignee: User;
+  assignee: User | null;
   created_at: string;
   created_by: User;
   deadline: string;

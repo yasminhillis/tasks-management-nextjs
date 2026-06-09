@@ -1,7 +1,7 @@
 'use client';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import Header from '../../_components/Header';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { fetchEpics } from '@/lib/store/slices/epicSlice';
 import EpicCard from './_components/EpicCard';
 import ErrorScreen from '@/app/(protected)/_components/ErrorScreen';
@@ -14,8 +14,10 @@ import Pagination from '@/app/(protected)/_components/Pagination';
 import type { Epic } from '@/lib/types/index';
 import MobilePlusButton from '../../_components/MobilePlusButton';
 import { EPICS_PAGE_SIZE } from '@/lib/constants';
+import EpicModal from './_components/EpicModal';
 
 export default function EpicsList({ projectId }: { projectId: string }) {
+  const [epicId, setEpicId] = useState('')
   const dispatch = useAppDispatch();
   const { epics, error, loading, currentPage } = useAppSelector(
     (state) => state.epics
@@ -37,6 +39,10 @@ export default function EpicsList({ projectId }: { projectId: string }) {
     });
   }
 
+  function getEpicId(id: string){
+    setEpicId(id)
+  }
+  useEffect(() => {console.log(epicId, 'lll')}, [epicId])
   if (loading === 'succeeded' && error.length === 0 && epics.length === 0) {
     return (
       <EmptyState
@@ -156,6 +162,7 @@ export default function EpicsList({ projectId }: { projectId: string }) {
           <div className="grid sm:grid-cols-2 md:grid-cols-2 justify-items-center gap-6 mb-6 md:mb-10">
             {epics.map((epic: Epic) => (
               <EpicCard
+                sendEpicIdToParent={() => getEpicId(epic.id)}
                 id={epic.epic_id}
                 key={epic.epic_id}
                 title={epic.title}
@@ -165,6 +172,7 @@ export default function EpicsList({ projectId }: { projectId: string }) {
               />
             ))}
           </div>
+          <EpicModal projectId={projectId} epicId={epicId}/>
           <MobilePlusButton
             handleBtnClick={() =>
               router.push(`/project/${projectId}/epics/new`)
