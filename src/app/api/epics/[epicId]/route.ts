@@ -11,7 +11,7 @@ function getHeaders(token: string | undefined) {
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { epicId: string } }
+  { params }: {params: Promise<{ epicId: string }>}
 ) {
   const projectId = req.nextUrl.searchParams.get('projectId');
   const { epicId } = await params;
