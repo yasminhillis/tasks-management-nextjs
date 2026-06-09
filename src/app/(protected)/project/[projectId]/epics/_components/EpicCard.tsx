@@ -9,6 +9,7 @@ type EpicCardProps = {
   assignee?: string;
   createdBy: string;
   createdAt?: string;
+  sendEpicIdToParent: (id: string) => void
 };
 
 export default function EpicCard({
@@ -17,10 +18,12 @@ export default function EpicCard({
   assignee,
   createdBy,
   createdAt,
+  sendEpicIdToParent
 }: EpicCardProps) {
   const router = useRouter();
+
   return (
-    <Card extraStyles="shadow-sm md:border-l-[4px] md:border-l-[#004E32] w-auto">
+    <Card onClick={() => sendEpicIdToParent(id)} extraStyles="shadow-sm md:border-l-[4px] md:border-l-[#004E32] w-auto">
       <div className="flex justify-between">
         <CardIdBadge id={id} />
         <div className="md:hidden">
