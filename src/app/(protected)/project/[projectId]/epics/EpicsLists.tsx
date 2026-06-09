@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import Header from '../../_components/Header';
 import { useEffect } from 'react';
 import { fetchEpics } from '@/lib/store/slices/epicSlice';
-import EpicCard from '../../_components/EpicCard';
+import EpicCard from './_components/EpicCard';
 import ErrorScreen from '@/app/(protected)/_components/ErrorScreen';
 import PageWrapper from '../../_components/PageWrapper';
 import EpicCardSkeleton from './EpicCardSkeleton';
