@@ -15,9 +15,11 @@ import type { Epic } from '@/lib/types/index';
 import MobilePlusButton from '../../_components/MobilePlusButton';
 import { EPICS_PAGE_SIZE } from '@/lib/constants';
 import EpicModal from './_components/EpicModal';
+import { formatDate } from '@/app/(protected)/_utils/formatDate';
 
 export default function EpicsList({ projectId }: { projectId: string }) {
-  const [epicId, setEpicId] = useState('')
+  const [epicId, setEpicId] = useState('');
+  const [networkError, setNetworkError] = useState('');
   const dispatch = useAppDispatch();
   const { epics, error, loading, currentPage } = useAppSelector(
     (state) => state.epics
@@ -31,18 +33,6 @@ export default function EpicsList({ projectId }: { projectId: string }) {
     );
   }, [dispatch]);
 
-  function formatDate(dateString: string) {
-    return new Date(dateString).toLocaleString('en-GB', {
-      day: 'numeric',
-      month: 'short',
-      year: 'numeric',
-    });
-  }
-
-  function getEpicId(id: string){
-    setEpicId(id)
-  }
-  useEffect(() => {console.log(epicId, 'lll')}, [epicId])
   if (loading === 'succeeded' && error.length === 0 && epics.length === 0) {
     return (
       <EmptyState
@@ -118,21 +108,43 @@ export default function EpicsList({ projectId }: { projectId: string }) {
       </PageWrapper>
     );
 
-  if (loading === 'failed' && error?.length > 0 && epics.length === 0) {
+  if (loading === 'failed' && error?.length > 0) {
     return (
       <ErrorScreen
         message={`We're having trouble retrieving your
                 project epics right now. Please try
                 again in a moment.`}
         buttonElement
+        onRetry={() =>
+          dispatch(
+            fetchEpics({
+              projectId,
+              page: currentPage,
+              limit: EPICS_PAGE_SIZE,
+              mode: 'desktop',
+            })
+          )
+        }
       />
     );
+  }
+
+  function handleNetworkError() {
+    setNetworkError('Please check your connection and try again.');
+    setTimeout(() => {
+      setNetworkError('');
+    }, 3000);
   }
 
   return (
     <div>
       {loading === 'succeeded' && error.length === 0 && epics?.length > 0 && (
         <>
+          {networkError.length > 0 && (
+            <div className="fixed bottom-5 right-5 max-w-sm px-4 py-3 md:bottom-6 md:right-6 max-md:bottom-16 max-md:right-0 max-md:mx-3 max-md:rounded-lg max-md:left-0 max-md:max-w-full text-red-500 bg-red-600/10  border border-red-500 flex items-center justify-center rounded-lg gap-2">
+              <h3>{networkError}</h3>
+            </div>
+          )}
           <Header
             desktopTitle="Project Epics"
             buttonLabel="New Epic"
@@ -162,7 +174,7 @@ export default function EpicsList({ projectId }: { projectId: string }) {
           <div className="grid sm:grid-cols-2 md:grid-cols-2 justify-items-center gap-6 mb-6 md:mb-10">
             {epics.map((epic: Epic) => (
               <EpicCard
-                sendEpicIdToParent={() => getEpicId(epic.id)}
+                sendEpicIdToParent={() => setEpicId(epic.id)}
                 id={epic.epic_id}
                 key={epic.epic_id}
                 title={epic.title}
@@ -172,7 +184,15 @@ export default function EpicsList({ projectId }: { projectId: string }) {
               />
             ))}
           </div>
-          <EpicModal projectId={projectId} epicId={epicId}/>
+          {epicId && (
+            <EpicModal
+              onNetworkError={() => handleNetworkError()}
+              projectId={projectId}
+              epicId={epicId}
+              onClose={() => setEpicId('')}
+            />
+          )}
+
           <MobilePlusButton
             handleBtnClick={() =>
               router.push(`/project/${projectId}/epics/new`)

@@ -12,6 +12,15 @@ export const mainNavItems = [
 
 export const projectNavItems = (projectId: string) => [
   {
+    label: 'Projects',
+    icon: 'folder_open',
+    collapsedIcon: 'grid_view',
+    href: '/project',
+    mobileIcon: 'grid_view',
+    mobileLabel: 'Projects',
+    mobileIconFilled: true,
+  },
+  {
     label: 'Project Epics',
     icon: 'account_tree',
     collapsedIcon: 'account_tree',

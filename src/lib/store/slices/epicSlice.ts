@@ -38,18 +38,22 @@ export const fetchEpics = createAsyncThunk(
     },
     { rejectWithValue }
   ) => {
-    const offset = (page - 1) * limit;
-    const res = await fetch(
-      `/api/epics?projectId=${projectId}&limit=${limit}&offset=${offset}`
-    );
-    if (!res.ok) {
-      const error = await res.json();
-
-      return rejectWithValue(error.msg || 'Failed to fetch epics');
+    try {
+      const offset = (page - 1) * limit;
+      const res = await fetch(
+        `/api/epics?projectId=${projectId}&limit=${limit}&offset=${offset}`
+      );
+      if (!res.ok) {
+        const error = await res.json();
+  
+        return rejectWithValue(error.msg || 'Failed to fetch epics');
+      }
+      const epics = await res.json();
+  
+      return { ...epics, currentPage: page, projectId, mode };
+    } catch (error) {
+      return rejectWithValue('Please check your connection and try again.')
     }
-    const epics = await res.json();
-
-    return { ...epics, currentPage: page, projectId, mode };
   }
 );
 
@@ -90,6 +94,8 @@ export const epicSlice = createSlice({
     });
 
     builder.addCase(fetchEpics.rejected, (state, action) => {
+      console.log('rejected777777777777777777');
+      
       state.loading = 'failed';
       state.error = action.payload as string;
     });

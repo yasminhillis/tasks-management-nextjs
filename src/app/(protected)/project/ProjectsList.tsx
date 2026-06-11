@@ -13,6 +13,7 @@ import { PROJECTS_PAGE_SIZE } from '@/lib/constants';
 import Pagination from '../_components/Pagination';
 import MobilePlusButton from './_components/MobilePlusButton';
 import Header from './_components/Header';
+import { formatDate } from '../_utils/formatDate';
 
 type Project = {
   id: string;
@@ -34,20 +35,11 @@ export default function ProjectsList() {
     dispatch(fetchProjects({ page: 1, limit: PROJECTS_PAGE_SIZE, mode }));
   }, [dispatch]);
 
-  function formatDate(dateString: string) {
-    return new Date(dateString).toLocaleString('en-GB', {
-      day: 'numeric',
-      month: 'short',
-      year: 'numeric',
-    });
-  }
-
   if (error) {
     return (
       <ErrorScreen
         message={` We're having trouble retrieving your projects right now. Please try
         again in a moment.`}
-        pageErrorHappendOn="projectList"
         onRetry={() => {
           dispatch(
             fetchProjects({

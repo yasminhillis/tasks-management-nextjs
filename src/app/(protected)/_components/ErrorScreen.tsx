@@ -7,7 +7,6 @@ type ErrorScreenProps = {
   message: string;
   buttonElement?: boolean;
   extraStyles?: string;
-  pageErrorHappendOn?: string;
 };
 
 export default function ErrorScreen({
@@ -15,7 +14,6 @@ export default function ErrorScreen({
   message,
   buttonElement,
   extraStyles,
-  pageErrorHappendOn,
 }: ErrorScreenProps) {
   const router = useRouter();
 
@@ -32,11 +30,7 @@ export default function ErrorScreen({
       </p>
       {buttonElement ? (
         <button
-          onClick={
-            pageErrorHappendOn === 'projectList' && onRetry
-              ? () => onRetry()
-              : () => router.refresh()
-          }
+          onClick={() => onRetry?.()}
           className="px-4 py-[8px] bg-[#0052CC] hover:bg-[#1966e1] transition-colors font-semibold text-white cursor-pointer rounded-xs"
         >
           Retry Connection
