@@ -66,7 +66,17 @@ export default function EpicCard({
           </>
         ) : (
           <>
-            <div></div>
+            <div className='flex items-center justify-center gap-3 md:my-[10px]'>
+              <div className="flex items-center justify-center w-[24px] h-[24px] bg-[#E0E8FF] rounded-full">
+                  <span
+                    className="material-symbols-outlined"
+                    style={{ fontSize: '15px', color: '#4F5F7B' }}
+                  >
+                    person_off
+                  </span>
+                </div>
+                <p className="body-md-medium">Unassigned</p>
+            </div>
             <div className="flex justify-end md:hidden">
               <div className="flex flex-col items-end">
                 <h3 className="text-[10px] font-bold tracking-[-0.5px] uppercase text-[#737685]">
