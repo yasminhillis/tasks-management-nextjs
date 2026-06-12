@@ -30,7 +30,7 @@ export async function GET(
       const error = await res.json();
       console.log(error, 'error');
       return Response.json(
-        { success: false, message: 'Something went wrong' },
+        { success: false, message: 'Something went wrong', error },
         { status: 404 }
       );
     }

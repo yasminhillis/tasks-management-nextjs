@@ -33,10 +33,11 @@ export default function Initials({
         state === 'loading'
           ? 'bg-linear-to-r from-[#E8EDFF] via-[#F1F3FF] to-[#E8EDFF] w-[40px] h-[40px] rounded-[12px] translate-x-0 opacity-100 transition-all duration-500 animate-pulse'
           : mode === 'mobile'
-            ? `w-10 h-10 rounded-lg bg-[#D7E2FF] flex items-center justify-center text-[16px] font-bold text-[#003D9B] ${extraStyles}`
-            : `p-2
-                    flex items-center justify-center shadow-sm
-                     font-bold text-[10px] ${extraStyles}`
+            ? `w-[24px] h-[24px] rounded-lg bg-[#D7E2FF] flex items-center justify-center text-[9px] font-bold text-[#003D9B] ${extraStyles}`
+            : `w-[40px] h-[40px]
+   flex items-center justify-center
+   shadow-sm font-bold
+   ${extraStyles}`
       }
     >
       {getInitials(name)}

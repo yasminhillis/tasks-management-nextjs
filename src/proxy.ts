@@ -8,7 +8,8 @@ function isTokenExpired(token: string): boolean {
 
 export async function proxy(req: NextRequest) {
   const accessToken = req.cookies.get('access_token')?.value;
-
+  console.log(accessToken, 'accessToken');
+  
   const { pathname } = req.nextUrl;
 
   const refreshToken = req.cookies.get('refresh_token')?.value;
