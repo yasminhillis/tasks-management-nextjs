@@ -18,9 +18,6 @@ export default function Project() {
   async function fetchProjects(page: number) {
     try {
       const offset = (page - 1) * PROJECTS_PAGE_SIZE;
-      // console.log(page, 'page');
-
-      setLoading('loading');
       const res = await fetch(
         `/api/projects?limit=${PROJECTS_PAGE_SIZE}&offset=${offset}`
       );

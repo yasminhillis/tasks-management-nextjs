@@ -22,30 +22,55 @@ export default function Epics() {
   async function fetchEpics(page: number) {
     try {
       const offset = (page - 1) * EPICS_PAGE_SIZE;
-      setLoading('loading');
+     
       const res = await fetch(
         `/api/epics?projectId=${projectId}&limit=${EPICS_PAGE_SIZE}&offset=${offset}`
       );
+
       if (!res.ok) {
         const error = await res.json();
-        console.log(error);
+        console.log(error, 'errrrrrrrrorrrrrrrrrrrr');
         setLoading('failed');
         setError(error.message || 'Epic fetching failed');
         return;
-        // setError()
       }
 
       const { data, totalCount } = await res.json();
-      // console.log(epics, 'epics');
-      setLoading('success');
-      setEpics(data);
+
+      // setEpics(data);
+      if (page > 1) {
+        // setEpics((prev) => {
+        //   const existingIds = new Set(prev.map((epic: Epic) => epic.id));
+        //   console.log(
+        //     ...prev,
+        //     ...data.filter((epic: Epic) => !existingIds.has(epic.id))
+        //   );
+
+        //   return [
+        //     ...prev,
+        //     ...data.filter((epic: Epic) => !existingIds.has(epic.id)),
+        //   ];
+        // });
+
+        const existingIds = new Set(epics.map((epic: Epic) => epic.id));
+        const newEpics = data.filter((epic: Epic) => !existingIds.has(epic.id));
+
+        setEpics((prev) => [...prev, ...newEpics]);
+      } else {
+        setEpics(data);
+      }
+      console.log(epics, 'epics');
+
       setTotalCount(totalCount);
       setCurrentPage(page);
+      console.log(page);
+
       setIsFetched(true);
+      setLoading('success');
     } catch (error) {
       console.log(error);
+      setError('Network error. Please try again later');
       setLoading('failed');
-      // netwrok erro
     }
   }
 
