@@ -1,39 +1,37 @@
 'use client';
-import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import Header from '../../_components/Header';
-import { useEffect, useState } from 'react';
-import { fetchEpics } from '@/lib/store/slices/epicSlice';
+import { useState } from 'react';
 import EpicCard from './_components/EpicCard';
 import ErrorScreen from '@/app/(protected)/_components/ErrorScreen';
 import PageWrapper from '../../_components/PageWrapper';
 import EpicCardSkeleton from './EpicCardSkeleton';
 import EmptyState from '@/app/(protected)/_components/EmptyState';
 import { useRouter } from 'next/navigation';
-import FeatureHintCard from './_components/FeatureHintCard';
 import Pagination from '@/app/(protected)/_components/Pagination';
 import type { Epic } from '@/lib/types/index';
 import MobilePlusButton from '../../_components/MobilePlusButton';
-import { EPICS_PAGE_SIZE } from '@/lib/constants';
 import EpicModal from './_components/EpicModal';
 import { formatDate } from '@/app/(protected)/_utils/formatDate';
+import EmptyStateFooter from './_components/EmptyStateFooter';
 
-export default function EpicsList({ projectId }: { projectId: string }) {
+type EpicListProps = {
+  epics: Epic[],
+  error: string,
+  loading: 'idle' | 'loading' | 'success' | 'failed',
+  currentPage: number,
+  projectId: string,
+  isFetched: boolean, 
+  totalCount: number, 
+  onPageChange: (page: number) => void, 
+  pageSize: number
+}
+
+export default function EpicsList({ projectId, epics, error, loading, currentPage, isFetched, totalCount, onPageChange, pageSize }: EpicListProps) {
   const [epicId, setEpicId] = useState('');
   const [networkError, setNetworkError] = useState('');
-  const dispatch = useAppDispatch();
-  const { epics, error, loading, currentPage } = useAppSelector(
-    (state) => state.epics
-  );
   const router = useRouter();
 
-  useEffect(() => {
-    const mode = window.innerWidth < 768 ? 'mobile' : 'desktop';
-    dispatch(
-      fetchEpics({ projectId, page: currentPage, limit: EPICS_PAGE_SIZE, mode })
-    );
-  }, [dispatch]);
-
-  if (loading === 'succeeded' && error.length === 0 && epics.length === 0) {
+  if (loading === 'success' && error.length === 0 && epics.length === 0) {
     return (
       <EmptyState
         imageSrc="/emptyEpic.png"
@@ -48,28 +46,7 @@ export default function EpicsList({ projectId }: { projectId: string }) {
         buttonLabel="Create First Epic"
         materialButtonIcon="electric_bolt"
         onButtonClick={() => router.push(`/project/${projectId}/epics/new`)}
-        footer={
-          <div className="grid grid-cols-1 gap-[15px] md:grid-cols-3 md:gap-[24px]">
-            <FeatureHintCard
-              materialIcon="auto_awesome"
-              title="High Level Goals"
-              description="Define the broad objectives that span across multiple
-                        cycles."
-            />
-
-            <FeatureHintCard
-              materialIcon="schema"
-              title="High Level Goals"
-              description="Define the broad objectives that span across multiple cycles."
-            />
-
-            <FeatureHintCard
-              materialIcon="timeline"
-              title="High Level Goals"
-              description="Define the broad objectives that span across multiple cycles."
-            />
-          </div>
-        }
+        footer={<EmptyStateFooter />}
       />
     );
   }
@@ -115,16 +92,7 @@ export default function EpicsList({ projectId }: { projectId: string }) {
                 project epics right now. Please try
                 again in a moment.`}
         buttonElement
-        onRetry={() =>
-          dispatch(
-            fetchEpics({
-              projectId,
-              page: currentPage,
-              limit: EPICS_PAGE_SIZE,
-              mode: 'desktop',
-            })
-          )
-        }
+        onRetry={() => onPageChange(1)}
       />
     );
   }
@@ -138,7 +106,7 @@ export default function EpicsList({ projectId }: { projectId: string }) {
 
   return (
     <div>
-      {loading === 'succeeded' && error.length === 0 && epics?.length > 0 && (
+      {loading === 'success' && error.length === 0 && epics?.length > 0 && (
         <>
           {networkError.length > 0 && (
             <div className="fixed bottom-5 right-5 max-w-sm px-4 py-3 md:bottom-6 md:right-6 max-md:bottom-16 max-md:right-0 max-md:mx-3 max-md:rounded-lg max-md:left-0 max-md:max-w-full text-red-500 bg-red-600/10  border border-red-500 flex items-center justify-center rounded-lg gap-2">
@@ -198,7 +166,7 @@ export default function EpicsList({ projectId }: { projectId: string }) {
               router.push(`/project/${projectId}/epics/new`)
             }
           />
-          <Pagination slice="epics" />
+          <Pagination currentPage={currentPage} totalCount={totalCount} isFetched={isFetched} onPageChange={onPageChange} pageSize={pageSize}/>
         </>
       )}
     </div>
