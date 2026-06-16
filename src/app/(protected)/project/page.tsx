@@ -50,7 +50,7 @@ export default function Project() {
       if (window.innerWidth < 768) {
         setMobileProjects(data)
       }
-
+      setError('')
       setIsFetched(true);
       setTotalCount(totalCount);
       setDesktopCurrentPage(page);

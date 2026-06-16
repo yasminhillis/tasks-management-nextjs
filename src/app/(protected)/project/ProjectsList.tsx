@@ -39,7 +39,7 @@ export default function ProjectsList({
       <ErrorScreen
         message={` We're having trouble retrieving your projects right now. Please try
         again in a moment.`}
-        onRetry={() => fetchProjects(1)}
+        onRetry={() => fetchProjects(currentPage)}
         buttonElement={true}
       />
     );
