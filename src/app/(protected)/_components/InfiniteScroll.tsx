@@ -14,11 +14,14 @@ export default function InfiniteScroll({
   pageSize,
   onScroll,
 }: InfiniteScrollProps) {
+  
   const totalPages = Math.ceil(totalCount / pageSize);
   const bottomRef = useRef<HTMLDivElement>(null);
   const isFetchingRef = useRef(false);
 
   useEffect(() => {
+    console.log('here mobile');
+    
     const observer = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting) {
         if (isFetchingRef.current || currentPage === totalPages) return;
@@ -32,9 +35,10 @@ export default function InfiniteScroll({
     return () => observer.disconnect();
   }, [currentPage, totalPages]);
 
+
   return (
     <div className="md:hidden">
-      <div ref={bottomRef} className="h-[1px]"></div>
+      <div ref={bottomRef} className="h-[1px] bg-red-100"></div>
     </div>
   );
 }

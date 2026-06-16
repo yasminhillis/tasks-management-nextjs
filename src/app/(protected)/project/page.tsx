@@ -12,9 +12,25 @@ export default function Project() {
     'idle' | 'loading' | 'success' | 'failed'
   >('idle');
   const [projects, setProjects] = useState<Project[]>([]);
+  const [mobileProjects, setMobileProjects] = useState<Project[]>([]);
   const [isFetched, setIsFetched] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentDesktopPage, setDesktopCurrentPage] = useState(1);
+  const [currentMobilePage, setMobileCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+
+    checkScreenSize();
+
+    window.addEventListener('resize', checkScreenSize)
+
+    return () => window.removeEventListener('resize', checkScreenSize)
+  }, [])
+
   async function fetchProjects(page: number) {
     try {
       const offset = (page - 1) * PROJECTS_PAGE_SIZE;
@@ -29,17 +45,15 @@ export default function Project() {
         return;
       }
       const { data, totalCount } = await res.json();
-      if (page > 1) {
-        const existingIds = new Set(projects.map((p: Project) => p.id));
-        const newProjects = data.filter((p: Project) => !existingIds.has(p.id));
+      setProjects(data);
 
-        setProjects((prev) => [...prev, ...newProjects]);
-      } else {
-        setProjects(data);
+      if (window.innerWidth < 768) {
+        setMobileProjects(data)
       }
+
       setIsFetched(true);
       setTotalCount(totalCount);
-      setCurrentPage(page);
+      setDesktopCurrentPage(page);
       setLoading('success');
     } catch (error) {
       setError('Network error. Please try again later');
@@ -47,26 +61,55 @@ export default function Project() {
     }
   }
 
+  async function loadMore(page: number) {
+    const offset = (page - 1) * PROJECTS_PAGE_SIZE;
+
+    const res = await fetch(
+      `/api/projects?limit=${PROJECTS_PAGE_SIZE}&offset=${offset}`
+    );
+    if (!res.ok) {
+      const error = await res.json();
+      console.log(error);
+      setError(error.message || 'fetching projects failed');
+      setLoading('failed');
+      return;
+    }
+    const { data, totalCount } = await res.json();
+
+    setMobileProjects((prev) => {
+      const existingIds = new Set(prev.map((p: Project) => p.id));
+      const newProjects = data.filter((p: Project) => !existingIds.has(p.id));
+      return [...prev, ...newProjects]
+    });
+
+    setMobileCurrentPage(page)
+    setTotalCount(totalCount)
+  }
+
   useEffect(() => {
+    console.log('here');
+    
     fetchProjects(1);
+    // loadMore(1)
   }, []);
+
   return (
     <PageWrapper>
       <ProjectsList
-        projects={projects}
+        projects={isMobile ? mobileProjects : projects}
         loading={loading}
         error={error}
         totalCount={totalCount}
-        currentPage={currentPage}
+        currentPage={currentDesktopPage}
         isFetched={isFetched}
         fetchProjects={fetchProjects}
         pageSize={PROJECTS_PAGE_SIZE}
       />
       <InfiniteScroll
         totalCount={totalCount}
-        currentPage={currentPage}
+        currentPage={currentMobilePage}
         pageSize={PROJECTS_PAGE_SIZE}
-        onScroll={fetchProjects}
+        onScroll={loadMore}
       />
     </PageWrapper>
   );
