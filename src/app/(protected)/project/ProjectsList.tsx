@@ -68,6 +68,18 @@ export default function ProjectsList({
     );
   }
 
+  function renderProjects(projects: Project[]) {
+    return projects.map((project: Project) => (
+      <ProjectCard
+        id={project.id}
+        key={project.id}
+        name={project.name}
+        description={project.description}
+        date={formatDate(project.created_at)}
+      />
+    ));
+  }
+
   return (
     <div className="px-8">
       {loading === 'loading' && (
@@ -94,15 +106,7 @@ export default function ProjectsList({
           />
           {
             <div className="grid sm:grid-cols-2 md:grid-cols-3 justify-items-center gap-6 mb-6 md:mb-10">
-              {projects.map((project: Project) => (
-                <ProjectCard
-                  id={project.id}
-                  key={project.id}
-                  name={project.name}
-                  description={project.description}
-                  date={formatDate(project.created_at)}
-                />
-              ))}
+              {renderProjects(projects)}
               <AddProjectCard />
             </div>
           }
