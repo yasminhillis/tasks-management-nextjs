@@ -4,14 +4,6 @@ import PageWrapper from '../../_components/PageWrapper';
 import Header from '../../_components/Header';
 import AddMemberButton from './_components/AddMemberButton';
 export default function Loading() {
-  //    const AddMembers = ({state, loadingStyle}: {state: 'success' | 'loading', loadingStyle: string}) => {
-  //     return <button className={`${state === "loading" ? `${loadingStyle} w-[40px] h-[40px]` : `btn-primary px-[24px] py-[12px] rounded-[10px] w-[40px] h-[40px] cursor-pointer`}`}>
-  //      { state === 'success' && <span className='material-symbols-outlined'>
-  //         person_add
-  //       </span>}
-  //     </button>
-  //   };
-
   const loadingStyle = `relative overflow-hidden bg-[#E8EDFF] rounded-md
                       before:absolute before:inset-0
                       before:translate-x-[-100%]
@@ -67,7 +59,7 @@ export default function Loading() {
               </th>
               <th>
                 <div
-                  className={`w-[96px] h-[12px] ${loadingStyle}   mx-auto`}
+                  className={`w-[96px] h-[12px] ${loadingStyle} mx-auto`}
                 ></div>
               </th>
               <th className="">

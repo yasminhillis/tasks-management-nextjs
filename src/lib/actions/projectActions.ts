@@ -104,8 +104,7 @@ export async function getProjectMembers(
     }
   );
 
-  if (!res.ok)
-    return { success: false, message: 'Failed to fetch project members' };
+  if (!res.ok) return { success: false, message: 'Failed to fetch project members' };
 
   const data = await res.json();
 
