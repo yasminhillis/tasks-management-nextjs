@@ -59,6 +59,8 @@ export default function EpicsList({
     epics.length === 0 &&
     isFetched
   ) {
+    console.log(epics, 'epics');
+    
     return (
       <EmptyState
         imageSrc="/emptyEpic.png"

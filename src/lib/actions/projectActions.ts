@@ -42,34 +42,46 @@ export async function updateProject(
   projectId: string,
   data: { name: string; description?: string }
 ) {
-  const cookieStore = await cookies();
-
-  const token = cookieStore.get('access_token')?.value;
-  if (!token) return { success: false, message: 'Unauthorized' };
-  const res = await fetch(
-    `${process.env.SUPABASE_URL}/rest/v1/projects?id=eq.${projectId}`,
-    {
-      method: 'PATCH',
-      headers: {
-        apikey: process.env.SUPABASE_ANON_KEY!,
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        name: data.name,
-        description: data.description,
-      }),
+  try {
+    const cookieStore = await cookies();
+  
+    const token = cookieStore.get('access_token')?.value;
+    if (!token) return { success: false, message: 'Unauthorized' };
+    const res = await fetch(
+      `${process.env.SUPABASE_URL}/rest/v1/projects?id=eq.${projectId}`,
+      {
+        method: 'PATCH',
+        headers: {
+          apikey: process.env.SUPABASE_ANON_KEY!,
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: data.name,
+          description: data.description,
+        }),
+      }
+    );
+  
+    if (!res.ok) {
+      const error = await res.json()
+      console.log(error, 'error3333333333');
+      
+      return {
+        success: false,
+        message: 'Update was not successfull. Please try again',
+      };
     }
-  );
+  
+    return { success: true, data: null, message: 'Project updated successfully' };
 
-  if (!res.ok) {
+  } catch (error) {
+    console.error('updateProject failed:', error);
     return {
-      success: false,
-      message: 'Update was not successfull. Please try again',
-    };
+      success: false, 
+      message: 'Network error. Please check your connection and try again'
+    }
   }
-
-  return { success: true, data: null, message: 'Project updated successfully' };
 }
 
 export async function getProjectMembers(
