@@ -1,14 +1,23 @@
 import AddEpicForm from './AddEpicForm';
 import PageWrapper from '../../../_components/PageWrapper';
 import { getProjectMembers } from '@/lib/actions/projectMembersActions';
-
+import type { MemberData } from '@/lib/types/index';
 export default async function AddNewEpic({
   params,
 }: {
   params: Promise<{ projectId: string }>;
 }) {
   const { projectId } = await params;
-  const projectMembers = await getProjectMembers(projectId);
+  let members: MemberData[] = [];
+  try {
+    const result = await getProjectMembers(projectId);
+    if (result.success) {
+      members = result.data;
+    }
+
+  } catch (error) {
+    // network error - form should render with empty member list
+  }
 
   return (
     <>
@@ -22,7 +31,7 @@ export default async function AddNewEpic({
           Define a high-level goal and organizational structure for your
           architectural phase.
         </p>
-        <AddEpicForm members={projectMembers.data} projectId={projectId} />
+        <AddEpicForm members={members} projectId={projectId} />
       </PageWrapper>
     </>
   );

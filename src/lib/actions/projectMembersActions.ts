@@ -1,6 +1,7 @@
 'use server';
 
 import { cookies } from 'next/headers';
+import { getApiHeaders } from '../utils/getApiHeaders';
 
 export async function getProjectMembers(
   projectId: string
@@ -14,11 +15,7 @@ export async function getProjectMembers(
   const res = await fetch(
     `${process.env.SUPABASE_URL}/rest/v1/get_project_members?project_id=eq.${projectId}`,
     {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        apikey: process.env.SUPABASE_ANON_KEY!,
-        'Content-Type': 'application/json',
-      },
+      headers: await getApiHeaders(),
     }
   );
 

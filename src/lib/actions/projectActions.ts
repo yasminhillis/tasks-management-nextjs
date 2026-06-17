@@ -1,6 +1,7 @@
 'use server';
 
 import { cookies } from 'next/headers';
+import { getApiHeaders } from '../utils/getApiHeaders';
 
 export async function getProjectById(projectId: string) {
   const cookieStore = await cookies();
@@ -12,11 +13,7 @@ export async function getProjectById(projectId: string) {
   const res = await fetch(
     `${process.env.SUPABASE_URL}/rest/v1/projects?id=eq.${projectId}`,
     {
-      headers: {
-        apikey: process.env.SUPABASE_ANON_KEY!,
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
+      headers: await getApiHeaders(),
     }
   );
 
@@ -51,11 +48,7 @@ export async function updateProject(
       `${process.env.SUPABASE_URL}/rest/v1/projects?id=eq.${projectId}`,
       {
         method: 'PATCH',
-        headers: {
-          apikey: process.env.SUPABASE_ANON_KEY!,
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
+        headers: await getApiHeaders(),
         body: JSON.stringify({
           name: data.name,
           description: data.description,
@@ -74,7 +67,6 @@ export async function updateProject(
     return { success: true, data: null, message: 'Project updated successfully' };
 
   } catch (error) {
-    console.error('updateProject failed:', error);
     return {
       success: false, 
       message: 'Network error. Please check your connection and try again'
