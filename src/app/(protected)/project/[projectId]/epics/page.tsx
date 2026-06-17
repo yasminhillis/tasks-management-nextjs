@@ -11,18 +11,33 @@ import { EPICS_PAGE_SIZE } from '@/lib/constants';
 export default function Epics() {
   const { projectId } = useParams<{ projectId: string }>();
   const [epics, setEpics] = useState<Epic[]>([]);
+  const [desktopEpics, setDesktopEpics] = useState<Epic[]>([]);
+  const [mobileEpics, setMobileEpics] = useState<Epic[]>([]);
+  const [isMobile, setIsMobile] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState<
     'idle' | 'loading' | 'success' | 'failed'
   >('idle');
   const [currentPage, setCurrentPage] = useState(1);
+  const [desktopCurrentPage, setDesktopCurrentPage] = useState(1);
+  const [mobileCurrentPage, setMobileCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const [isFetched, setIsFetched] = useState(false);
+
+  useEffect(() => {
+    function checkScreenWidth() {
+      setIsMobile(window.innerWidth < 768);
+    }
+    checkScreenWidth();
+
+    window.addEventListener('resize', checkScreenWidth);
+    return () => window.removeEventListener('resize', checkScreenWidth);
+  }, []);
 
   async function fetchEpics(page: number) {
     try {
       const offset = (page - 1) * EPICS_PAGE_SIZE;
-     
+
       const res = await fetch(
         `/api/epics?projectId=${projectId}&limit=${EPICS_PAGE_SIZE}&offset=${offset}`
       );
@@ -36,35 +51,53 @@ export default function Epics() {
       }
 
       const { data, totalCount } = await res.json();
-
-      // setEpics(data);
-      if (page > 1) {
-        // setEpics((prev) => {
-        //   const existingIds = new Set(prev.map((epic: Epic) => epic.id));
-        //   console.log(
-        //     ...prev,
-        //     ...data.filter((epic: Epic) => !existingIds.has(epic.id))
-        //   );
-
-        //   return [
-        //     ...prev,
-        //     ...data.filter((epic: Epic) => !existingIds.has(epic.id)),
-        //   ];
-        // });
-
-        const existingIds = new Set(epics.map((epic: Epic) => epic.id));
-        const newEpics = data.filter((epic: Epic) => !existingIds.has(epic.id));
-
-        setEpics((prev) => [...prev, ...newEpics]);
+      console.log(isMobile, 'kk');
+      
+      if (window.innerWidth < 768) {
+        setMobileEpics(data)
+        setMobileCurrentPage(page)
       } else {
-        setEpics(data);
+        setDesktopEpics(data);
+        setDesktopCurrentPage(page);
+        
       }
-      console.log(epics, 'epics');
-
-      setTotalCount(totalCount);
-      setCurrentPage(page);
+      console.log(epics, 'epicsssss333');
       console.log(page);
+      setTotalCount(totalCount);
+      setError('')
+      setIsFetched(true);
+      setLoading('success');
+    } catch (error) {
+      console.log(error);
+      setError('Network error. Please try again later');
+      setLoading('failed');
+    }
+  }
 
+  async function loadMore(page: number) {
+    try {
+      const offset = (page - 1) * EPICS_PAGE_SIZE;
+
+      const res = await fetch(
+        `/api/epics?projectId=${projectId}&limit=${EPICS_PAGE_SIZE}&offset=${offset}`
+      );
+
+      if (!res.ok) {
+        const error = await res.json();
+        console.log(error, 'errrrrrrrrorrrrrrrrrrrr');
+        setLoading('failed');
+        setError(error.message || 'Epic fetching failed');
+        return;
+      }
+
+      const { data, totalCount } = await res.json();
+      setMobileEpics((prev) => {
+        const existingIds = new Set(prev.map((epic: Epic) => epic.id));
+        const newEpics = data.filter((epic: Epic) => !existingIds.has(epic.id));
+        return [...prev, ...newEpics];
+      });
+      setMobileCurrentPage(page);
+      setTotalCount(totalCount);
       setIsFetched(true);
       setLoading('success');
     } catch (error) {
@@ -78,14 +111,18 @@ export default function Epics() {
     fetchEpics(1);
   }, []);
 
+  console.log(isMobile, 'isMobile');
+  console.log(mobileEpics, 'mobileEpics');
+  
+
   return (
     <PageWrapper>
       <EpicsList
         projectId={projectId}
-        epics={epics}
+        epics={isMobile ? mobileEpics : desktopEpics}
         error={error}
         loading={loading}
-        currentPage={currentPage}
+        currentPage={isMobile ? mobileCurrentPage : desktopCurrentPage}
         totalCount={totalCount}
         isFetched={isFetched}
         onPageChange={fetchEpics}
@@ -93,9 +130,9 @@ export default function Epics() {
       />
       <InfiniteScroll
         totalCount={totalCount}
-        currentPage={currentPage}
+        currentPage={mobileCurrentPage}
         pageSize={EPICS_PAGE_SIZE}
-        onScroll={fetchEpics}
+        onScroll={loadMore}
       />
     </PageWrapper>
   );
