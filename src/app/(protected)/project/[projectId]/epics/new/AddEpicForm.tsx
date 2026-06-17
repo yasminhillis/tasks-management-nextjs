@@ -31,23 +31,29 @@ export default function AddEpicForm({ projectId, members }: AddEpicFormProps) {
   const descriptionLength = watch('description')?.length ?? 0;
 
   async function onSubmit(data: EpicFormData) {
-    const result = await addNewEpic({
-      title: data.title,
-      description: data.description || undefined,
-      assignee_id: data.assignee_id || undefined,
-      project_id: projectId,
-      deadline: data.deadline || undefined,
-    });
-
-    if (!result.success) {
-      setError('root', {
-        message: result.message,
+    try {
+      const result = await addNewEpic({
+        title: data.title,
+        description: data.description || undefined,
+        assignee_id: data.assignee_id || undefined,
+        project_id: projectId,
+        deadline: data.deadline || undefined,
       });
-      return;
+
+      if (!result.success) {
+        setError('root', {
+          message: result.message,
+        });
+        return;
+      }
+      setSuccessMsg(result.message);
+      setIsRedirecting(true);
+      setTimeout(() => router.push(`/project/${projectId}/epics`), 300);
+    } catch (error) {
+      setError('root', {
+        message: 'Network error. Please check your connection and try again.',
+      });
     }
-    setSuccessMsg(result.message);
-    setIsRedirecting(true);
-    setTimeout(() => router.push(`/project/${projectId}/epics`), 300);
   }
 
   return (
@@ -198,13 +204,13 @@ export default function AddEpicForm({ projectId, members }: AddEpicFormProps) {
           )}
         </div>
       </div>
-      {errors.root && (
-        <div className="error-sm inline-flex items-center gap-[3px]">
+      {errors?.root && (
+        <div className="flex items-center gap-1 text-[#BA1A1A] pb-2 font-medium text-sm mb-3">
           <span
             className="material-symbols-outlined"
             style={{ fontSize: '14px' }}
           >
-            info
+            error
           </span>
           {errors.root.message}
         </div>
