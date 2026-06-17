@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 
 type ErrorScreenProps = {
   onRetry?: () => void;
+  title?: string;
   message: string;
   buttonElement?: boolean;
   extraStyles?: string;
@@ -11,6 +12,7 @@ type ErrorScreenProps = {
 
 export default function ErrorScreen({
   onRetry,
+  title="Something went wrong",
   message,
   buttonElement,
   extraStyles,
@@ -24,7 +26,7 @@ export default function ErrorScreen({
           cloud_off
         </span>
       </div>
-      <h2 className="title-lg mb-2">Something went wrong</h2>
+      <h2 className="title-lg mb-2">{title}</h2>
       <p className={`body-md text-center max-w-xs mb-6 ${extraStyles}`}>
         {message}
       </p>

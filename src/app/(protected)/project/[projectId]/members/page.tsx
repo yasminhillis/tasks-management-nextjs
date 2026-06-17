@@ -10,27 +10,38 @@ export default async function Members({
   params: Promise<{ projectId: string }>;
 }) {
   const { projectId } = await params;
-  const result = await getProjectMembers(projectId);
+  try {
+    const result = await getProjectMembers(projectId);
 
-  if (!result.success)
+    if (!result.success) {
+      return (
+        <ErrorScreen
+          message={`We're having trouble retrieving your
+   project members right now. Please try
+  again in a moment.`}
+          buttonElement={true}
+        />
+      );
+    }
+    return (
+      <PageWrapper>
+        <Header
+          desktopTitle="Project Members"
+          buttonLabel="Invite Member"
+          materialIcon="person_add"
+          mobileTitle="Project Members"
+          mobileStyles="text-center"
+        />
+        <MembersTable data={result.data} />
+      </PageWrapper>
+    );
+  } catch (error) {
     return (
       <ErrorScreen
-        message={`We're having trouble retrieving your
- project members right now. Please try
-again in a moment.`}
+       title="You're offline"
+        message={`Network error. Please check your connection and try again.`}
         buttonElement={true}
       />
     );
-  return (
-    <PageWrapper>
-      <Header
-        desktopTitle="Project Members"
-        buttonLabel="Invite Member"
-        materialIcon="person_add"
-        mobileTitle="Project Members"
-        mobileStyles="text-center"
-      />
-      <MembersTable data={result.data} />
-    </PageWrapper>
-  );
+  }
 }
