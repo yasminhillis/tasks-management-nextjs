@@ -1,6 +1,6 @@
-import { getProjectMembers } from '@/lib/actions/projectActions';
 import AddEpicForm from './AddEpicForm';
 import PageWrapper from '../../../_components/PageWrapper';
+import { getProjectMembers } from '@/lib/actions/projectMembersActions';
 
 export default async function AddNewEpic({
   params,
