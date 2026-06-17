@@ -1,4 +1,5 @@
 import { cookies } from 'next/headers';
+
 export async function POST(request: Request) {
   const cookieStore = await cookies();
   const token = cookieStore.get('access_token')?.value;

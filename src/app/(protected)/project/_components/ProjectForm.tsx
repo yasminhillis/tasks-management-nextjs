@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { updateProject } from '@/lib/actions/projectActions';
+import Toast from '@/components/Toast';
 
 type ProjectFormProps = {
   mode: 'edit' | 'add';
@@ -35,7 +36,7 @@ export default function ProjectForm({
   });
 
   const [isRequestSuccessful, setIsRequestSuccessful] = useState(false);
-  // const [isEditSuccessful, setIsEditSuccessful] = useState(false);
+  const [networkError, setNetworkError] = useState('');
   const descriptionLength: number | undefined = watch('description')?.length;
   const router = useRouter();
 
@@ -47,12 +48,18 @@ export default function ProjectForm({
 
   async function onSubmit(data: ADDProjectFormData) {
     if (mode === 'edit') {
-      const result = await updateProject(projectId!, data);
-      if (!result.success) {
-        setError('root', { message: result.message });
-        return;
+      try {
+        const result = await updateProject(projectId!, data);
+        if (!result.success) {
+          setError('root', { message: result.message });
+          return;
+        }
+        setIsRequestSuccessful(true);
+      } catch (error) {
+        setError('root', {
+          message: 'Network error. Please check your connection and try again.',
+        });
       }
-      setIsRequestSuccessful(true);
     } else {
       try {
         const res = await fetch('/api/projects', {
@@ -75,7 +82,8 @@ export default function ProjectForm({
       } catch (error) {
         if (error instanceof TypeError && error.message === 'Failed to fetch') {
           setError('root', {
-            message: 'Please check your connection and try again',
+            message:
+              'Network error. Please check your connection and try again.',
           });
         } else {
           setError('root', {
@@ -88,15 +96,16 @@ export default function ProjectForm({
 
   return (
     <div className="max-w-[672px] max-h-[696px] mx-auto shadow-sm rounded-md">
-      {isRequestSuccessful && (
-        <div className="fixed bottom-5 right-5 max-w-sm px-4 py-3 md:bottom-6 md:right-6 max-md:bottom-16 max-md:right-0 max-md:mx-3 max-md:rounded-lg max-md:left-0 max-md:max-w-full bg-[#82F9BE]/30 text-[#005235]  border border-green-500 flex items-center justify-center rounded-lg gap-2">
-          <h3>
-            {mode === 'add'
-              ? 'Project Added Successfully!'
-              : 'Your changes are saved successfully'}
-          </h3>
-        </div>
-      )}
+      {isRequestSuccessful &&
+        (mode === 'add' ? (
+          <Toast success>
+            <h3>Project Added Successfully!</h3>
+          </Toast>
+        ) : (
+          <Toast>
+            <h3>Your changes are saved successfully</h3>
+          </Toast>
+        ))}
       <header className="hidden md:block bg-white shadow-sm pt-8 pl-8 pb-10 pr-8 border-b border-b-[#F1F3FF]">
         <div className="flex items-center gap-4 ">
           <div className="flex items-center justify-center w-[46px] h-[44px] bg-[#0052CC1A] rounded-sm">
@@ -118,17 +127,6 @@ export default function ProjectForm({
         onSubmit={handleSubmit(onSubmit)}
         className="md:pt-8 md:pl-8 md:pb-4 md:pr-8 md:bg-white"
       >
-        {errors?.root && (
-          <div className="flex items-center gap-1 text-[#BA1A1A] pb-2 font-medium text-sm mb-3">
-            <span
-              className="material-symbols-outlined"
-              style={{ fontSize: '14px' }}
-            >
-              error
-            </span>
-            {errors.root.message}
-          </div>
-        )}
         <div className="flex flex-col mb-6 space-y-3">
           <label
             htmlFor="name"
@@ -204,6 +202,17 @@ export default function ProjectForm({
             </div>
           )}
         </div>
+        {errors?.root && (
+          <div className="flex items-center gap-1 text-[#BA1A1A] pb-2 font-medium text-sm mb-3">
+            <span
+              className="material-symbols-outlined"
+              style={{ fontSize: '14px' }}
+            >
+              error
+            </span>
+            {errors.root.message}
+          </div>
+        )}
         <div className="flex flex-col md:flex-row md:justify-between">
           <button
             disabled={isSubmitting}
@@ -219,7 +228,7 @@ export default function ProjectForm({
           <button
             onClick={() => router.push('/project')}
             type="button"
-            className="order-1 md:order-1 px-6 py-4 md:py-3 md:max-w-[96px] font-medium text-[#003D9B] w-full cursor-pointer hover:text-[#2b76e8] transition-colors"
+            className="order-1 md:order-1 text-start pl-0 pr-6 py-4 md:py-3 md:max-w-[96px] font-medium text-[#003D9B] w-full cursor-pointer hover:text-[#2b76e8] transition-colors"
           >
             {mode === 'add' ? 'Back' : 'Cancel'}
           </button>

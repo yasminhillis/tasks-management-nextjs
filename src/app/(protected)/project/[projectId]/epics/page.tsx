@@ -51,18 +51,13 @@ export default function Epics() {
       }
 
       const { data, totalCount } = await res.json();
-      console.log(isMobile, 'kk');
+      setDesktopEpics(data);
       
       if (window.innerWidth < 768) {
         setMobileEpics(data)
         setMobileCurrentPage(page)
-      } else {
-        setDesktopEpics(data);
-        setDesktopCurrentPage(page);
-        
       }
-      console.log(epics, 'epicsssss333');
-      console.log(page);
+      setDesktopCurrentPage(page);
       setTotalCount(totalCount);
       setError('')
       setIsFetched(true);
