@@ -1,4 +1,4 @@
-import { getProjectMembers } from '@/lib/actions/projectActions';
+import { getProjectMembers } from '@/lib/actions/projectMembersActions';
 import Header from '../../_components/Header';
 import PageWrapper from '../../_components/PageWrapper';
 import MembersTable from './MembersTable';
