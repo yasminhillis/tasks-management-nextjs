@@ -23,7 +23,6 @@ export default function ProjectForm({
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    reset,
     setError,
     watch,
   } = useForm<ADDProjectFormData>({
@@ -36,7 +35,6 @@ export default function ProjectForm({
   });
 
   const [isRequestSuccessful, setIsRequestSuccessful] = useState(false);
-  const [networkError, setNetworkError] = useState('');
   const descriptionLength: number | undefined = watch('description')?.length;
   const router = useRouter();
 
@@ -102,7 +100,7 @@ export default function ProjectForm({
             <h3>Project Added Successfully!</h3>
           </Toast>
         ) : (
-          <Toast>
+          <Toast success>
             <h3>Your changes are saved successfully</h3>
           </Toast>
         ))}
@@ -228,7 +226,7 @@ export default function ProjectForm({
           <button
             onClick={() => router.push('/project')}
             type="button"
-            className="order-1 md:order-1 text-start pl-0 pr-6 py-4 md:py-3 md:max-w-[96px] font-medium text-[#003D9B] w-full cursor-pointer hover:text-[#2b76e8] transition-colors"
+            className="order-1 md:order-1 px-6 py-4 md:py-3 md:max-w-[96px] font-medium text-[#003D9B] w-full cursor-pointer hover:text-[#2b76e8] transition-colors"
           >
             {mode === 'add' ? 'Back' : 'Cancel'}
           </button>
