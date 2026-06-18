@@ -49,11 +49,8 @@ export default function Epics() {
 
       const { data, totalCount } = await res.json();
       setDesktopEpics(data);
-      
-      // if (window.innerWidth < 768) {
-        setMobileEpics(data)
-        setMobileCurrentPage(page)
-      // }
+      setMobileEpics(data)
+      setMobileCurrentPage(page)
       setDesktopCurrentPage(page);
       setTotalCount(totalCount);
       setError('')
@@ -76,7 +73,6 @@ export default function Epics() {
 
       if (!res.ok) {
         const error = await res.json();
-        console.log(error, 'errrrrrrrrorrrrrrrrrrrr');
         setLoading('failed');
         setError(error.message || 'Epic fetching failed');
         return;
@@ -102,10 +98,6 @@ export default function Epics() {
   useEffect(() => {
     fetchEpics(1);
   }, []);
-
-  console.log(isMobile, 'isMobile');
-  console.log(mobileEpics, 'mobileEpics');
-  
 
   return (
     <PageWrapper>
