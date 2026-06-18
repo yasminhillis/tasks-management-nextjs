@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { updateProject } from '@/lib/actions/projectActions';
+import { addNewProject, updateProject } from '@/lib/actions/projectActions';
 import Toast from '@/components/Toast';
 
 type ProjectFormProps = {
@@ -60,18 +60,11 @@ export default function ProjectForm({
       }
     } else {
       try {
-        const res = await fetch('/api/projects', {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          method: 'POST',
-          body: JSON.stringify(data),
-        });
+        const result = await addNewProject(data)
 
-        if (!res.ok) {
-          const error = await res.json();
+        if (!result.success) {
           setError('root', {
-            message: error.message,
+            message: result.message,
           });
           return;
         }
