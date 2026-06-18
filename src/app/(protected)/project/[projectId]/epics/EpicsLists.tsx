@@ -115,13 +115,6 @@ export default function EpicsList({
     );
   }
 
-  function handleNetworkError() {
-    setNetworkError('Please check your connection and try again.');
-    setTimeout(() => {
-      setNetworkError('');
-    }, 3000);
-  }
-
   return (
     <div>
       {loading === 'success' &&
@@ -175,7 +168,6 @@ export default function EpicsList({
             </div>
             {epicId && (
               <EpicModal
-                onNetworkError={() => handleNetworkError()}
                 projectId={projectId}
                 epicId={epicId}
                 onClose={() => setEpicId('')}
