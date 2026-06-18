@@ -1,9 +1,16 @@
 
 type ModalErrorProps = {
-    onClose: () => void
+    onClose: () => void, 
+    title?: string, 
+    message?: string 
 }
 
-export default function ModalError({ onClose }: ModalErrorProps){
+export default function ModalError({ 
+  onClose, 
+  title="Something went wrong", 
+  message=`We're having trouble retrieving your
+        epic details right now. Please try
+        again in a moment.` }: ModalErrorProps){
     return <div onClick={onClose} className="fixed inset-0 backdrop-blur-xs bg-black/50 z-100 flex items-center justify-center">
     
     <div onClick={e => e.stopPropagation()}  className="bg-white w-[672px] rounded-[8px] shadow-modal p-5">
@@ -18,11 +25,9 @@ export default function ModalError({ onClose }: ModalErrorProps){
           cloud_off
         </span>
       </div>
-      <h2 className="title-lg mb-2">Something went wrong</h2>
+      <h2 className="title-lg mb-2">{title}</h2>
       <p className={`body-md text-center max-w-xs  `}>
-        We're having trouble retrieving your
-        epic details right now. Please try
-        again in a moment.
+        {message}
       </p>
      </div>
     </div>

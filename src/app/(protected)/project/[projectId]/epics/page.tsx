@@ -10,7 +10,6 @@ import { EPICS_PAGE_SIZE } from '@/lib/constants';
 
 export default function Epics() {
   const { projectId } = useParams<{ projectId: string }>();
-  const [epics, setEpics] = useState<Epic[]>([]);
   const [desktopEpics, setDesktopEpics] = useState<Epic[]>([]);
   const [mobileEpics, setMobileEpics] = useState<Epic[]>([]);
   const [isMobile, setIsMobile] = useState(false);
@@ -18,7 +17,6 @@ export default function Epics() {
   const [loading, setLoading] = useState<
     'idle' | 'loading' | 'success' | 'failed'
   >('idle');
-  const [currentPage, setCurrentPage] = useState(1);
   const [desktopCurrentPage, setDesktopCurrentPage] = useState(1);
   const [mobileCurrentPage, setMobileCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
@@ -44,7 +42,6 @@ export default function Epics() {
 
       if (!res.ok) {
         const error = await res.json();
-        console.log(error, 'errrrrrrrrorrrrrrrrrrrr');
         setLoading('failed');
         setError(error.message || 'Epic fetching failed');
         return;
@@ -53,10 +50,10 @@ export default function Epics() {
       const { data, totalCount } = await res.json();
       setDesktopEpics(data);
       
-      if (window.innerWidth < 768) {
+      // if (window.innerWidth < 768) {
         setMobileEpics(data)
         setMobileCurrentPage(page)
-      }
+      // }
       setDesktopCurrentPage(page);
       setTotalCount(totalCount);
       setError('')

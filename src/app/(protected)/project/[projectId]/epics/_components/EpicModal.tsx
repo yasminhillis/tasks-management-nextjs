@@ -12,17 +12,19 @@ type EpicModalProps = {
   epicId?: string;
   projectId: string;
   onClose: () => void, 
-  onNetworkError: () => void
 };
 
-export default function EpicModal({ epicId, projectId, onClose, onNetworkError }: EpicModalProps) {
+export default function EpicModal({ epicId, projectId, onClose }: EpicModalProps) {
   const [status, setStatus] = useState<
-    'idle' | 'loading' | 'success' | 'error'
+    'idle' | 'loading' | 'success' | 'fetchError' | 'networkError'
   >('idle');
   const [epic, setEpic] = useState<Epic | null>(null);
 
+
   useEffect(() => {
     const fetchEpic = async () => {
+      console.log(epicId, 'epicId');
+      
       if (!epicId) return;
       setStatus('loading');
       try {
@@ -32,21 +34,21 @@ export default function EpicModal({ epicId, projectId, onClose, onNetworkError }
           const error = await res.json();
           console.log(error, 'errpr');
           
-          setStatus('error');
+          setStatus('fetchError');
           return;
         }
         const { epic } = await res.json();
         setEpic(epic);
         setStatus('success');
       } catch (error) {
-        onNetworkError()
-        return;
+        setStatus('networkError')
       }
     };
     fetchEpic();
   }, [epicId]);
 
-  if (status === 'error') return <ModalError onClose={onClose}/>
+  if (status === 'fetchError') return <ModalError onClose={onClose}/>
+  if (status === 'networkError') return <ModalError onClose={onClose} title={`You're offline`} message={`Network error. Please try again later`}/>
 
   if (status === 'loading') {
     return <div onClick={onClose} className="fixed inset-0 backdrop-blur-xs bg-black/50 z-100 flex items-center justify-center">
