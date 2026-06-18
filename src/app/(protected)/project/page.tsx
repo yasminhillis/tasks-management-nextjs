@@ -47,9 +47,8 @@ export default function Project() {
       const { data, totalCount } = await res.json();
       setProjects(data);
 
-      if (window.innerWidth < 768) {
-        setMobileProjects(data)
-      }
+      setMobileProjects(data)
+      
       setError('')
       setIsFetched(true);
       setTotalCount(totalCount);
