@@ -169,7 +169,7 @@ export default function ProjectForm({
               errors.description ? 'description-error' : undefined
             }
             placeholder="Provide a high-level overview of the project's architectural objectives and key milestones..."
-            className="bg-[#D7E2FF] resize-none overflow-hidden pt-4 pr-4 pb-22 pl-4 rounded-md placeholder:text-[#4F5F7B80] border border-transparent focus:outline-none focus:border focus:border-primary-container"
+            className="bg-[#D7E2FF] resize-none overflow-y-auto pt-4 pr-4 pb-22 pl-4 rounded-md placeholder:text-[#4F5F7B80] border border-transparent focus:outline-none focus:border focus:border-primary-container"
           ></textarea>
           <span
             className={`flex justify-end text-[11px] font-medium ${descriptionLength && descriptionLength > 500 ? 'text-red-500' : 'text-[#4F5F7B]'}`}

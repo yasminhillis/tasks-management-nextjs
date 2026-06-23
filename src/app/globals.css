@@ -13,6 +13,7 @@
   --color-slate-500: #434654;
   --color-slate-600: #4f5f7b;
   --color-slate-900: #041b3c;
+  
 
   /* Semantic */
   --color-success: #004e32;
@@ -33,7 +34,7 @@
   --font-size-btn-label: 1rem;
   --font-size-body-xs: 0.875rem; 
   --font-size-caption-md: 0.875rem;
-   --font-size-body-sm: 0.875rem;
+  --font-size-body-sm: 0.875rem;
   --font-size-body-md: 0.875rem;
   --font-size-label-sm: 0.6875rem;
   --font-size-caption-xs: 0.75rem;

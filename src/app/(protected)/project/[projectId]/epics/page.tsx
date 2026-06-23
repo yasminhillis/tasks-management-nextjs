@@ -39,7 +39,7 @@ export default function Epics() {
       const res = await fetch(
         `/api/epics?projectId=${projectId}&limit=${EPICS_PAGE_SIZE}&offset=${offset}`
       );
-
+      setLoading('loading')
       if (!res.ok) {
         const error = await res.json();
         setLoading('failed');

@@ -37,6 +37,7 @@ export default function Project() {
       const res = await fetch(
         `/api/projects?limit=${PROJECTS_PAGE_SIZE}&offset=${offset}`
       );
+      setLoading('loading')
       if (!res.ok) {
         const error = await res.json();
         console.log(error);
@@ -66,6 +67,7 @@ export default function Project() {
     const res = await fetch(
       `/api/projects?limit=${PROJECTS_PAGE_SIZE}&offset=${offset}`
     );
+    setLoading('loading')
     if (!res.ok) {
       const error = await res.json();
       console.log(error);
@@ -85,11 +87,8 @@ export default function Project() {
     setTotalCount(totalCount)
   }
 
-  useEffect(() => {
-    console.log('here');
-    
+  useEffect(() => {    
     fetchProjects(1);
-    // loadMore(1)
   }, []);
 
   return (
