@@ -28,7 +28,7 @@ export default function ModalBody({
 
       <div className="grid grid-cols-2 md:grid-cols-3 gap-[24px]">
         <div className="flex flex-col gap-[8.5px]">
-          <h3 className="label-sm md:label-xs-muted">Created By</h3>
+          <h3 className="label-sm md:label-xs-muted text-[#041B3C66]">Created By</h3>
           <div className="flex items-center gap-[8px]">
             <div className="hidden  md:block">
               <Initials
@@ -53,7 +53,7 @@ export default function ModalBody({
         </div>
 
         <div className="flex flex-col gap-[8.5px]">
-          <h3 className="label-sm md:label-xs-muted">Assignee</h3>
+          <h3 className="label-sm md:label-xs-muted text-[#041B3C66]">Assignee</h3>
           <div className="flex items-center gap-[8px]">
             {assignee === 'Unassigned' ? (
               <div className="flex items-center gap-[8.5px]">
@@ -95,7 +95,7 @@ export default function ModalBody({
         <div className="col-span-2 border-t border-[#E6EAF2] md:hidden" />
 
         <div className="flex flex-col gap-[8.5px]">
-          <h3 className="label-sm md:label-xs-muted">Deadline</h3>
+          <h3 className="label-sm md:label-xs-muted text-[#041B3C66]">Deadline</h3>
           <div className="flex items-center gap-[8px] body-md-medium">
             <span
               className="material-symbols-outlined"
@@ -110,7 +110,7 @@ export default function ModalBody({
         </div>
 
         <div className="flex flex-col gap-[8.5px]">
-          <h3 className="label-sm md:label-xs-muted">Created At</h3>
+          <h3 className="label-sm md:label-xs-muted text-[#041B3C66]">Created At</h3>
           <div className="flex items-center gap-[8px] body-md-medium text-[14px]">
             <span
               className="material-symbols-outlined"
@@ -129,10 +129,10 @@ export default function ModalBody({
         <h2 className="text-[11px] md:text-[18px] font-semibold leading-[28px]">
           Tasks
         </h2>
-        <div className="flex items-center gap-[3px] cursor-pointer hidden md:block">
+        <div className="flex items-center gap-[3px] cursor-pointer hidden md:flex">
           <span
-            className="material-symbols-outlined"
-            style={{ fontSize: '19px', color: '#003D9B' }}
+            className="material-symbols-outlined inline-flex items-center"
+            style={{ fontSize: '19px', color: '#003D9B', 'display': 'inline-flex', 'alignItems': 'center' }}
           >
             add
           </span>
