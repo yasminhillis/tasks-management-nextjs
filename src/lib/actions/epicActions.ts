@@ -9,7 +9,7 @@ type Epic = {
   deadline: string | undefined;
 };
 
-export default async function addNewEpic(data: Epic) {
+export async function addNewEpic(data: Epic) {
   try {
     const res = await fetch(`${process.env.SUPABASE_URL}/rest/v1/epics`, {
       method: 'POST',
@@ -39,5 +39,36 @@ export default async function addNewEpic(data: Epic) {
       message: 'Network error. Please check your connection and try again'
     }
   }
+}
 
+type PartialData = Partial<Pick<Epic, "title" | "description" | "assignee_id" | "deadline">>
+
+
+export async function updateEpic({data, epicId}: {data: PartialData, epicId: string}){
+  try {
+    const res = await fetch(`${process.env.SUPABASE_URL}/rest/v1/epics?id=eq.${epicId}`, {
+        method: 'PATCH',
+        headers: await getApiHeaders(), 
+        body: JSON.stringify({
+          title: data.title,
+          description: data.description,
+          assignee_id: data.assignee_id,
+          deadline: data.deadline
+        })
+      })
+
+    if (!res.ok) {
+      return {
+        success: false, 
+        message: "Updating epic failed. Please try again"
+      }
+    }
+
+    return { success: true, message: "Updated epic successfully" }
+
+  } catch(error) {
+    console.log(error, 'kk');
+    
+    return { success: false, message: "Network error. Please try again" }
+  }
 }

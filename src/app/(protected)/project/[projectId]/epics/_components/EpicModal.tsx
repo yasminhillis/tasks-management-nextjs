@@ -7,6 +7,7 @@ import ModalBody from './ModalBody';
 import ModalHeaderLoading from './ModalHeaderLoading';
 import ModalBodyLoading from './ModalBodyLoading';
 import ModalError from './ModalError';
+import { updateEpic } from '@/lib/actions/epicActions';
 
 type EpicModalProps = {
   epicId?: string;
@@ -45,6 +46,16 @@ export default function EpicModal({ epicId, projectId, onClose }: EpicModalProps
       }
     };
     fetchEpic();
+
+    // if (epicId) {
+    //   updateEpic({
+    //     epicId: epicId, 
+    //     data: {
+    //       title: 'New title test 888'        
+    //     }
+    //   }).then(console.log)
+    // }
+    // updateEpic()
   }, [epicId]);
 
   if (status === 'fetchError') return <ModalError onClose={onClose}/>

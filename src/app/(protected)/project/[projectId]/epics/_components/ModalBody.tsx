@@ -16,9 +16,6 @@ export default function ModalBody({
   createdAt,
   assignee,
 }: ModalBodyProps) {
-  console.log(createdBy, 'createdBy');
-  console.log(description, 'description');
-
   return (
     <div className="px-[24px] py-[16px] md:p-[32px] flex flex-col gap-[20px] md:gap-[32px]">
       <div>
@@ -148,7 +145,6 @@ export default function ModalBody({
 
       <div className="border-dashed-custom bg-[#F1F3FF] p-[48px] rounded-[8px] flex flex-col items-center justify-center gap-[16px]">
         <div className="flex items-center justify-center w-[48px] h-[48px] rounded-[12px] bg-[#D7E2FF]">
-          {/*  */}
           <span
             className="material-symbols-outlined hidden! md:inline!"
             style={{ opacity: '30%' }}
