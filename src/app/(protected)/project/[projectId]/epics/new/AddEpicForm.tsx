@@ -1,5 +1,5 @@
 'use client';
-import addNewEpic from '@/lib/actions/epicActions';
+import {addNewEpic} from '@/lib/actions/epicActions';
 import type { MemberData } from '@/lib/types/index';
 import { EpicSchema, type EpicFormData } from '@/validations/epic.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
