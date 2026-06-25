@@ -34,8 +34,8 @@ export async function addNewEpic(data: Epic) {
 
     return { success: true, message: 'Epic created successfully' };
   } catch (error) {
-    return { 
-      success: false, 
+    return {
+      success: false,
       message: 'Network error. Please check your connection and try again'
     }
   }
@@ -44,31 +44,33 @@ export async function addNewEpic(data: Epic) {
 type PartialData = Partial<Pick<Epic, "title" | "description" | "assignee_id" | "deadline">>
 
 
-export async function updateEpic({data, epicId}: {data: PartialData, epicId: string}){
+export async function updateEpic({ data, epicId }: { data: PartialData, epicId: string }) {
   try {
     const res = await fetch(`${process.env.SUPABASE_URL}/rest/v1/epics?id=eq.${epicId}`, {
-        method: 'PATCH',
-        headers: await getApiHeaders(), 
-        body: JSON.stringify({
-          title: data.title,
-          description: data.description,
-          assignee_id: data.assignee_id,
-          deadline: data.deadline
-        })
+      method: 'PATCH',
+      headers: await getApiHeaders(),
+      body: JSON.stringify({
+        title: data.title,
+        description: data.description,
+        assignee_id: data.assignee_id,
+        deadline: data.deadline
       })
+    })
 
     if (!res.ok) {
+      const error = await res.json()
+      console.log(error, 'supabase error')
       return {
-        success: false, 
+        success: false,
         message: "Updating epic failed. Please try again"
       }
     }
 
     return { success: true, message: "Updated epic successfully" }
 
-  } catch(error) {
+  } catch (error) {
     console.log(error, 'kk');
-    
+
     return { success: false, message: "Network error. Please try again" }
   }
 }
