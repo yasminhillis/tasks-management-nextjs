@@ -1,6 +1,6 @@
 'use client';
 import Header from '../../_components/Header';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import EpicCard from './_components/EpicCard';
 import ErrorScreen from '@/app/(protected)/_components/ErrorScreen';
 import PageWrapper from '../../_components/PageWrapper';
@@ -24,6 +24,7 @@ type EpicListProps = {
   totalCount: number;
   onPageChange: (page: number) => void;
   pageSize: number;
+  onEpicUpdate: (id: string, data: Partial<Epic>) => void
 };
 
 export default function EpicsList({
@@ -36,6 +37,7 @@ export default function EpicsList({
   totalCount,
   onPageChange,
   pageSize,
+  onEpicUpdate
 }: EpicListProps) {
   const [epicId, setEpicId] = useState('');
   const [networkError, setNetworkError] = useState('');
@@ -59,8 +61,6 @@ export default function EpicsList({
     epics.length === 0 &&
     isFetched
   ) {
-    console.log(epics, 'epics');
-    
     return (
       <EmptyState
         imageSrc="/emptyEpic.png"
@@ -171,6 +171,7 @@ export default function EpicsList({
                 projectId={projectId}
                 epicId={epicId}
                 onClose={() => setEpicId('')}
+                onEpicUpdate={onEpicUpdate}
               />
             )}
 
