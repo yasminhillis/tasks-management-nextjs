@@ -39,7 +39,7 @@ export default function Epics() {
       const res = await fetch(
         `/api/epics?projectId=${projectId}&limit=${EPICS_PAGE_SIZE}&offset=${offset}`
       );
-      setLoading('loading')
+      setLoading('loading');
       if (!res.ok) {
         const error = await res.json();
         setLoading('failed');
@@ -49,11 +49,11 @@ export default function Epics() {
 
       const { data, totalCount } = await res.json();
       setDesktopEpics(data);
-      setMobileEpics(data)
-      setMobileCurrentPage(page)
+      setMobileEpics(data);
+      setMobileCurrentPage(page);
       setDesktopCurrentPage(page);
       setTotalCount(totalCount);
-      setError('')
+      setError('');
       setIsFetched(true);
       setLoading('success');
     } catch (error) {
@@ -95,6 +95,21 @@ export default function Epics() {
     }
   }
 
+  function updateEpics(epics: Epic[], id: string, data: Partial<Epic>) {
+    return epics.map(epic => {
+      if (epic.id === id) {
+        return {...epic, ...data}
+      }
+      return epic
+    })
+  }
+
+  function onEpicUpdate(id: string, data: Partial<Epic>){
+    setDesktopEpics(prev => updateEpics(prev, id, data))
+    setMobileEpics(prev => updateEpics(prev, id, data))
+  }
+
+
   useEffect(() => {
     fetchEpics(1);
   }, []);
@@ -111,6 +126,7 @@ export default function Epics() {
         isFetched={isFetched}
         onPageChange={fetchEpics}
         pageSize={EPICS_PAGE_SIZE}
+        onEpicUpdate={onEpicUpdate}
       />
       <InfiniteScroll
         totalCount={totalCount}

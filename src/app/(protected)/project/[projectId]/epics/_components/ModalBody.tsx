@@ -16,6 +16,7 @@ export default function ModalBody({
   createdAt,
   assignee,
 }: ModalBodyProps) {
+
   return (
     <div className="px-[24px] py-[16px] md:p-[32px] flex flex-col gap-[20px] md:gap-[32px]">
       <div>
