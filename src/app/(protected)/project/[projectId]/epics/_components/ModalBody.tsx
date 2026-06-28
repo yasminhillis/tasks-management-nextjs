@@ -33,7 +33,7 @@ export default function ModalBody({
                 name={createdBy}
                 mode="desktop"
                 state="success"
-                extraStyles="rounded-full bg-[#0052CC] text-[10px] font-bold text-white"
+                extraStyles="rounded-[12px] bg-[#0052CC] text-[10px] font-bold text-white w-[28px] h-[28px]"
               />
             </div>
 
@@ -55,7 +55,7 @@ export default function ModalBody({
           <div className="flex items-center gap-[8px]">
             {assignee === 'Unassigned' ? (
               <div className="flex items-center gap-[8.5px]">
-                <div className="flex items-center justify-center w-[24px] h-[24px] bg-[#E0E8FF] rounded-full">
+                <div className="flex items-center justify-center w-[28px] h-[28px] bg-[#E0E8FF] rounded-[12px]">
                   <span
                     className="material-symbols-outlined"
                     style={{ fontSize: '15px', color: '#4F5F7B' }}
@@ -72,7 +72,7 @@ export default function ModalBody({
                     name={assignee}
                     mode="desktop"
                     state="success"
-                    extraStyles="rounded-full bg-[#CDDDFF] text-[10px] text-[#51617E]"
+                    extraStyles="rounded-full bg-[#CDDDFF] text-[10px] text-[#51617E] w-[28px] h-[28px]"
                   />
                 </div>
 
