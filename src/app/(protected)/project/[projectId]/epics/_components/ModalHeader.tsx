@@ -18,7 +18,6 @@ export default function ModalHeader({epicId, displayId, title, onClose, onEpicUp
     const [isSaving, setIsSaving] = useState(false); 
     const [message, setMessage] = useState('');
     const [success, setSuccess] = useState(false)
-    const [isUpdated, setIsUpdated] = useState(false)
 
     function showToast(message: string, success: boolean){
         setMessage(message);
@@ -32,22 +31,28 @@ export default function ModalHeader({epicId, displayId, title, onClose, onEpicUp
     const updateEpicHandler = async (updatedTitle: string) => {
         if (currentTitleValue === previousTitleValue) return;
         setIsSaving(true); 
-        const result = await updateEpic({epicId: epicId, data: {
-            title: updatedTitle
-        }})
-
-        if (result.success) {
-            showToast('Title updated successfully', true)
-            setPreviousTitleValue(updatedTitle)
-            onEpicUpdate(epicId, {title: updatedTitle})
-        }
-
-        if (!result.success) {
-            showToast('Failed to update title', false)
+        try {
+            const result = await updateEpic({epicId: epicId, data: {
+                title: updatedTitle
+            }})
+    
+            if (result.success) {
+                showToast('Title updated successfully', true)
+                setPreviousTitleValue(updatedTitle)
+                onEpicUpdate(epicId, {title: updatedTitle})
+            }
+    
+            if (!result.success) {
+                showToast(result.message, false)
+                setCurrentTitleValue(previousTitleValue)
+            }
+            
+        } catch(error) {
+            showToast('Network error. Please try again', false)
             setCurrentTitleValue(previousTitleValue)
+        } finally {
+            setIsSaving(false)
         }
-        setIsSaving(false)
-        setIsUpdated(true)
     }
 
     return <div className="bg-linear-to-b from-white to-[#F1F3FF] md:bg-none bg-white pt-[24px] pr-[24px] pb-[8px] pl-[24px] md:p-[32px] flex justify-between border-b border-b-[#C3C6D626]">

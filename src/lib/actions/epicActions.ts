@@ -69,8 +69,6 @@ export async function updateEpic({ data, epicId }: { data: PartialData, epicId: 
     return { success: true, message: "Updated epic successfully" }
 
   } catch (error) {
-    console.log(error, 'kk');
-
     return { success: false, message: "Network error. Please try again" }
   }
 }
