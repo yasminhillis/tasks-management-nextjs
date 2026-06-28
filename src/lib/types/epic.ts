@@ -8,7 +8,7 @@ export type Epic = {
   assignee: User | null;
   created_at: string;
   created_by: User;
-  deadline: string;
+  deadline: string | null;
   description: string | null;
   epic_id: string;
   id: string;

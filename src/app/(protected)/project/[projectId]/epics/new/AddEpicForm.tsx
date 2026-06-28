@@ -34,7 +34,7 @@ export default function AddEpicForm({ projectId, members }: AddEpicFormProps) {
     try {
       const result = await addNewEpic({
         title: data.title,
-        description: data.description || undefined,
+        description: data.description || null,
         assignee_id: data.assignee_id || undefined,
         project_id: projectId,
         deadline: data.deadline || undefined,

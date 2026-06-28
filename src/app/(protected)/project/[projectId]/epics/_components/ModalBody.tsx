@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 type ModalBodyProps = {
   description: string;
   createdBy: string;
-  deadline: string;
+  deadline: string | null;
   createdAt: string;
   assignee: string;
   epicId: string,
@@ -157,8 +157,8 @@ export default function ModalBody({
             >
               calendar_today
             </span>
-            <time className="text-[14px] w-full" dateTime={deadline}>
-              {formatDate(deadline)}
+            <time className="text-[14px] w-full" dateTime={deadline ?? ""}>
+              {deadline ? formatDate(deadline): "No deadline"}
             </time>
           </div>
         </div>
