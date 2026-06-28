@@ -3,7 +3,7 @@ import { getApiHeaders } from '../utils/getApiHeaders';
 
 type Epic = {
   title: string;
-  description: string | undefined;
+  description: string | null;
   assignee_id: string | undefined;
   project_id: string;
   deadline: string | undefined;

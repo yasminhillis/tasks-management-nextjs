@@ -1,12 +1,18 @@
 import { formatDate } from '@/app/(protected)/_utils/formatDate';
 import Initials from '@/components/Initials';
+import Toast from '@/components/Toast';
+import { updateEpic } from '@/lib/actions/epicActions';
+import { Epic } from '@/lib/types';
+import { useEffect, useState } from 'react';
 
 type ModalBodyProps = {
   description: string;
   createdBy: string;
-  deadline: string;
+  deadline: string | null;
   createdAt: string;
   assignee: string;
+  epicId: string,
+  onEpicUpdate: (id: string, data: Partial<Epic>) => void
 };
 
 export default function ModalBody({
@@ -15,17 +21,67 @@ export default function ModalBody({
   deadline,
   createdAt,
   assignee,
+  epicId,
+  onEpicUpdate
 }: ModalBodyProps) {
+
+  const [currentDescriptionValue, setCurrentDescriptionValue] = useState(description);
+  const [previousDescriptionValue, setPreviousDescriptionValue] = useState(description);
+  const [message, setMessage] = useState(''); 
+  const [success, setSuccess] = useState(false)
+  const [isSaving, setIsSaving] = useState(false)
+
+  useEffect(() => {
+    console.log(currentDescriptionValue, 'current desc');
+    
+  }, [currentDescriptionValue])
+
+  function showToast(message: string, success: boolean){
+    setMessage(message)
+    setSuccess(success)
+    setTimeout(() => {setMessage(""); setSuccess(false)}, 3000)
+  }
+
+  async function handleDescriptionUpdate(updatedDescription: string){
+    if (currentDescriptionValue === previousDescriptionValue) return;
+    setIsSaving(true)
+    try {
+      const valueToSave = updatedDescription === "" ? null : updatedDescription
+      const result = await updateEpic({data:{ description: valueToSave}, epicId })
+      console.log(result, 'result77');
+
+      if (!result.success) {
+        showToast("Failed to update description", false);
+        setCurrentDescriptionValue(previousDescriptionValue);
+
+      }
+      if (result.success) {
+        showToast("Description updated successfully", true)
+        setPreviousDescriptionValue(updatedDescription)
+        onEpicUpdate(epicId, {description: valueToSave})
+      }
+    } catch (error) {
+      showToast('Network error. Please try again', false)
+    } finally {
+      setIsSaving(false)
+    }
+  }
 
   return (
     <div className="px-[24px] py-[16px] md:p-[32px] flex flex-col gap-[20px] md:gap-[32px]">
-      <div>
+      {/* <div>
         <span className='md:hidden label-sm mb-[8px]'>Descriptipn</span>
         <p className='body-lg mt-0 text-[14px] text-[#4F5F7B]'>{description}</p>
+      </div> */}
+      {message && <Toast success={success}>{message}</Toast>}
+      <div className="flex flex-col gap-2">
+        <label className='md:hidden label-sm mb-[8px]' htmlFor="description">Description</label>
+        <textarea name="description" id="description" placeholder={currentDescriptionValue === "" ? 'No description provided' : ''} 
+        className={`body-lg mt-0 text-[14px] text-[#4F5F7B] resize-none focus:border border-[#E6EAF2] p-2 outline-none focus:border-primary-container`} value={currentDescriptionValue} onChange={e => setCurrentDescriptionValue(e.target.value)} onBlur={() => handleDescriptionUpdate(currentDescriptionValue)} disabled={isSaving}></textarea>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-[24px]">
-        <div className="flex flex-col gap-[8.5px]">
+      <div className="grid grid-cols-2 md:grid-cols-[1fr_1fr_1fr] gap-[24px]">
+        <div className="flex flex-col gap-[8.5px] bg-green-100">
           <h3 className="label-sm md:label-xs-muted text-[#041B3C66]">Created By</h3>
           <div className="flex items-center gap-[8px]">
             <div className="hidden  md:block">
@@ -50,7 +106,7 @@ export default function ModalBody({
           </div>
         </div>
 
-        <div className="flex flex-col gap-[8.5px]">
+        <div className="flex flex-col gap-[8.5px] bg-yellow-100">
           <h3 className="label-sm md:label-xs-muted text-[#041B3C66]">Assignee</h3>
           <div className="flex items-center gap-[8px]">
             {assignee === 'Unassigned' ? (
@@ -92,7 +148,7 @@ export default function ModalBody({
 
         <div className="col-span-2 border-t border-[#E6EAF2] md:hidden" />
 
-        <div className="flex flex-col gap-[8.5px]">
+        <div className="flex flex-col gap-[8.5px] bg-red-100">
           <h3 className="label-sm md:label-xs-muted text-[#041B3C66]">Deadline</h3>
           <div className="flex items-center gap-[8px] body-md-medium">
             <span
@@ -101,13 +157,13 @@ export default function ModalBody({
             >
               calendar_today
             </span>
-            <time className="text-[14px] w-full" dateTime={deadline}>
-              {formatDate(deadline)}
+            <time className="text-[14px] w-full" dateTime={deadline ?? ""}>
+              {deadline ? formatDate(deadline): "No deadline"}
             </time>
           </div>
         </div>
 
-        <div className="flex flex-col gap-[8.5px]">
+        <div className="flex flex-col gap-[8.5px] bg-blue-100">
           <h3 className="label-sm md:label-xs-muted text-[#041B3C66]">Created At</h3>
           <div className="flex items-center gap-[8px] body-md-medium text-[14px]">
             <span
