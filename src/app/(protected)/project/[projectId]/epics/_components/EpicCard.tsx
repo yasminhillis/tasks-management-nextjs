@@ -9,6 +9,7 @@ type EpicCardProps = {
   assignee?: string;
   createdBy: string;
   createdAt?: string;
+  deadline?: string | null,
   sendEpicIdToParent: (id: string) => void
 };
 
@@ -18,6 +19,7 @@ export default function EpicCard({
   assignee,
   createdBy,
   createdAt,
+  deadline,
   sendEpicIdToParent
 }: EpicCardProps) {
   const router = useRouter();
@@ -60,7 +62,7 @@ export default function EpicCard({
                 <h3 className="text-[10px] font-bold tracking-[-0.5px] uppercase text-[#737685]">
                   DEADLINE
                 </h3>
-                <h4 className="caption-xs text-slate-900">{createdAt}</h4>
+                <h4 className="caption-xs text-slate-900">{deadline ? deadline : 'No deadline specified'}</h4>
               </div>
             </div>
           </>
@@ -82,7 +84,7 @@ export default function EpicCard({
                 <h3 className="text-[10px] font-bold tracking-[-0.5px] uppercase text-[#737685]">
                   DEADLINE
                 </h3>
-                <h4 className="caption-xs text-slate-900">{createdAt}</h4>
+                <h4 className="caption-xs text-slate-900">{deadline ? deadline : 'No deadline specified'}</h4>
               </div>
             </div>
           </>
@@ -105,14 +107,14 @@ export default function EpicCard({
           </h4>
         </div>
 
-        <div className="flex items-center gap-[8px]">
+        <div className="flex items-center gap-1">
           <span
             className="material-symbols-outlined"
             style={{ fontSize: '19px', color: '#434654CC', opacity: '80%' }}
           >
             calendar_today
           </span>
-          <h4 className="caption-xs opacity-80">{createdAt}</h4>
+          <h4 className="caption-xs opacity-80">{deadline ? deadline : 'No deadline specified'}</h4>
         </div>
       </div>
     </Card>

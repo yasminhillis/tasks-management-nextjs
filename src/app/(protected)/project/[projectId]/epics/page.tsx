@@ -112,6 +112,8 @@ export default function Epics() {
 
   useEffect(() => {
     fetchEpics(1);
+    console.log(desktopEpics, 'desktopEpics');
+    
   }, []);
 
   return (
