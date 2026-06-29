@@ -73,7 +73,7 @@ export default function ModalBody({
       <div className="flex flex-col gap-2">
         <label className='md:hidden label-sm mb-[8px]' htmlFor="description">Description</label>
         <textarea name="description" id="description" style={{'fieldSizing': 'content'}} placeholder={currentDescriptionValue === "" ? 'No description provided' : ''} 
-        className={`min-h-[120px] max-h-[160px] body-lg mt-0 text-[14px] text-[#4F5F7B] resize-none focus:border border-[#E6EAF2] p-2 outline-none focus:border-primary-container`} value={currentDescriptionValue} onChange={e => setCurrentDescriptionValue(e.target.value)} onBlur={() => handleDescriptionUpdate(currentDescriptionValue)} disabled={isSaving}></textarea>
+        className={`min-h-[120px] max-h-[160px] body-lg mt-0 text-[14px] text-[#4F5F7B] resize-none border border-transparent focus:border border-[#E6EAF2] p-2 outline-none focus:border-primary-container`} value={currentDescriptionValue} onChange={e => setCurrentDescriptionValue(e.target.value)} onBlur={() => handleDescriptionUpdate(currentDescriptionValue)} disabled={isSaving}></textarea>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-[1fr_1fr_1fr] gap-[24px]">

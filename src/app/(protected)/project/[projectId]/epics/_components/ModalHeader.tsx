@@ -63,7 +63,7 @@ export default function ModalHeader({epicId, displayId, title, onClose, onEpicUp
                 <p className="text-[10px] font-bold uppercase tracking-[0.06em] text-[#003D9B] 
               md:text-[12px] md:tracking-[0.6px] md:text-[#041B3C] md:opacity-60">{displayId}</p>
             </div>
-            <input className="title-xl" type="text" value={currentTitleValue} onBlur={() => updateEpicHandler(currentTitleValue)} onChange={e => setCurrentTitleValue(e.target.value)} disabled={isSaving}/>
+            <input className="title-xl p-2 border border-transparent focus:border focus:border-primary-container appearance-none outline-none" type="text" value={currentTitleValue} onBlur={() => updateEpicHandler(currentTitleValue)} onChange={e => setCurrentTitleValue(e.target.value)} disabled={isSaving}/>
         </div>
         <button onClick={onClose} className="cursor-pointer">
             <span className="material-symbols-outlined" style={{'fontSize': '21px', color: '#041B3C99'}}>close</span>
