@@ -66,16 +66,9 @@ export default function ModalBody({
       setIsSaving(false)
     }
   }
-  // const textAreaLength =  currentDescriptionValue.length/ (15.2); 
-  // console.log(currentDescriptionValue.length, 'currentDescriptionValue.length');
-  // console.log(textAreaLength, 'length text area');
   
   return (
     <div className="px-[24px] py-[16px] md:p-[32px] flex flex-col gap-[20px] md:gap-[32px]">
-      {/* <div>
-        <span className='md:hidden label-sm mb-[8px]'>Descriptipn</span>
-        <p className='body-lg mt-0 text-[14px] text-[#4F5F7B]'>{description}</p>
-      </div> */}
       {message && <Toast success={success}>{message}</Toast>}
       <div className="flex flex-col gap-2">
         <label className='md:hidden label-sm mb-[8px]' htmlFor="description">Description</label>
@@ -84,7 +77,7 @@ export default function ModalBody({
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-[1fr_1fr_1fr] gap-[24px]">
-        <div className="flex flex-col gap-[8.5px] bg-green-100">
+        <div className="flex flex-col gap-[8.5px]">
           <h3 className="label-sm md:label-xs-muted text-[#041B3C66]">Created By</h3>
           <div className="flex items-center gap-[8px]">
             <div className="hidden  md:block">
@@ -109,7 +102,7 @@ export default function ModalBody({
           </div>
         </div>
 
-        <div className="flex flex-col gap-[8.5px] bg-yellow-100">
+        <div className="flex flex-col gap-[8.5px]">
           <h3 className="label-sm md:label-xs-muted text-[#041B3C66]">Assignee</h3>
           <div className="flex items-center gap-[8px]">
             {assignee === 'Unassigned' ? (
@@ -151,7 +144,7 @@ export default function ModalBody({
 
         <div className="col-span-2 border-t border-[#E6EAF2] md:hidden" />
 
-        <div className="flex flex-col gap-[8.5px] bg-red-100">
+        <div className="flex flex-col gap-[8.5px]">
           <h3 className="label-sm md:label-xs-muted text-[#041B3C66]">Deadline</h3>
           <div className="flex items-center gap-[8px] body-md-medium">
             <span
@@ -166,7 +159,7 @@ export default function ModalBody({
           </div>
         </div>
 
-        <div className="flex flex-col gap-[8.5px] bg-blue-100">
+        <div className="flex flex-col gap-[8.5px]">
           <h3 className="label-sm md:label-xs-muted text-[#041B3C66]">Created At</h3>
           <div className="flex items-center gap-[8px] body-md-medium text-[14px]">
             <span
