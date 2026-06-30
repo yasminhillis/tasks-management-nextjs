@@ -11,8 +11,8 @@ type ModalBodyProps = {
   deadline: string | null;
   createdAt: string;
   assignee: string;
-  epicId: string,
-  onEpicUpdate: (id: string, data: Partial<Epic>) => void
+  epicId: string;
+  onEpicUpdate: (id: string, data: Partial<Epic>) => void;
 };
 
 export default function ModalBody({
@@ -22,60 +22,93 @@ export default function ModalBody({
   createdAt,
   assignee,
   epicId,
-  onEpicUpdate
+  onEpicUpdate,
 }: ModalBodyProps) {
-
-  const [currentDescriptionValue, setCurrentDescriptionValue] = useState(description);
-  const [previousDescriptionValue, setPreviousDescriptionValue] = useState(description);
-  const [message, setMessage] = useState(''); 
-  const [success, setSuccess] = useState(false)
-  const [isSaving, setIsSaving] = useState(false)
+  const [currentDescriptionValue, setCurrentDescriptionValue] =
+    useState(description);
+  const [previousDescriptionValue, setPreviousDescriptionValue] =
+    useState(description);
+  const [message, setMessage] = useState('');
+  const [success, setSuccess] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     console.log(currentDescriptionValue, 'current desc');
-    
-  }, [currentDescriptionValue])
+  }, [currentDescriptionValue]);
 
-  function showToast(message: string, success: boolean){
-    setMessage(message)
-    setSuccess(success)
-    setTimeout(() => {setMessage(""); setSuccess(false)}, 3000)
+  function showToast(message: string, success: boolean) {
+    setMessage(message);
+    setSuccess(success);
+    setTimeout(() => {
+      setMessage('');
+      setSuccess(false);
+    }, 3000);
   }
 
-  async function handleFieldUpdate(field: 'title' | 'description' | 'assignee' | 'deadline', previousValue:string, currentValue:string) {
+  async function handleFieldUpdate(
+    field: 'title' | 'description' | 'assignee' | 'deadline',
+    previousValue: string,
+    currentValue: string
+  ) {
     function handleRevert(previousValue: string, message: string) {
-      // if (error === 'fetch failed') {
-      //   showToast(`Failed to update ${field}`, false);
-      // } else {
-      //   showToast("Network error. Please try again", false);
-      // }
-      showToast(message, false)
+      showToast(message, false);
       setCurrentDescriptionValue(previousValue);
     }
 
-    function handleSuccess(currentValue: string){
-      showToast(`${field.charAt(0).toUpperCase() + field.slice(1)} updated successfully`, true)
-      setPreviousDescriptionValue(currentValue)
-      onEpicUpdate(epicId, {[field]: currentValue})
+    function handleSuccess(currentValue: string) {
+      showToast(
+        `${field.charAt(0).toUpperCase() + field.slice(1)} updated successfully`,
+        true
+      );
+      setPreviousDescriptionValue(currentValue);
+      onEpicUpdate(epicId, { [field]: currentValue });
     }
 
-    setIsSaving(true)
-    await updateField({epicId, field, previousValue, currentValue, onSuccess:handleSuccess , onRevert:handleRevert})
-    setIsSaving(false)
+    setIsSaving(true);
+    await updateField({
+      epicId,
+      field,
+      previousValue,
+      currentValue,
+      onSuccess: handleSuccess,
+      onRevert: handleRevert,
+    });
+    setIsSaving(false);
   }
-  
+
   return (
     <div className="px-[24px] py-[16px] md:p-[32px] flex flex-col gap-[20px] md:gap-[32px]">
       {message && <Toast success={success}>{message}</Toast>}
       <div className="flex flex-col gap-2">
-        <label className='md:hidden label-sm mb-[8px]' htmlFor="description">Description</label>
-        <textarea name="description" id="description" style={{'fieldSizing': 'content'}} placeholder={currentDescriptionValue === "" ? 'No description provided' : ''} 
-        className={`min-h-[120px] max-h-[160px] body-lg mt-0 text-[14px] text-[#4F5F7B] resize-none border border-transparent focus:border border-[#E6EAF2] p-2 outline-none focus:border-primary-container`} value={currentDescriptionValue} onChange={e => setCurrentDescriptionValue(e.target.value)} onBlur={() => handleFieldUpdate('description', previousDescriptionValue, currentDescriptionValue)} disabled={isSaving}></textarea>
+        <label className="md:hidden label-sm mb-[8px]" htmlFor="description">
+          Description
+        </label>
+        <textarea
+          name="description"
+          id="description"
+          style={{ fieldSizing: 'content' }}
+          placeholder={
+            currentDescriptionValue === '' ? 'No description provided' : ''
+          }
+          className={`min-h-[120px] max-h-[160px] body-lg mt-0 text-[14px] text-[#4F5F7B] resize-none border border-transparent focus:border border-[#E6EAF2] p-2 outline-none focus:border-primary-container`}
+          value={currentDescriptionValue}
+          onChange={(e) => setCurrentDescriptionValue(e.target.value)}
+          onBlur={() =>
+            handleFieldUpdate(
+              'description',
+              previousDescriptionValue,
+              currentDescriptionValue
+            )
+          }
+          disabled={isSaving}
+        ></textarea>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-[1fr_1fr_1fr] gap-[24px]">
         <div className="flex flex-col gap-[8.5px]">
-          <h3 className="label-sm md:label-xs-muted text-[#041B3C66]">Created By</h3>
+          <h3 className="label-sm md:label-xs-muted text-[#041B3C66]">
+            Created By
+          </h3>
           <div className="flex items-center gap-[8px]">
             <div className="hidden  md:block">
               <Initials
@@ -100,7 +133,9 @@ export default function ModalBody({
         </div>
 
         <div className="flex flex-col gap-[8.5px]">
-          <h3 className="label-sm md:label-xs-muted text-[#041B3C66]">Assignee</h3>
+          <h3 className="label-sm md:label-xs-muted text-[#041B3C66]">
+            Assignee
+          </h3>
           <div className="flex items-center gap-[8px]">
             {assignee === 'Unassigned' ? (
               <div className="flex items-center gap-[8.5px]">
@@ -142,7 +177,9 @@ export default function ModalBody({
         <div className="col-span-2 border-t border-[#E6EAF2] md:hidden" />
 
         <div className="flex flex-col gap-[8.5px]">
-          <h3 className="label-sm md:label-xs-muted text-[#041B3C66]">Deadline</h3>
+          <h3 className="label-sm md:label-xs-muted text-[#041B3C66]">
+            Deadline
+          </h3>
           <div className="flex items-center gap-[8px] body-md-medium">
             <span
               className="material-symbols-outlined"
@@ -150,14 +187,16 @@ export default function ModalBody({
             >
               calendar_today
             </span>
-            <time className="text-[14px] w-full" dateTime={deadline ?? ""}>
-              {deadline ? formatDate(deadline): "No deadline"}
+            <time className="text-[14px] w-full" dateTime={deadline ?? ''}>
+              {deadline ? formatDate(deadline) : 'No deadline'}
             </time>
           </div>
         </div>
 
         <div className="flex flex-col gap-[8.5px]">
-          <h3 className="label-sm md:label-xs-muted text-[#041B3C66]">Created At</h3>
+          <h3 className="label-sm md:label-xs-muted text-[#041B3C66]">
+            Created At
+          </h3>
           <div className="flex items-center gap-[8px] body-md-medium text-[14px]">
             <span
               className="material-symbols-outlined"
@@ -179,7 +218,12 @@ export default function ModalBody({
         <div className="flex items-center gap-[3px] cursor-pointer hidden md:flex">
           <span
             className="material-symbols-outlined inline-flex items-center"
-            style={{ fontSize: '19px', color: '#003D9B', 'display': 'inline-flex', 'alignItems': 'center' }}
+            style={{
+              fontSize: '19px',
+              color: '#003D9B',
+              display: 'inline-flex',
+              alignItems: 'center',
+            }}
           >
             add
           </span>
@@ -204,7 +248,7 @@ export default function ModalBody({
 
           <span
             className="material-symbols-outlined md:hidden!"
-            style={{'color': '#003D9B' }}
+            style={{ color: '#003D9B' }}
           >
             list
           </span>
@@ -213,10 +257,16 @@ export default function ModalBody({
           No tasks have been added to this epic yet
         </p>
         <button className="btn-primary shadow-sm text-[12px] md:text-[16px] gap-[3px]">
-          <span className="material-symbols-outlined md:hidden!" style={{'fontSize': '17px'}}>
+          <span
+            className="material-symbols-outlined md:hidden!"
+            style={{ fontSize: '17px' }}
+          >
             add
           </span>
-          <span className="material-symbols-outlined hidden! md:inline!" style={{'fontSize': '20px'}}>
+          <span
+            className="material-symbols-outlined hidden! md:inline!"
+            style={{ fontSize: '20px' }}
+          >
             add
           </span>
           Add Task
