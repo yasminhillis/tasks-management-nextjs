@@ -2,6 +2,7 @@ import { useRouter } from 'next/navigation';
 import Card from '../../../_components/Card';
 import Initials from '@/components/Initials';
 import CardIdBadge from '../../../_components/CardIdBadge';
+import { useEffect } from 'react';
 
 type EpicCardProps = {
   id: string;
@@ -23,7 +24,8 @@ export default function EpicCard({
   sendEpicIdToParent
 }: EpicCardProps) {
   const router = useRouter();
-
+  console.log(assignee, 'assigneessss');
+  useEffect(() => {console.log(assignee,'nnn')}, [])
   return (
     <Card onClick={() => sendEpicIdToParent(id)} extraStyles="shadow-sm md:border-l-[4px] md:border-l-[#004E32] w-auto">
       <div className="flex justify-between">
