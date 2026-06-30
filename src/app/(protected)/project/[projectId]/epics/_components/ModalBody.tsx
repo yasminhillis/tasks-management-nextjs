@@ -28,6 +28,10 @@ export default function ModalBody({
     useState(description);
   const [previousDescriptionValue, setPreviousDescriptionValue] =
     useState(description);
+
+  const [currentDeadline, setCurrentDeadline] = useState(deadline)  
+  const [previousDeadline, setpreviousDeadline] = useState(deadline)  
+
   const [message, setMessage] = useState('');
   const [success, setSuccess] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -190,6 +194,8 @@ export default function ModalBody({
             <time className="text-[14px] w-full" dateTime={deadline ?? ''}>
               {deadline ? formatDate(deadline) : 'No deadline'}
             </time>
+
+            <input type="data" onChange={e => {console.log(e.target.value);setCurrentDeadline(e.target.value)}} className='bg-red-100' value={deadline ? deadline : ""}/>
           </div>
         </div>
 
