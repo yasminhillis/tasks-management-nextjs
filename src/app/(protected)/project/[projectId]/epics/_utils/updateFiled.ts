@@ -6,7 +6,7 @@ type handleFieldUpdateProps = {
     previousValue: string,
     currentValue: string,
     onSuccess: (value: string) => void,
-    onRevert: (value: string, error: "fetch failed" | "network error") => void
+    onRevert: (value: string, message: string) => void
 }
 
 export default async function updateFiled({ epicId, field, previousValue, currentValue, onSuccess, onRevert }: handleFieldUpdateProps) {
@@ -17,11 +17,9 @@ export default async function updateFiled({ epicId, field, previousValue, curren
         if (result.success) {
             onSuccess(currentValue)
         } else {
-            onRevert(previousValue, "fetch failed")
+            onRevert(previousValue, result.message)
         }
-    } catch (error) {
-        console.log('network rorr here');
-        
-        onRevert(previousValue, "network error")
+    } catch (error) {        
+        onRevert(previousValue, "Network error. Please try again")
     }
 }
