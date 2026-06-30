@@ -7,7 +7,7 @@ import ModalBody from './ModalBody';
 import ModalHeaderLoading from './ModalHeaderLoading';
 import ModalBodyLoading from './ModalBodyLoading';
 import ModalError from './ModalError';
-import { updateEpic } from '@/lib/actions/epicActions';
+import type { MemberData } from '@/lib/types';
 
 type EpicModalProps = {
   epicId?: string;
@@ -21,6 +21,8 @@ export default function EpicModal({ epicId, projectId, onClose, onEpicUpdate }: 
     'idle' | 'loading' | 'success' | 'fetchError' | 'networkError'
   >('idle');
   const [epic, setEpic] = useState<Epic | null>(null);
+  const [membersData, setMembersData] = useState<MemberData[]>([])
+  const [membersStatus, setMembersStatus] = useState<'idle' | 'loading' | 'failed' | 'success'>('idle')
 
   useEffect(() => {
     const fetchEpic = async () => {

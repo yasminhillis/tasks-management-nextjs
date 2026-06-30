@@ -35,6 +35,7 @@ export default function ModalBody({
   const [message, setMessage] = useState('');
   const [success, setSuccess] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [isEditingAssignee, setIsEditingAssignee] = useState(false)
 
   useEffect(() => {
     console.log(currentDescriptionValue, 'current desc');
@@ -52,11 +53,13 @@ export default function ModalBody({
   async function handleFieldUpdate(
     field: 'title' | 'description' | 'assignee' | 'deadline',
     previousValue: string,
-    currentValue: string
+    currentValue: string,
+    onSuccessCallback: (value: string) => void, 
+    onRevertCallback: (value: string) => void
   ) {
     function handleRevert(previousValue: string, message: string) {
       showToast(message, false);
-      setCurrentDescriptionValue(previousValue);
+      onRevertCallback(previousValue)
     }
 
     function handleSuccess(currentValue: string) {
@@ -64,7 +67,8 @@ export default function ModalBody({
         `${field.charAt(0).toUpperCase() + field.slice(1)} updated successfully`,
         true
       );
-      setPreviousDescriptionValue(currentValue);
+      // setPreviousDescriptionValue(currentValue);
+      onSuccessCallback(currentValue)
       onEpicUpdate(epicId, { [field]: currentValue });
     }
 
@@ -101,7 +105,9 @@ export default function ModalBody({
             handleFieldUpdate(
               'description',
               previousDescriptionValue,
-              currentDescriptionValue
+              currentDescriptionValue,
+              (val) => setPreviousDescriptionValue(val),
+              (val) => setCurrentDescriptionValue(val)
             )
           }
           disabled={isSaving}
@@ -181,9 +187,9 @@ export default function ModalBody({
         <div className="col-span-2 border-t border-[#E6EAF2] md:hidden" />
 
         <div className="flex flex-col gap-[8.5px]">
-          <h3 className="label-sm md:label-xs-muted text-[#041B3C66]">
+          <label className="label-sm md:label-xs-muted text-[#041B3C66]">
             Deadline
-          </h3>
+          </label>
           <div className="flex items-center gap-[8px] body-md-medium">
             <span
               className="material-symbols-outlined"
@@ -191,11 +197,19 @@ export default function ModalBody({
             >
               calendar_today
             </span>
-            <time className="text-[14px] w-full" dateTime={deadline ?? ''}>
+            {/* <time className="text-[14px] w-full" dateTime={deadline ?? ''}>
               {deadline ? formatDate(deadline) : 'No deadline'}
-            </time>
+            </time> */}
 
-            <input type="data" onChange={e => {console.log(e.target.value);setCurrentDeadline(e.target.value)}} className='bg-red-100' value={deadline ? deadline : ""}/>
+            <input type="date" onChange={e => {
+            setCurrentDeadline(e.target.value)
+            handleFieldUpdate(
+              'deadline',
+              previousDeadline ?? "",
+              e.target.value,
+              (val) => setCurrentDeadline(val),
+              (val) => setpreviousDeadline(val)
+            )}} value={currentDeadline ? currentDeadline : ""}/>
           </div>
         </div>
 
