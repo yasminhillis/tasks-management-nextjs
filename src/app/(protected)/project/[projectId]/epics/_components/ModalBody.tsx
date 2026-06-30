@@ -4,6 +4,7 @@ import Toast from '@/components/Toast';
 import { updateEpic } from '@/lib/actions/epicActions';
 import { Epic } from '@/lib/types';
 import { useEffect, useState } from 'react';
+import updateField from '../_utils/updateFiled';
 
 type ModalBodyProps = {
   description: string;
@@ -42,30 +43,88 @@ export default function ModalBody({
     setTimeout(() => {setMessage(""); setSuccess(false)}, 3000)
   }
 
-  async function handleDescriptionUpdate(updatedDescription: string){
-    if (currentDescriptionValue === previousDescriptionValue) return;
-    setIsSaving(true)
-    try {
-      const valueToSave = updatedDescription === "" ? null : updatedDescription
-      const result = await updateEpic({data:{ description: valueToSave}, epicId })
-      console.log(result, 'result77');
+  async function handleFieldUpdate(field: 'title' | 'description' | 'assignee' | 'deadline', previousValue:string, currentValue:string) {
+    // try { 
 
-      if (!result.success) {
-        showToast("Failed to update description", false);
-        setCurrentDescriptionValue(previousDescriptionValue);
+    // } catch (error) {
 
+    // }
+
+    function handleRevert(previousValue: string, error: "fetch failed" | "network error") {
+      if (error === 'fetch failed') {
+        showToast(`Failed to update ${field}`, false);
+      } else {
+        showToast("Network error. Please try again", false);
       }
-      if (result.success) {
-        showToast("Description updated successfully", true)
-        setPreviousDescriptionValue(updatedDescription)
-        onEpicUpdate(epicId, {description: valueToSave})
-      }
-    } catch (error) {
-      showToast('Network error. Please try again', false)
-    } finally {
-      setIsSaving(false)
+      setCurrentDescriptionValue(previousValue);
     }
+
+    function handleSuccess(currentValue: string){
+      
+        showToast(`${field.charAt(0).toUpperCase() + field.slice(1)} updated successfully`, true)
+        // if (currentValue === "") currentValue = null;
+        setPreviousDescriptionValue(currentValue)
+        onEpicUpdate(epicId, {[field]: currentValue})
+    }
+
+
+    setIsSaving(true)
+    await updateField({epicId, field, previousValue, currentValue, onSuccess:handleSuccess , onRevert:handleRevert})
+    setIsSaving(false)
   }
+
+  // async function handleDescriptionUpdate(updatedDescription: string){
+  //   if (currentDescriptionValue === previousDescriptionValue) return;
+  //   setIsSaving(true)
+  //   try {
+  //     const valueToSave = updatedDescription === "" ? null : updatedDescription
+  //     const result = await updateEpic({data:{ description: valueToSave}, epicId })
+  //     console.log(result, 'result77');
+
+  //     if (!result.success) {
+        // showToast("Failed to update description", false);
+        // setCurrentDescriptionValue(previousDescriptionValue);
+  //     }
+  //     if (result.success) {
+        // showToast("Description updated successfully", true)
+        // setPreviousDescriptionValue(updatedDescription)
+        // onEpicUpdate(epicId, {description: valueToSave})
+  //     }
+  //   } catch (error) {
+  //     showToast('Network error. Please try again', false)
+  //   } finally {
+  //     setIsSaving(false)
+  //   }
+  // }
+
+  // async function updateFields(field: string, previousValue: string, currentValue: string) {
+  //   if (previousValue === currentValue) return;
+  //   setIsSaving(true)
+  //   try {
+  //     let valueToSave;
+  //     if (field === 'description') {
+  //        valueToSave = currentValue === "" ? null : currentValue
+  //     } else {
+  //       valueToSave = currentValue
+  //     }
+  //     const result = await updateEpic({data : {[field]: valueToSave}, epicId })
+  //     console.log(result, 'result77');
+
+  //     if (!result.success) {
+  //       showToast(`Failed to update ${field}`, false);
+  //       setCurrentDescriptionValue(previousValue);
+  //     }
+  //     if (result.success) {
+  //       showToast("Description updated successfully", true)
+  //       setPreviousDescriptionValue(currentValue)
+  //       onEpicUpdate(epicId, {[field]: valueToSave})
+  //     }
+  //   } catch (error) {
+  //     showToast('Network error. Please try again', false)
+  //   } finally {
+  //     setIsSaving(false)
+  //   }
+  // }
   
   return (
     <div className="px-[24px] py-[16px] md:p-[32px] flex flex-col gap-[20px] md:gap-[32px]">
@@ -73,7 +132,7 @@ export default function ModalBody({
       <div className="flex flex-col gap-2">
         <label className='md:hidden label-sm mb-[8px]' htmlFor="description">Description</label>
         <textarea name="description" id="description" style={{'fieldSizing': 'content'}} placeholder={currentDescriptionValue === "" ? 'No description provided' : ''} 
-        className={`min-h-[120px] max-h-[160px] body-lg mt-0 text-[14px] text-[#4F5F7B] resize-none border border-transparent focus:border border-[#E6EAF2] p-2 outline-none focus:border-primary-container`} value={currentDescriptionValue} onChange={e => setCurrentDescriptionValue(e.target.value)} onBlur={() => handleDescriptionUpdate(currentDescriptionValue)} disabled={isSaving}></textarea>
+        className={`min-h-[120px] max-h-[160px] body-lg mt-0 text-[14px] text-[#4F5F7B] resize-none border border-transparent focus:border border-[#E6EAF2] p-2 outline-none focus:border-primary-container`} value={currentDescriptionValue} onChange={e => setCurrentDescriptionValue(e.target.value)} onBlur={() => handleFieldUpdate('description', previousDescriptionValue, currentDescriptionValue)} disabled={isSaving}></textarea>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-[1fr_1fr_1fr] gap-[24px]">
