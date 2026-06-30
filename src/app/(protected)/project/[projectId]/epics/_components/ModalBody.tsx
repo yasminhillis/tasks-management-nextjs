@@ -67,7 +67,6 @@ export default function ModalBody({
         `${field.charAt(0).toUpperCase() + field.slice(1)} updated successfully`,
         true
       );
-      // setPreviousDescriptionValue(currentValue);
       onSuccessCallback(currentValue)
       onEpicUpdate(epicId, { [field]: currentValue });
     }

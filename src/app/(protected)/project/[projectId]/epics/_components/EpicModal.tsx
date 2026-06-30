@@ -8,6 +8,7 @@ import ModalHeaderLoading from './ModalHeaderLoading';
 import ModalBodyLoading from './ModalBodyLoading';
 import ModalError from './ModalError';
 import type { MemberData } from '@/lib/types';
+import { getProjectMembers } from '@/lib/actions/projectMembersActions';
 
 type EpicModalProps = {
   epicId?: string;
@@ -47,8 +48,18 @@ export default function EpicModal({ epicId, projectId, onClose, onEpicUpdate }: 
         setStatus('networkError')
       }
     };
+
+    const fetchMembers = async() => {
+      try {
+        const result = await getProjectMembers(projectId); 
+        if (result.success) setMembersData(result.data)
+      } catch (error) {
+
+      }
+    }
     
     fetchEpic();
+    fetchMembers()
 
   }, [epicId]);
 
