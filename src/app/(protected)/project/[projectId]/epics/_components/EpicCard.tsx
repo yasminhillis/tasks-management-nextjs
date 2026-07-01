@@ -24,8 +24,7 @@ export default function EpicCard({
   sendEpicIdToParent
 }: EpicCardProps) {
   const router = useRouter();
-  console.log(assignee, 'assigneessss');
-  useEffect(() => {console.log(assignee,'nnn')}, [])
+
   return (
     <Card onClick={() => sendEpicIdToParent(id)} extraStyles="shadow-sm md:border-l-[4px] md:border-l-[#004E32] w-auto">
       <div className="flex justify-between">

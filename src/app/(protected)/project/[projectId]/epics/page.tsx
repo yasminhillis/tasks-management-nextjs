@@ -105,6 +105,7 @@ export default function Epics() {
   }
 
   function onEpicUpdate(id: string, data: Partial<Epic>){
+      console.log('onEpicUpdate called:', data)  
     setDesktopEpics(prev => updateEpics(prev, id, data))
     setMobileEpics(prev => updateEpics(prev, id, data))
   }

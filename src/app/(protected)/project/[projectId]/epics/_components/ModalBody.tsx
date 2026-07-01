@@ -4,7 +4,8 @@ import Toast from '@/components/Toast';
 import { Epic } from '@/lib/types';
 import { useEffect, useState } from 'react';
 import updateField from '../_utils/updateFiled';
-
+import type { MemberData } from '@/lib/types';
+import Select from 'react-select';
 type ModalBodyProps = {
   description: string;
   createdBy: string;
@@ -12,7 +13,15 @@ type ModalBodyProps = {
   createdAt: string;
   assignee: string;
   epicId: string;
+  assigneeId: string;
   onEpicUpdate: (id: string, data: Partial<Epic>) => void;
+  members: MemberData[];
+  membersStatus: 'idle' | 'loading' | 'failed' | 'success';
+};
+
+type AssigneeOptions = {
+  value: string;
+  label: string;
 };
 
 export default function ModalBody({
@@ -22,23 +31,32 @@ export default function ModalBody({
   createdAt,
   assignee,
   epicId,
+  assigneeId,
   onEpicUpdate,
+  members,
+  membersStatus,
 }: ModalBodyProps) {
   const [currentDescriptionValue, setCurrentDescriptionValue] =
     useState(description);
   const [previousDescriptionValue, setPreviousDescriptionValue] =
     useState(description);
 
-  const [currentDeadline, setCurrentDeadline] = useState(deadline)  
-  const [previousDeadline, setpreviousDeadline] = useState(deadline)  
+  const [currentDeadline, setCurrentDeadline] = useState(deadline);
+  const [previousDeadline, setpreviousDeadline] = useState(deadline);
 
   const [message, setMessage] = useState('');
   const [success, setSuccess] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [isEditingAssignee, setIsEditingAssignee] = useState(false)
+  const [isEditingAssignee, setIsEditingAssignee] = useState(false);
+
+  const [currentAssigneeName, setCurrentAssigneeName] = useState(assignee);
+  const [currentAssigneeId, setCurrentAssigneeId] = useState(assigneeId);
+  const [previousAssigneeId, setPreviousAssigneeId] = useState(assigneeId);
+  const [previousAssigneeName, setPreviousAssigneeName] = useState(assignee);
 
   useEffect(() => {
     console.log(currentDescriptionValue, 'current desc');
+    console.log(members, 'members');
   }, [currentDescriptionValue]);
 
   function showToast(message: string, success: boolean) {
@@ -51,24 +69,27 @@ export default function ModalBody({
   }
 
   async function handleFieldUpdate(
-    field: 'title' | 'description' | 'assignee' | 'deadline',
+    field: 'title' | 'description' | 'assignee_id' | 'deadline' | 'assignee',
     previousValue: string,
     currentValue: string,
-    onSuccessCallback: (value: string) => void, 
+    onSuccessCallback: (value: string) => void,
     onRevertCallback: (value: string) => void
   ) {
     function handleRevert(previousValue: string, message: string) {
       showToast(message, false);
-      onRevertCallback(previousValue)
+      onRevertCallback(previousValue);
     }
 
     function handleSuccess(currentValue: string) {
+      const displayField = field === 'assignee_id' ? 'assignee' : field;
       showToast(
-        `${field.charAt(0).toUpperCase() + field.slice(1)} updated successfully`,
+        `${displayField.charAt(0).toUpperCase() + field.slice(1)} updated successfully`,
         true
       );
-      onSuccessCallback(currentValue)
-      onEpicUpdate(epicId, { [field]: currentValue });
+      onSuccessCallback(currentValue);
+      if (field !== 'assignee_id') {
+        onEpicUpdate(epicId, { [field]: currentValue });
+      }
     }
 
     setIsSaving(true);
@@ -82,6 +103,14 @@ export default function ModalBody({
     });
     setIsSaving(false);
   }
+
+  const options: AssigneeOptions[] = [
+    { value: '', label: 'Unassigned' },
+    ...members.map((member) => ({
+      value: member.user_id,
+      label: member.metadata.name,
+    })),
+  ];
 
   return (
     <div className="px-[24px] py-[16px] md:p-[32px] flex flex-col gap-[20px] md:gap-[32px]">
@@ -142,45 +171,90 @@ export default function ModalBody({
         </div>
 
         <div className="flex flex-col gap-[8.5px]">
-          <h3 className="label-sm md:label-xs-muted text-[#041B3C66]">
+          <label className="label-sm md:label-xs-muted text-[#041B3C66]">
             Assignee
-          </h3>
-          <div className="flex items-center gap-[8px]">
-            {assignee === 'Unassigned' ? (
-              <div className="flex items-center gap-[8.5px]">
-                <div className="flex items-center justify-center w-[28px] h-[28px] bg-[#E0E8FF] rounded-[12px]">
-                  <span
-                    className="material-symbols-outlined"
-                    style={{ fontSize: '15px', color: '#4F5F7B' }}
-                  >
-                    person_off
-                  </span>
+          </label>
+          {isEditingAssignee ? (
+            <Select<AssigneeOptions>
+              value={options.find(
+                (option) => option.label === currentAssigneeName
+              )}
+              options={options}
+              onChange={(e) => {
+                const selectedMember = members.find(
+                  (m) => m.user_id === e?.value
+                );
+                console.log('selected:', e);
+                console.log('selectedMember:', selectedMember);
+                console.log('members:', members);
+                setCurrentAssigneeName(e?.label ?? 'Unassigned');
+                handleFieldUpdate(
+                  'assignee_id',
+                  previousAssigneeId,
+                  e?.value ?? '',
+                  (val) => {
+                    setPreviousAssigneeId(val);
+                    setPreviousAssigneeName(currentAssigneeName);
+                    setIsEditingAssignee(false);
+                    onEpicUpdate(epicId, {
+                      assignee: selectedMember
+                        ? {
+                            sub: selectedMember.user_id,
+                            name: selectedMember.metadata.name,
+                            email: selectedMember.metadata.email ?? '',
+                            department:
+                              selectedMember.metadata.department ?? '',
+                          }
+                        : null,
+                    });
+                  },
+                  (val) => {
+                    setCurrentAssigneeName(previousAssigneeName);
+                  }
+                );
+              }}
+            />
+          ) : (
+            <div
+              onClick={() => setIsEditingAssignee(true)}
+              className="flex items-center gap-[8px] cursor-pointer"
+            >
+              {currentAssigneeName === 'Unassigned' ? (
+                <div className="flex items-center gap-[8.5px]">
+                  <div className="flex items-center justify-center w-[28px] h-[28px] bg-[#E0E8FF] rounded-[12px]">
+                    <span
+                      className="material-symbols-outlined"
+                      style={{ fontSize: '15px', color: '#4F5F7B' }}
+                    >
+                      person_off
+                    </span>
+                  </div>
+                  <p className="body-md-medium">Unassigned</p>
                 </div>
-                <p className="body-md-medium">Unassigned</p>
-              </div>
-            ) : (
-              <>
-                <div className="hidden md:block">
-                  <Initials
-                    name={assignee}
-                    mode="desktop"
-                    state="success"
-                    extraStyles="rounded-full bg-[#CDDDFF] text-[10px] text-[#51617E] w-[28px] h-[28px]"
-                  />
-                </div>
+              ) : (
+                <>
+                  <div className="hidden md:block">
+                    <Initials
+                      name={assignee}
+                      mode="desktop"
+                      state="success"
+                      extraStyles="rounded-full bg-[#CDDDFF] text-[10px] text-[#51617E] w-[28px] h-[28px]"
+                    />
+                  </div>
 
-                <div className="md:hidden">
-                  <Initials
-                    name={assignee}
-                    mode="mobile"
-                    state="success"
-                    extraStyles="rounded-full bg-[#CDDDFF] text-[10px] text-[#51617E]"
-                  />
-                </div>
-                <p className="body-md-medium">{assignee}</p>
-              </>
-            )}
-          </div>
+                  <div className="md:hidden">
+                    <Initials
+                      name={assignee}
+                      mode="mobile"
+                      state="success"
+                      extraStyles="rounded-full bg-[#CDDDFF] text-[10px] text-[#51617E]"
+                    />
+                  </div>
+                  <p className="body-md-medium">{currentAssigneeName}</p>
+                </>
+              )}
+            </div>
+          )}
         </div>
 
         <div className="col-span-2 border-t border-[#E6EAF2] md:hidden" />
@@ -200,15 +274,20 @@ export default function ModalBody({
               {deadline ? formatDate(deadline) : 'No deadline'}
             </time> */}
 
-            <input type="date" onChange={e => {
-            setCurrentDeadline(e.target.value)
-            handleFieldUpdate(
-              'deadline',
-              previousDeadline ?? "",
-              e.target.value,
-              (val) => setCurrentDeadline(val),
-              (val) => setpreviousDeadline(val)
-            )}} value={currentDeadline ? currentDeadline : ""}/>
+            <input
+              type="date"
+              onChange={(e) => {
+                setCurrentDeadline(e.target.value);
+                handleFieldUpdate(
+                  'deadline',
+                  previousDeadline ?? '',
+                  e.target.value,
+                  (val) => setCurrentDeadline(val),
+                  (val) => setpreviousDeadline(val)
+                );
+              }}
+              value={currentDeadline ? currentDeadline : ''}
+            />
           </div>
         </div>
 
