@@ -2,6 +2,7 @@ export type User = {
   name: string;
   email: string;
   department: string;
+  sub: string
 };
 
 export type Epic = {

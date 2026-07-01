@@ -27,7 +27,7 @@ export default function EpicModal({ epicId, projectId, onClose, onEpicUpdate }: 
 
   useEffect(() => {
     const fetchEpic = async () => {
-      console.log(epicId, 'epicId');
+      // console.log(epicId, 'epicId');
       
       if (!epicId) return;
       setStatus('loading');
@@ -51,10 +51,13 @@ export default function EpicModal({ epicId, projectId, onClose, onEpicUpdate }: 
 
     const fetchMembers = async() => {
       try {
+        setMembersStatus("loading")
         const result = await getProjectMembers(projectId); 
-        if (result.success) setMembersData(result.data)
+        if (result.success){ setMembersData(result.data)
+        setMembersStatus("success")} else {
+      setMembersStatus("failed")}
       } catch (error) {
-
+        setMembersStatus("failed")
       }
     }
     
@@ -80,7 +83,7 @@ export default function EpicModal({ epicId, projectId, onClose, onEpicUpdate }: 
   return <div onClick={onClose} className="fixed inset-0 backdrop-blur-xs bg-black/50 z-100 flex items-center justify-center">
     <div onClick={e => e.stopPropagation()} className="bg-white  md:max-h-[80vh] w-[672px] overflow-y-auto rounded-[8px] shadow-modal">
         <ModalHeader epicId={epic.id} displayId={epic.epic_id} title={epic.title} onClose={onClose} onEpicUpdate={onEpicUpdate} />
-        <ModalBody epicId={epic.id} description={epic.description ?? ''} createdBy={epic.created_by.name} assignee={epic.assignee?.name ?? 'Unassigned'}  deadline={epic.deadline} createdAt={epic.created_at} onEpicUpdate={onEpicUpdate} />
+        <ModalBody epicId={epic.id} assigneeId={epic.assignee?.sub ?? ''} description={epic.description ?? ''} createdBy={epic.created_by.name} assignee={epic.assignee?.name ?? 'Unassigned'}  deadline={epic.deadline} createdAt={epic.created_at} onEpicUpdate={onEpicUpdate} members={membersData} membersStatus={membersStatus}/>
     </div>
   </div>;
   

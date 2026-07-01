@@ -2,7 +2,7 @@ import { updateEpic } from "@/lib/actions/epicActions";
 
 type handleFieldUpdateProps = {
     epicId: string,
-    field: 'title' | 'description' | 'assignee' | 'deadline',
+    field: 'title' | 'description' | 'assignee_id' | 'deadline' | 'assignee',
     previousValue: string,
     currentValue: string,
     onSuccess: (value: string) => void,
