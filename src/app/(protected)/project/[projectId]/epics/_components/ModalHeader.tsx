@@ -1,6 +1,5 @@
 import EpicIcon from "@/components/icons/EpicIcons"
 import Toast from "@/components/Toast";
-import { updateEpic } from "@/lib/actions/epicActions";
 import { useState } from "react";
 import type { Epic } from "@/lib/types";
 import updateFiled from "../_utils/updateFiled";
@@ -28,33 +27,6 @@ export default function ModalHeader({epicId, displayId, title, onClose, onEpicUp
             setSuccess(false)
         }, 3000)
     }
-
-    // const updateEpicHandler = async (updatedTitle: string) => {
-    //     if (currentTitleValue === previousTitleValue) return;
-    //     setIsSaving(true); 
-    //     try {
-    //         const result = await updateEpic({epicId: epicId, data: {
-    //             title: updatedTitle
-    //         }})
-    
-    //         if (result.success) {
-    //             showToast('Title updated successfully', true)
-    //             setPreviousTitleValue(updatedTitle)
-    //             onEpicUpdate(epicId, {title: updatedTitle})
-    //         }
-    
-    //         if (!result.success) {
-                // showToast(result.message, false)
-                // setCurrentTitleValue(previousTitleValue)
-    //         }
-            
-    //     } catch(error) {
-    //         showToast('Network error. Please try again', false)
-    //         setCurrentTitleValue(previousTitleValue)
-    //     } finally {
-    //         setIsSaving(false)
-    //     }
-    // }
 
     async function updateFieldHandler(field: "title" | "description" | "assignee" | "deadline", previousValue:string, currentValue:string){
         function handleSuccess(){
