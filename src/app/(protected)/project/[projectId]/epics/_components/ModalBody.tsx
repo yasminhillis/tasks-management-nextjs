@@ -47,17 +47,10 @@ export default function ModalBody({
   const [message, setMessage] = useState('');
   const [success, setSuccess] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [isEditingAssignee, setIsEditingAssignee] = useState(false);
 
   const [currentAssigneeName, setCurrentAssigneeName] = useState(assignee);
-  const [currentAssigneeId, setCurrentAssigneeId] = useState(assigneeId);
   const [previousAssigneeId, setPreviousAssigneeId] = useState(assigneeId);
   const [previousAssigneeName, setPreviousAssigneeName] = useState(assignee);
-
-  useEffect(() => {
-    console.log(currentDescriptionValue, 'current desc');
-    console.log(members, 'members');
-  }, [currentDescriptionValue]);
 
   function showToast(message: string, success: boolean) {
     setMessage(message);
@@ -174,46 +167,44 @@ export default function ModalBody({
           <label className="label-sm md:label-xs-muted text-[#041B3C66]">
             Assignee
           </label>
-         
-            <Select<AssigneeOptions>
-              value={options.find(
-                (option) => option.label === currentAssigneeName
-              )}
-              options={options}
-              onChange={(e) => {
-                const selectedMember = members.find(
-                  (m) => m.user_id === e?.value
-                );
-                console.log('selected:', e);
-                console.log('selectedMember:', selectedMember);
-                console.log('members:', members);
-                setCurrentAssigneeName(e?.label ?? 'Unassigned');
-                handleFieldUpdate(
-                  'assignee_id',
-                  previousAssigneeId,
-                  e?.value ?? '',
-                  (val) => {
-                    setPreviousAssigneeId(val);
-                    setPreviousAssigneeName(currentAssigneeName);
-                    setIsEditingAssignee(false);
-                    onEpicUpdate(epicId, {
-                      assignee: selectedMember
-                        ? {
-                            sub: selectedMember.user_id,
-                            name: selectedMember.metadata.name,
-                            email: selectedMember.metadata.email ?? '',
-                            department:
-                              selectedMember.metadata.department ?? '',
-                          }
-                        : null,
-                    });
-                  },
-                  (val) => {
-                    setCurrentAssigneeName(previousAssigneeName);
-                  }
-                );
-              }}
-            />
+
+          <Select<AssigneeOptions>
+            value={options.find(
+              (option) => option.label === currentAssigneeName
+            )}
+            options={options}
+            onChange={(e) => {
+              const selectedMember = members.find(
+                (m) => m.user_id === e?.value
+              );
+              console.log('selected:', e);
+              console.log('selectedMember:', selectedMember);
+              console.log('members:', members);
+              setCurrentAssigneeName(e?.label ?? 'Unassigned');
+              handleFieldUpdate(
+                'assignee_id',
+                previousAssigneeId,
+                e?.value ?? '',
+                (val) => {
+                  setPreviousAssigneeId(val);
+                  setPreviousAssigneeName(currentAssigneeName);
+                  onEpicUpdate(epicId, {
+                    assignee: selectedMember
+                      ? {
+                          sub: selectedMember.user_id,
+                          name: selectedMember.metadata.name,
+                          email: selectedMember.metadata.email ?? '',
+                          department: selectedMember.metadata.department ?? '',
+                        }
+                      : null,
+                  });
+                },
+                (val) => {
+                  setCurrentAssigneeName(previousAssigneeName);
+                }
+              );
+            }}
+          />
         </div>
 
         <div className="col-span-2 border-t border-[#E6EAF2] md:hidden" />
