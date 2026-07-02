@@ -174,7 +174,7 @@ export default function ModalBody({
           <label className="label-sm md:label-xs-muted text-[#041B3C66]">
             Assignee
           </label>
-          {isEditingAssignee ? (
+         
             <Select<AssigneeOptions>
               value={options.find(
                 (option) => option.label === currentAssigneeName
@@ -214,68 +214,28 @@ export default function ModalBody({
                 );
               }}
             />
-          ) : (
-            <div
-              onClick={() => setIsEditingAssignee(true)}
-              className="flex items-center gap-[8px] cursor-pointer"
-            >
-              {currentAssigneeName === 'Unassigned' ? (
-                <div className="flex items-center gap-[8.5px]">
-                  <div className="flex items-center justify-center w-[28px] h-[28px] bg-[#E0E8FF] rounded-[12px]">
-                    <span
-                      className="material-symbols-outlined"
-                      style={{ fontSize: '15px', color: '#4F5F7B' }}
-                    >
-                      person_off
-                    </span>
-                  </div>
-                  <p className="body-md-medium">Unassigned</p>
-                </div>
-              ) : (
-                <>
-                  <div className="hidden md:block">
-                    <Initials
-                      name={assignee}
-                      mode="desktop"
-                      state="success"
-                      extraStyles="rounded-full bg-[#CDDDFF] text-[10px] text-[#51617E] w-[28px] h-[28px]"
-                    />
-                  </div>
-
-                  <div className="md:hidden">
-                    <Initials
-                      name={assignee}
-                      mode="mobile"
-                      state="success"
-                      extraStyles="rounded-full bg-[#CDDDFF] text-[10px] text-[#51617E]"
-                    />
-                  </div>
-                  <p className="body-md-medium">{currentAssigneeName}</p>
-                </>
-              )}
-            </div>
-          )}
         </div>
 
         <div className="col-span-2 border-t border-[#E6EAF2] md:hidden" />
 
-        <div className="flex flex-col gap-[8.5px]">
+        <div className="flex flex-col justify-center gap-[8.5px]">
           <label className="label-sm md:label-xs-muted text-[#041B3C66]">
             Deadline
           </label>
           <div className="flex items-center gap-[8px] body-md-medium">
-            <span
+            {/* <span
               className="material-symbols-outlined"
               style={{ fontSize: '15px', color: '#041B3C66' }}
             >
               calendar_today
-            </span>
+            </span> */}
             {/* <time className="text-[14px] w-full" dateTime={deadline ?? ''}>
               {deadline ? formatDate(deadline) : 'No deadline'}
             </time> */}
 
             <input
               type="date"
+              className="cursor-pointer"
               onChange={(e) => {
                 setCurrentDeadline(e.target.value);
                 handleFieldUpdate(
