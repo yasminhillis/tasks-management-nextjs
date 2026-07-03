@@ -13,7 +13,6 @@
   --color-slate-500: #434654;
   --color-slate-600: #4f5f7b;
   --color-slate-900: #041b3c;
-  
 
   /* Semantic */
   --color-success: #004e32;
@@ -28,11 +27,11 @@
   --font-size-display-md: 2.25rem;
   --font-size-headline-lg: 2rem;
   --font-size-title-md: 1.125rem;
-  --font-size-title-xl: 1.5rem; 
+  --font-size-title-xl: 1.5rem;
   --font-size-title-lg: 1.25rem;
   --font-size-body-lg: 1rem;
   --font-size-btn-label: 1rem;
-  --font-size-body-xs: 0.875rem; 
+  --font-size-body-xs: 0.875rem;
   --font-size-caption-md: 0.875rem;
   --font-size-body-sm: 0.875rem;
   --font-size-body-md: 0.875rem;
@@ -40,13 +39,13 @@
   --font-size-caption-xs: 0.75rem;
   --font-size-error-sm: 0.6875rem;
   --font-size-hint: 0.625rem;
-  --font-size-label-xs: 0.625rem; 
+  --font-size-label-xs: 0.625rem;
 
   /* line heights */
   --line-height-display-lg: 1.2;
   --line-height-display-md: 2.5rem;
   --line-height-headline-lg: 2.5rem;
-  --line-height-title-xl: 2rem; 
+  --line-height-title-xl: 2rem;
   --line-height-title-md: 1.6875rem;
   --line-height-body-sm: 1.25rem;
   --line-height-body-md: 1.421875rem;
@@ -54,7 +53,7 @@
   --line-height-btn-label: 1.5rem;
   --line-height-label-sm: 1.03125rem;
   --line-height-caption-md: 1.25rem;
-  --line-height-body-xs: 1.25rem; 
+  --line-height-body-xs: 1.25rem;
   --line-height-title-lg: 1.75rem;
   --line-height-caption-xs: 1rem;
   --line-height-error-sm: 1.03125rem;
@@ -176,6 +175,14 @@ body {
     line-height: var(--line-height-body-lg);
     letter-spacing: var(--letter-spacing-normal);
     color: #434654;
+  }
+
+  .body-lg-dark {
+    font-size: var(--font-size-body-lg);
+    font-weight: var(--font-weight-regular);
+    line-height: 1.625rem;
+    letter-spacing: var(--letter-spacing-normal);
+    color: var(--color-slate-900);
   }
 
   .label-sm {

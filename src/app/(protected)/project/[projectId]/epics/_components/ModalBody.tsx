@@ -6,6 +6,8 @@ import { useEffect, useState } from 'react';
 import updateField from '../_utils/updateFiled';
 import type { MemberData } from '@/lib/types';
 import Select from 'react-select';
+import { components } from 'react-select';
+
 type ModalBodyProps = {
   description: string;
   createdBy: string;
@@ -105,6 +107,65 @@ export default function ModalBody({
     })),
   ];
 
+  const customSingleValue = (props: any) => {
+    const isUnassigned = props.data.label === 'Unassigned';
+
+    return (
+      <components.SingleValue {...props}>
+        <div className="flex items-center gap-2 cursor-pointer">
+          {isUnassigned ? (
+            <div className="flex items-center justify-center w-[24px] h-[24px] bg-[#E0E8FF] rounded-full">
+              <span
+                className="material-symbols-outlined"
+                style={{ fontSize: '15px', color: '#4F5F7B' }}
+              >
+                person_off
+              </span>
+            </div>
+          ) : (
+            <Initials
+              name={props.data.label}
+              mode="desktop"
+              state="success"
+              extraStyles="rounded-full w-6 h-6 bg-[#CDDDFF] font-normal text-[11px]"
+            />
+          )}
+          {props.data.label}
+        </div>
+      </components.SingleValue>
+    );
+  };
+  const customOption = (props) => {
+    const isUnassigned = props.data.label === 'Unassigned';
+    return (
+      <components.Option
+        {...props}
+        className="flex items-center gap-2 cursor-pointer"
+      >
+        <div className="flex items-center gap-2 cursor-pointer">
+          {isUnassigned ? (
+            <div className="flex items-center justify-center w-[24px] h-[24px] bg-[#E0E8FF] rounded-full">
+              <span
+                className="material-symbols-outlined"
+                style={{ fontSize: '15px', color: '#4F5F7B' }}
+              >
+                person_off
+              </span>
+            </div>
+          ) : (
+            <Initials
+              name={props.data.label}
+              mode="desktop"
+              state="success"
+              extraStyles="rounded-full w-6 h-6 bg-[#CDDDFF] font-normal text-xs"
+            />
+          )}
+          {props.data.label}
+        </div>
+      </components.Option>
+    );
+  };
+
   return (
     <div className="px-[24px] py-[16px] md:p-[32px] flex flex-col gap-[20px] md:gap-[32px]">
       {message && <Toast success={success}>{message}</Toast>}
@@ -119,7 +180,7 @@ export default function ModalBody({
           placeholder={
             currentDescriptionValue === '' ? 'No description provided' : ''
           }
-          className={`min-h-[120px] max-h-[160px] body-lg mt-0 text-[14px] text-[#4F5F7B] resize-none border border-transparent focus:border border-[#E6EAF2] p-2 outline-none focus:border-primary-container`}
+          className={`min-h-[120px] max-h-[160px] body-lg-dark mt-0 text-[14px] text-[#4F5F7B] resize-none border border-[#D7E2FF] rounded-lg h-[150px] focus:border border-[#E6EAF2] p-2 outline-none focus:border-primary-container`}
           value={currentDescriptionValue}
           onChange={(e) => setCurrentDescriptionValue(e.target.value)}
           onBlur={() =>
@@ -169,6 +230,10 @@ export default function ModalBody({
           </label>
 
           <Select<AssigneeOptions>
+            components={{
+              Option: customOption,
+              SingleValue: customSingleValue,
+            }}
             value={options.find(
               (option) => option.label === currentAssigneeName
             )}
