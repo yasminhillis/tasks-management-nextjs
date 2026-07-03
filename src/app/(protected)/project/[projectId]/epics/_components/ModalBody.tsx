@@ -107,12 +107,10 @@ export default function ModalBody({
     })),
   ];
 
-  const customSingleValue = (props: SingleValueProps<AssigneeOptions>) => {
-    const isUnassigned = props.data.label === 'Unassigned';
-
+  const DisplayAssignee = ({data}: {data: AssigneeOptions}) => {
+    const isUnassigned = data.label === 'Unassigned';
     return (
-      <components.SingleValue {...props}>
-        <div className="flex items-center gap-2 cursor-pointer">
+     <div className="flex items-center gap-2 cursor-pointer">
           {isUnassigned ? (
             <div className="flex items-center justify-center w-[24px] h-[24px] bg-[#E0E8FF] rounded-full">
               <span
@@ -124,44 +122,30 @@ export default function ModalBody({
             </div>
           ) : (
             <Initials
-              name={props.data.label}
+              name={data.label}
               mode="desktop"
               state="success"
               extraStyles="rounded-full w-6 h-6 bg-[#CDDDFF] font-normal text-[11px]"
             />
           )}
-          {props.data.label}
-        </div>
+          {data.label}
+        </div>)
+  }
+
+  const customSingleValue = (props: SingleValueProps<AssigneeOptions>) => {
+    return (
+      <components.SingleValue {...props}>
+       <DisplayAssignee data={props.data}/>
       </components.SingleValue>
     );
   };
   const customOption = (props: OptionProps<AssigneeOptions>) => {
-    const isUnassigned = props.data.label === 'Unassigned';
     return (
       <components.Option
         {...props}
         className="flex items-center gap-2 cursor-pointer"
       >
-        <div className="flex items-center gap-2 cursor-pointer">
-          {isUnassigned ? (
-            <div className="flex items-center justify-center w-[24px] h-[24px] bg-[#E0E8FF] rounded-full">
-              <span
-                className="material-symbols-outlined"
-                style={{ fontSize: '15px', color: '#4F5F7B' }}
-              >
-                person_off
-              </span>
-            </div>
-          ) : (
-            <Initials
-              name={props.data.label}
-              mode="desktop"
-              state="success"
-              extraStyles="rounded-full w-6 h-6 bg-[#CDDDFF] font-normal text-xs"
-            />
-          )}
-          {props.data.label}
-        </div>
+       <DisplayAssignee data={props.data}/>
       </components.Option>
     );
   };
