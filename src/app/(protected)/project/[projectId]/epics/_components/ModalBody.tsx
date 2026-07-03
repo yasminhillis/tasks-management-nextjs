@@ -5,7 +5,7 @@ import { Epic } from '@/lib/types';
 import { useEffect, useState } from 'react';
 import updateField from '../_utils/updateFiled';
 import type { MemberData } from '@/lib/types';
-import Select from 'react-select';
+import Select, { OptionProps, SingleValueProps } from 'react-select';
 import { components } from 'react-select';
 
 type ModalBodyProps = {
@@ -107,7 +107,7 @@ export default function ModalBody({
     })),
   ];
 
-  const customSingleValue = (props: any) => {
+  const customSingleValue = (props: SingleValueProps<AssigneeOptions>) => {
     const isUnassigned = props.data.label === 'Unassigned';
 
     return (
@@ -135,7 +135,7 @@ export default function ModalBody({
       </components.SingleValue>
     );
   };
-  const customOption = (props) => {
+  const customOption = (props: OptionProps<AssigneeOptions>) => {
     const isUnassigned = props.data.label === 'Unassigned';
     return (
       <components.Option
