@@ -91,7 +91,7 @@ export default function ModalBody({
     return (
       <components.Option
         {...props}
-        className={`${props.className} flex items-center gap-2 cursor-pointer`}
+        className={`${props.className} flex items-center gap-2`}
       >
         <DisplayAssignee data={props.data} />
       </components.Option>
@@ -224,12 +224,37 @@ export default function ModalBody({
               SingleValue: customSingleValue,
             }}
             styles={{
-              control: (base) => ({
+              control: (base, state) => ({
                 ...base, 
-                borderColor: '#D7E2FF',
-                borderRadius: '8px'
+                borderColor: state.isFocused ? '#0052cc' :'#D7E2FF',
+                borderRadius: '8px',
+                boxShadow: 'none',
+                height: '40px',
+                display: 'flex', 
+                alignItems: 'center',
+                '&:hover': {
+                  borderColor: '#0052cc'
+                }
               }),
-              indicatorSeparator: () => ({display: 'none'})
+              indicatorSeparator: () => ({display: 'none'}),
+              valueContainer: (base) => ({
+                ...base, 
+                padding: '0 8px'
+              }), 
+              dropdownIndicator: (base) => ({
+                ...base, 
+                color: '#6B7280',
+                cursor: 'pointer',
+                "&:hover": {
+                  color: '#0052cc'
+                }
+              }), 
+              option: (base, state) => ({
+                ...base,
+                backgroundColor: state.isSelected ? '#E0E8FF' : state.isFocused ? '#F1F3FF' : 'white',
+                color: '#041B3C',
+                cursor: 'pointer'
+              }),
             }}
             value={options.find(
               (option) => option.label === currentAssigneeName
