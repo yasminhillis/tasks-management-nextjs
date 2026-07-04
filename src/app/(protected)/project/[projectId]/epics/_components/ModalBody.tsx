@@ -223,6 +223,8 @@ export default function ModalBody({
               Option: customOption,
               SingleValue: customSingleValue,
             }}
+            isLoading={membersStatus === "loading"}
+            isDisabled={isSaving}
             styles={{
               control: (base, state) => ({
                 ...base, 
@@ -253,7 +255,8 @@ export default function ModalBody({
                 ...base,
                 backgroundColor: state.isSelected ? '#E0E8FF' : state.isFocused ? '#F1F3FF' : 'white',
                 color: '#041B3C',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                borderRadius: '2px',
               }),
             }}
             value={options.find(
