@@ -54,6 +54,50 @@ export default function ModalBody({
   const [previousAssigneeId, setPreviousAssigneeId] = useState(assigneeId);
   const [previousAssigneeName, setPreviousAssigneeName] = useState(assignee);
 
+  const DisplayAssignee = ({ data }: { data: AssigneeOptions }) => {
+    const isUnassigned = data.value === "";
+    return (
+      <div className="flex items-center gap-2 cursor-pointer body-md-medium font-normal">
+        {isUnassigned ? (
+          <div className="flex items-center justify-center w-[24px] h-[24px] bg-[#E0E8FF] rounded-full">
+            <span
+              className="material-symbols-outlined"
+              style={{ fontSize: '15px', color: '#4F5F7B' }}
+            >
+              person_off
+            </span>
+          </div>
+        ) : (
+          <Initials
+            name={data.label}
+            mode="desktop"
+            state="success"
+            extraStyles="rounded-full w-4.5 h-4 bg-[#CDDDFF] font-normal text-[9px]"
+          />
+        )}
+        {data.label}
+      </div>
+    );
+  };
+
+  const customSingleValue = (props: SingleValueProps<AssigneeOptions>) => {
+    return (
+      <components.SingleValue {...props}>
+        <DisplayAssignee data={props.data} />
+      </components.SingleValue>
+    );
+  };
+  const customOption = (props: OptionProps<AssigneeOptions>) => {
+    return (
+      <components.Option
+        {...props}
+        className={`${props.className} flex items-center gap-2 cursor-pointer`}
+      >
+        <DisplayAssignee data={props.data} />
+      </components.Option>
+    );
+  };
+
   function showToast(message: string, success: boolean) {
     setMessage(message);
     setSuccess(success);
@@ -76,9 +120,13 @@ export default function ModalBody({
     }
 
     function handleSuccess(currentValue: string) {
+      console.log(currentValue, 'currentValue');
+
       const displayField = field === 'assignee_id' ? 'assignee' : field;
+      console.log(displayField, 'kk');
+
       showToast(
-        `${displayField.charAt(0).toUpperCase() + field.slice(1)} updated successfully`,
+        `${displayField.charAt(0).toUpperCase() + displayField.slice(1)} updated successfully`,
         true
       );
       onSuccessCallback(currentValue);
@@ -107,49 +155,6 @@ export default function ModalBody({
     })),
   ];
 
-  const DisplayAssignee = ({data}: {data: AssigneeOptions}) => {
-    const isUnassigned = data.label === 'Unassigned';
-    return (
-     <div className="flex items-center gap-2 cursor-pointer">
-          {isUnassigned ? (
-            <div className="flex items-center justify-center w-[24px] h-[24px] bg-[#E0E8FF] rounded-full">
-              <span
-                className="material-symbols-outlined"
-                style={{ fontSize: '15px', color: '#4F5F7B' }}
-              >
-                person_off
-              </span>
-            </div>
-          ) : (
-            <Initials
-              name={data.label}
-              mode="desktop"
-              state="success"
-              extraStyles="rounded-full w-6 h-6 bg-[#CDDDFF] font-normal text-[11px]"
-            />
-          )}
-          {data.label}
-        </div>)
-  }
-
-  const customSingleValue = (props: SingleValueProps<AssigneeOptions>) => {
-    return (
-      <components.SingleValue {...props}>
-       <DisplayAssignee data={props.data}/>
-      </components.SingleValue>
-    );
-  };
-  const customOption = (props: OptionProps<AssigneeOptions>) => {
-    return (
-      <components.Option
-        {...props}
-        className="flex items-center gap-2 cursor-pointer"
-      >
-       <DisplayAssignee data={props.data}/>
-      </components.Option>
-    );
-  };
-
   return (
     <div className="px-[24px] py-[16px] md:p-[32px] flex flex-col gap-[20px] md:gap-[32px]">
       {message && <Toast success={success}>{message}</Toast>}
@@ -164,7 +169,7 @@ export default function ModalBody({
           placeholder={
             currentDescriptionValue === '' ? 'No description provided' : ''
           }
-          className={`min-h-[120px] max-h-[160px] body-lg-dark mt-0 text-[14px] text-[#4F5F7B] resize-none border border-[#D7E2FF] rounded-lg h-[150px] focus:border border-[#E6EAF2] p-2 outline-none focus:border-primary-container`}
+          className={`min-h-[120px] max-h-[160px] body-lg-dark mt-0 text-[14px] text-[#4F5F7B] resize-none border border-[#D7E2FF] rounded-lg h-[150px] p-2 outline-none focus:border focus:border-primary-container`}
           value={currentDescriptionValue}
           onChange={(e) => setCurrentDescriptionValue(e.target.value)}
           onBlur={() =>
@@ -181,10 +186,10 @@ export default function ModalBody({
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-[1fr_1fr_1fr] gap-[24px]">
-        <div className="flex flex-col gap-[8.5px]">
-          <h3 className="label-sm md:label-xs-muted text-[#041B3C66]">
+        <div className="flex flex-col gap-[8.5px] justify-center ">
+          <label className="label-sm md:label-xs-muted text-[#041B3C66]">
             Created By
-          </h3>
+          </label>
           <div className="flex items-center gap-[8px]">
             <div className="hidden  md:block">
               <Initials
@@ -208,7 +213,7 @@ export default function ModalBody({
           </div>
         </div>
 
-        <div className="flex flex-col gap-[8.5px]">
+        <div className="flex flex-col gap-[8.5px] justify-center">
           <label className="label-sm md:label-xs-muted text-[#041B3C66]">
             Assignee
           </label>
@@ -218,6 +223,14 @@ export default function ModalBody({
               Option: customOption,
               SingleValue: customSingleValue,
             }}
+            styles={{
+              control: (base) => ({
+                ...base, 
+                borderColor: '#D7E2FF',
+                borderRadius: '8px'
+              }),
+              indicatorSeparator: () => ({display: 'none'})
+            }}
             value={options.find(
               (option) => option.label === currentAssigneeName
             )}
@@ -226,9 +239,6 @@ export default function ModalBody({
               const selectedMember = members.find(
                 (m) => m.user_id === e?.value
               );
-              console.log('selected:', e);
-              console.log('selectedMember:', selectedMember);
-              console.log('members:', members);
               setCurrentAssigneeName(e?.label ?? 'Unassigned');
               handleFieldUpdate(
                 'assignee_id',
@@ -291,7 +301,7 @@ export default function ModalBody({
           </div>
         </div>
 
-        <div className="flex flex-col gap-[8.5px]">
+        <div className="flex flex-col gap-[8.5px] justify-center">
           <h3 className="label-sm md:label-xs-muted text-[#041B3C66]">
             Created At
           </h3>

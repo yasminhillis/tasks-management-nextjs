@@ -277,7 +277,7 @@ body {
   .body-md-medium {
     font-size: var(--font-size-body-xs);
     font-weight: var(--font-weight-medium);
-    line-height: var(--line-height-body-xs);
+    line-height: 1.25rem; 
     letter-spacing: var(--letter-spacing-normal);
     color: var(--color-slate-900);
   }
