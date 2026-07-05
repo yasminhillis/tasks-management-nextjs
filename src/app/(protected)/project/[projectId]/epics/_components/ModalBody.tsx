@@ -2,7 +2,7 @@ import { formatDate } from '@/app/(protected)/_utils/formatDate';
 import Initials from '@/components/Initials';
 import Toast from '@/components/Toast';
 import { Epic } from '@/lib/types';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import updateField from '../_utils/updateFiled';
 import type { MemberData } from '@/lib/types';
 import Select, { OptionProps, SingleValueProps } from 'react-select';
@@ -57,7 +57,7 @@ export default function ModalBody({
   const DisplayAssignee = ({ data }: { data: AssigneeOptions }) => {
     const isUnassigned = data.value === "";
     return (
-      <div className="flex items-center gap-2 cursor-pointer body-md-medium font-normal">
+      <div className="flex items-center gap-2 body-md-medium font-normal">
         {isUnassigned ? (
           <div className="flex items-center justify-center w-[24px] h-[24px] bg-[#E0E8FF] rounded-full">
             <span
