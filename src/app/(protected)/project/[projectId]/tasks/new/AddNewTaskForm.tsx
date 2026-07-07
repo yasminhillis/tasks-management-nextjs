@@ -1,6 +1,5 @@
 'use client';
 import { FormSelect } from '@/components/ui/FormSelect';
-import Select from 'react-select';
 
 export default function AddNewTaskForm() {
   const options = [
