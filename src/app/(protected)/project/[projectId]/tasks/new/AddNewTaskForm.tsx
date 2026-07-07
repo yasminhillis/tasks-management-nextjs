@@ -1,5 +1,6 @@
 'use client';
 import { FormSelect } from '@/components/ui/FormSelect';
+import Select from 'react-select';
 
 export default function AddNewTaskForm() {
   const options = [
@@ -32,21 +33,6 @@ export default function AddNewTaskForm() {
           >
             Status <span className="text-red-700">*</span>
           </label>
-          {/* <Select
-            inputId="status"
-            instanceId="status-select"
-            unstyled
-            options={options}
-            classNames={{
-              control: (state) =>
-                `form-input input-text px-4 py-3 rounded-sm  ${state.isFocused ? 'border border-primary-container' : 'border border-transparent'} `,
-              placeholder: () => 'text-slate-500',
-              singleValue: () => 'input-text',
-              menu: () =>
-                'bg-white rounded-sm shadow-card input-text z-10 overflow-hidden p-2',
-              option: (state) => `${state.isFocused ? 'bg-surface-low' : ''}`,
-            }}
-          ></Select> */}
           <FormSelect  inputId="status"
             instanceId="status-select" />
         </div>
@@ -57,15 +43,6 @@ export default function AddNewTaskForm() {
           >
             Assignee
           </label>
-          {/* <Select
-            inputId="assignee"
-            instanceId="assignee-select"
-            unstyled
-            classNames={{
-              control: (state) => 'form-input input-text px-4 py-3 rounded-sm',
-              placeholder: () => 'input-text',
-            }}
-          ></Select> */}
           <FormSelect  inputId="assignee"
             instanceId="assignee-select" />
         </div>
@@ -78,15 +55,6 @@ export default function AddNewTaskForm() {
         >
           Epic
         </label>
-        {/* <Select
-          inputId="epic"
-          instanceId="epic-select"
-          unstyled
-          classNames={{
-            control: (state) => 'form-input input-text px-4 py-3 rounded-sm',
-            placeholder: () => '',
-          }}
-        ></Select> */}
         <FormSelect  inputId="epic"
           instanceId="epic-select" />
       </div>
