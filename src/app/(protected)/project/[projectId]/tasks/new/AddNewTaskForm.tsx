@@ -1,9 +1,22 @@
 'use client';
 import { FormSelect } from '@/components/ui/FormSelect';
+import { addTask } from '@/lib/actions/taskActions';
+import { useEffect } from 'react';
 
 export default function AddNewTaskForm() {
+  async function addNewTask(){
+    await addTask({
+      project_id: 'ddc3f2e6-588c-41d7-9d2f-3fc43fbf78ea',
+      epic_id: 'a773cc02-f09f-43d8-b5bd-0ea90320967b',
+      title: 'بسم الله الرحمن الرحيم2',
+      description: 'يارب يا الله444',
+    });
+  }
+  useEffect(() => {
+    addNewTask()
+  }, []);
   const options = [
-    { value: 'chocolate', label: 'Chocolate' },
+    { value: 'chcolate', label: 'Chocolate' },
     { value: 'strawberry', label: 'Strawberry' },
     { value: 'vanilla', label: 'Vanilla' },
   ];
@@ -32,8 +45,11 @@ export default function AddNewTaskForm() {
           >
             Status <span className="text-red-700">*</span>
           </label>
-          <FormSelect  inputId="status"
-            instanceId="status-select" />
+          <FormSelect
+            options={options}
+            inputId="status"
+            instanceId="status-select"
+          />
         </div>
         <div className="flex flex-col gap-2 w-1/2">
           <label
@@ -42,8 +58,7 @@ export default function AddNewTaskForm() {
           >
             Assignee
           </label>
-          <FormSelect  inputId="assignee"
-            instanceId="assignee-select" />
+          <FormSelect inputId="assignee" instanceId="assignee-select" />
         </div>
       </div>
 
@@ -54,8 +69,7 @@ export default function AddNewTaskForm() {
         >
           Epic
         </label>
-        <FormSelect  inputId="epic"
-          instanceId="epic-select" />
+        <FormSelect inputId="epic" instanceId="epic-select" />
       </div>
 
       <div className="flex flex-col gap-2">
