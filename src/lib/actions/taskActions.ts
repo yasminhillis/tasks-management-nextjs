@@ -3,19 +3,17 @@
 import { getApiHeaders } from "../utils/getApiHeaders";
 
 type Task = {
-    project_id: string,
-    assignee_id: string
-    description: string
-    due_date: string
-    epic_id: string
-    status: string
+    project_id: string
     title: string
+    assignee_id?: string
+    description?: string
+    due_date?: string
+    epic_id?: string
+    status?:  'TO_DO' | 'IN_PROGRESS' | 'BLOCKED' | 'IN_REVIEW' | 'READY_FOR_QA' | 'REOPENED' | 'READY_FOR_PRODUCTION' | 'DONE'
 }
 
-export async function addTask(data: Partial<Task>) {
+export async function addTask(data: Task) {
     try {
-        console.log(process.env.SUPABASE_URL, 'url');
-
         const res = await fetch(`${process.env.SUPABASE_URL}/rest/v1/tasks`, {
             method: 'POST',
             headers: await getApiHeaders(),
