@@ -8,5 +8,6 @@ export const formSelectStyles: ClassNamesConfig = {
               singleValue: () => 'input-text',
               menu: () =>
                 'bg-white rounded-sm shadow-card input-text z-10 overflow-hidden p-2',
-              option: (state) => `${state.isFocused ? 'bg-surface-low' : ''}`,
+              option: (state) => `p-2 !cursor-pointer rounded-sm ${state.isFocused ? 'bg-surface-low' : ''}`,
+              dropdownIndicator: () => 'cursor-pointer'
 }
