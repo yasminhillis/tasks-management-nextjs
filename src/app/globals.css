@@ -199,7 +199,6 @@ body {
     font-weight: var(--font-weight-medium);
     line-height: var(--line-height-error-sm);
     letter-spacing: var(--letter-spacing-error-sm);
-    text-transform: uppercase;
     color: #ba1a1a;
   }
 
