@@ -90,7 +90,7 @@ export default function AddNewTaskForm() {
         </label>
         <textarea
           id="description"
-          className="form-input input-text resize-none"
+          className="form-input input-text resize-none h-36"
           placeholder="Provide detailed context for this task..."
         />
       </div>
