@@ -4,7 +4,7 @@ import { getApiHeaders } from "../utils/getApiHeaders";
 
 import type { Task } from "../types";
 
-export async function addTask(data: Task) {
+export async function addNewTask(data: Task) {
     try {
         const res = await fetch(`${process.env.SUPABASE_URL}/rest/v1/tasks`, {
             method: 'POST',

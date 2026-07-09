@@ -1,11 +1,11 @@
 'use client';
 import { FormSelect } from '@/components/ui/FormSelect';
-import { addTask } from '@/lib/actions/taskActions';
+import { addNewTask } from '@/lib/actions/taskActions';
 import { useEffect } from 'react';
 
 export default function AddNewTaskForm() {
-  async function addNewTask(){
-    await addTask({
+  async function addTask(){
+    await addNewTask({
       project_id: 'ddc3f2e6-588c-41d7-9d2f-3fc43fbf78ea',
       epic_id: 'a773cc02-f09f-43d8-b5bd-0ea90320967b',
       title: 'بسم الله الرحمن الرحيم2',
@@ -13,7 +13,7 @@ export default function AddNewTaskForm() {
     });
   }
   useEffect(() => {
-    addNewTask()
+    addTask()
   }, []);
   const options = [
     { value: 'chcolate', label: 'Chocolate' },
