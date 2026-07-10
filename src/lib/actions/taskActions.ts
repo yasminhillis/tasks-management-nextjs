@@ -21,6 +21,9 @@ export async function addNewTask(data: Task) {
         })
 
         if (!res.ok) {
+            const error = await res.json();
+            console.log(error, 'error');
+            
             return { success: false, message: 'Something went wrong. Please try again' }
         }
         return { success: true, message: 'Task added successfully' }
