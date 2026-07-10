@@ -8,7 +8,8 @@ import { Controller, useForm } from 'react-hook-form';
 import type { AddTaskFormData } from '@/validations/add.task.schema';
 import { Status } from '@/lib/types/index'
 import Toast from '@/components/Toast';
-import { useState } from 'react';
+// import { useState } from 'react';
+import { useToast } from '@/lib/hooks/useToast';
 
 export default function AddNewTaskForm({ projectId }: {projectId: string}) {
   // async function addTask(){
@@ -25,17 +26,18 @@ export default function AddNewTaskForm({ projectId }: {projectId: string}) {
 
   
 
-  const [message, setMessage] = useState('')
-  const [success, setSuccess] = useState(false)
+  // const [message, setMessage] = useState('')
+  // const [success, setSuccess] = useState(false)
+  const { message, success, showToast } = useToast()
 
-  function setToastMessage(message: string, success: boolean){
-    setMessage(message);
-    setSuccess(success)
-    setTimeout(() => {
-      setMessage('');
-      setSuccess(false)
-    }, 1500)
-  }
+  // function setToastMessage(message: string, success: boolean){
+  //   setMessage(message);
+  //   setSuccess(success)
+  //   setTimeout(() => {
+  //     setMessage('');
+  //     setSuccess(false)
+  //   }, 1500)
+  // }
 
   function formateEpicTitle(title: string){
     return title.length > 100 ? title.slice(0, 100) + '...' : title
@@ -66,13 +68,15 @@ export default function AddNewTaskForm({ projectId }: {projectId: string}) {
     try {
       const result = await addNewTask({...data, project_id: projectId});
       if (!result.success) {
-        setToastMessage(result.message, false)
-        setError("root", {message: result.message})
+        // setToastMessage(result.message, false)
+        showToast(result.message, false, 1500)
         return;
       }
-      setToastMessage(result.message, true)
+      // setToastMessage(result.message, true)
+      showToast(result.message, true, 1500)
     } catch (error) {
-      setToastMessage('Network error. Please check your connection and try again', false)
+      // setToastMessage('Network error. Please check your connection and try again', false)
+      showToast('Network error. Please check your connection and try again', false, 1500)
     } 
   }
 

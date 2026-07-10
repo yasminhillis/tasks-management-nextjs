@@ -3,6 +3,7 @@ import Toast from '@/components/Toast';
 import { useState } from 'react';
 import type { Epic } from '@/lib/types';
 import updateFiled from '../_utils/updateFiled';
+import { useToast } from '@/lib/hooks/useToast';
 
 type ModalHeaderProps = {
   epicId: string;
@@ -22,17 +23,18 @@ export default function ModalHeader({
   const [previousTitleValue, setPreviousTitleValue] = useState(title);
   const [currentTitleValue, setCurrentTitleValue] = useState(title);
   const [isSaving, setIsSaving] = useState(false);
-  const [message, setMessage] = useState('');
-  const [success, setSuccess] = useState(false);
+  // const [message, setMessage] = useState('');
+  // const [success, setSuccess] = useState(false);
+  const { message, success, showToast } = useToast()
 
-  function showToast(message: string, success: boolean) {
-    setMessage(message);
-    setSuccess(success);
-    setTimeout(() => {
-      setMessage('');
-      setSuccess(false);
-    }, 3000);
-  }
+  // function showToast(message: string, success: boolean) {
+  //   setMessage(message);
+  //   setSuccess(success);
+  //   setTimeout(() => {
+  //     setMessage('');
+  //     setSuccess(false);
+  //   }, 3000);
+  // }
 
   async function updateFieldHandler(
     field: 'title' | 'description' | 'assignee' | 'deadline',

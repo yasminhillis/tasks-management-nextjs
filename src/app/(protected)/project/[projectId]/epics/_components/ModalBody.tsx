@@ -7,6 +7,7 @@ import updateField from '../_utils/updateFiled';
 import type { MemberData } from '@/lib/types';
 import Select, { OptionProps, SingleValueProps } from 'react-select';
 import { components } from 'react-select';
+import { useToast } from '@/lib/hooks/useToast';
 
 type ModalBodyProps = {
   description: string;
@@ -46,13 +47,15 @@ export default function ModalBody({
   const [currentDeadline, setCurrentDeadline] = useState(deadline);
   const [previousDeadline, setpreviousDeadline] = useState(deadline);
 
-  const [message, setMessage] = useState('');
-  const [success, setSuccess] = useState(false);
+  // const [message, setMessage] = useState('');
+  // const [success, setSuccess] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
   const [currentAssigneeName, setCurrentAssigneeName] = useState(assignee);
   const [previousAssigneeId, setPreviousAssigneeId] = useState(assigneeId);
   const [previousAssigneeName, setPreviousAssigneeName] = useState(assignee);
+
+  const { message, success, showToast } = useToast()
 
   const DisplayAssignee = ({ data }: { data: AssigneeOptions }) => {
     const isUnassigned = data.value === "";
@@ -98,14 +101,14 @@ export default function ModalBody({
     );
   };
 
-  function showToast(message: string, success: boolean) {
-    setMessage(message);
-    setSuccess(success);
-    setTimeout(() => {
-      setMessage('');
-      setSuccess(false);
-    }, 3000);
-  }
+  // function showToast(message: string, success: boolean) {
+  //   setMessage(message);
+  //   setSuccess(success);
+  //   setTimeout(() => {
+  //     setMessage('');
+  //     setSuccess(false);
+  //   }, 3000);
+  // }
 
   async function handleFieldUpdate(
     field: 'title' | 'description' | 'assignee_id' | 'deadline' | 'assignee',
@@ -116,6 +119,7 @@ export default function ModalBody({
   ) {
     function handleRevert(previousValue: string, message: string) {
       showToast(message, false);
+
       onRevertCallback(previousValue);
     }
 
