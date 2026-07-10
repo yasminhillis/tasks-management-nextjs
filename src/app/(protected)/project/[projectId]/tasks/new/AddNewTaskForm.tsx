@@ -23,8 +23,19 @@ export default function AddNewTaskForm({ projectId }: {projectId: string}) {
   //   addTask()
   // }, []);
 
+  
+
   const [message, setMessage] = useState('')
   const [success, setSuccess] = useState(false)
+
+  function setToastMessage(message: string, success: boolean){
+    setMessage(message);
+    setSuccess(success)
+    setTimeout(() => {
+      setMessage('');
+      setSuccess(false)
+    }, 1500)
+  }
 
   function formateEpicTitle(title: string){
     return title.length > 100 ? title.slice(0, 100) + '...' : title
@@ -55,15 +66,13 @@ export default function AddNewTaskForm({ projectId }: {projectId: string}) {
     try {
       const result = await addNewTask({...data, project_id: projectId});
       if (!result.success) {
-        setMessage(result.message)
+        setToastMessage(result.message, false)
         setError("root", {message: result.message})
         return;
       }
-      setMessage(result.message)
-      setSuccess(true)
+      setToastMessage(result.message, true)
     } catch (error) {
-      setMessage('Network error. Please check your connection and try again');
-      setSuccess(false)
+      setToastMessage('Network error. Please check your connection and try again', false)
     } 
   }
 
