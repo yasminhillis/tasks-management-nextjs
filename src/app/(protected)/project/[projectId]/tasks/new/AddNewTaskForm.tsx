@@ -29,6 +29,7 @@ export default function AddNewTaskForm({ projectId }: {projectId: string}) {
   function formateEpicTitle(title: string){
     return title.length > 100 ? title.slice(0, 100) + '...' : title
   }
+
   const options = [
     { value: 'chcolate', label: 'Chocolate' },
     { value: 'strawberry', label: 'Strawberry' },
@@ -39,7 +40,7 @@ export default function AddNewTaskForm({ projectId }: {projectId: string}) {
     value: statusOption, 
     label: statusOption.replace(/_/g, " ")
   }))
-  console.log(statusOptions, 'status options');
+  // console.log(statusOptions, 'status options');
   
 
   const { register, control, handleSubmit, setError, formState: {errors} } = useForm({
@@ -68,7 +69,7 @@ export default function AddNewTaskForm({ projectId }: {projectId: string}) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-[928px] md:bg-white rounded-md shadow-card px-6 py-4 flex flex-col gap-8">
-      {message && <Toast success>{message}</Toast>}
+      {message && <Toast success={success}>{message}</Toast>}
       <div className="flex flex-col gap-2">
         <label
           htmlFor="title"
@@ -79,7 +80,7 @@ export default function AddNewTaskForm({ projectId }: {projectId: string}) {
         <input
           id="title"
           {...register("title")}
-          className="form-input input-text"
+          className={`form-input  ${errors.title ? 'input-error bg-[#FFDAD6] focus:border-red-500' : 'input-text'}`}
           type="text"
           placeholder="e.g., Finalize structural schematics"
         />
@@ -175,6 +176,19 @@ export default function AddNewTaskForm({ projectId }: {projectId: string}) {
           placeholder="Provide detailed context for this task..."
         />
       </div>
+
+        {errors.root && <div
+              role="alert"
+              className="error-sm inline-flex items-center gap-[3px]"
+            >
+              <span
+                className="material-symbols-outlined"
+                style={{ fontSize: '14px' }}
+              >
+                info
+              </span>
+              {errors.root.message}
+            </div>}
 
       <div className="flex justify-end gap-4">
         <button type="button" className="btn-secondary">

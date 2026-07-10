@@ -17,11 +17,13 @@
   /* Semantic */
   --color-success: #004e32;
   --color-error: #c0392b;
+  --color-error-input: #93000a;
   --color-warning: #f5a623;
 
   /* Typography */
   --font-sans: var(--font-inter), sans-serif;
 
+  /* font size scale */
   /* font size scale */
   --font-size-display-lg: 3rem;
   --font-size-display-md: 2.25rem;
@@ -35,12 +37,14 @@
   --font-size-caption-md: 0.875rem;
   --font-size-body-sm: 0.875rem;
   --font-size-body-md: 0.875rem;
+  --font-size-error-md: 0.875rem;
   --font-size-label-sm: 0.6875rem;
   --font-size-caption-xs: 0.75rem;
   --font-size-error-sm: 0.6875rem;
   --font-size-hint: 0.625rem;
   --font-size-label-xs: 0.625rem;
 
+  /* line heights */
   /* line heights */
   --line-height-display-lg: 1.2;
   --line-height-display-md: 2.5rem;
@@ -56,6 +60,7 @@
   --line-height-body-xs: 1.25rem;
   --line-height-title-lg: 1.75rem;
   --line-height-caption-xs: 1rem;
+  --line-height-error-md: 1.25rem;
   --line-height-error-sm: 1.03125rem;
   --line-height-hint: 0.9375rem;
 
@@ -200,6 +205,15 @@ body {
     line-height: var(--line-height-error-sm);
     letter-spacing: var(--letter-spacing-error-sm);
     color: #ba1a1a;
+  }
+
+  .input-error {
+    font-size: var(--font-size-error-md);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-error-md);
+    letter-spacing: var(--letter-spacing-normal);
+    color: var(--color-error-input);
+    background-color: #FFDAD6;
   }
 
   .label-sm-muted {
