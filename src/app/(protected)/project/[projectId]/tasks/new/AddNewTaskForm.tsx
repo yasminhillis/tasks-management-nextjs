@@ -40,12 +40,6 @@ export default function AddNewTaskForm({ projectId }: {projectId: string}) {
     }
   ));
 
-  //  const assigneeOptions = members.map((member: MemberData) => (
-  //   {
-  //     value: member.metadata.name, 
-  //     label: member.metadata.name
-  //   }
-  // ));
   console.log(assigneeOptions, 'assignee options');
   
 
