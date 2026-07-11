@@ -8,10 +8,46 @@ import type { AddTaskFormData } from '@/validations/add.task.schema';
 import { Status } from '@/lib/types/index'
 import Toast from '@/components/Toast';
 import { useToast } from '@/lib/hooks/useToast';
+import { getProjectMembers } from '@/lib/actions/projectMembersActions';
+import { useEffect, useState } from 'react';
+import type { MemberData } from '@/lib/types/index';
 
 export default function AddNewTaskForm({ projectId }: {projectId: string}) {
+  
+  const { message, success, showToast } = useToast();
+  const [members, setMemebers] = useState<MemberData[]>([])
 
-  const { message, success, showToast } = useToast()
+  async function getMemebers(){
+    const result = await getProjectMembers(projectId); 
+    if (!result.success) {
+      showToast(result.message, false, 1500)
+      return;
+    }
+    setMemebers(result.data)
+  }
+
+  useEffect(() => {
+    getMemebers()
+   
+  }, [projectId])
+
+   console.log(members);
+
+  const assigneeOptions = members.map((member: MemberData) => (
+    {
+      value: member.user_id, 
+      label: member.metadata.name
+    }
+  ));
+
+  //  const assigneeOptions = members.map((member: MemberData) => (
+  //   {
+  //     value: member.metadata.name, 
+  //     label: member.metadata.name
+  //   }
+  // ));
+  console.log(assigneeOptions, 'assignee options');
+  
 
   function formateEpicTitle(title: string){
     return title.length > 100 ? title.slice(0, 100) + '...' : title
@@ -113,7 +149,15 @@ export default function AddNewTaskForm({ projectId }: {projectId: string}) {
 
           { 
             <Controller control={control} name="assignee_id" render={({ field }) => (
-              <FormSelect value={options.find(option => option.value) ?? null} onChange={selected => field.onChange(selected?.value ?? "")} inputId="assignee" instanceId="assignee-select" />
+              console.log(field, 'field'),
+              
+              <FormSelect
+                placeholder={'Select Team Member'}
+                value={assigneeOptions.find(option => option.value === field.value) ?? null} 
+                options={assigneeOptions}  onChange={selected => field.onChange(selected?.value ?? "")} 
+                inputId="assignee" 
+                instanceId="assignee-select" 
+              />
             )} />
           }
         </div>
