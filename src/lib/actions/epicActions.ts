@@ -58,8 +58,6 @@ export async function updateEpic({ data, epicId }: { data: PartialData, epicId: 
     })
 
     if (!res.ok) {
-      const error = await res.json()
-      console.log(error, 'supabase error')
       return {
         success: false,
         message: "Updating epic failed. Please try again"

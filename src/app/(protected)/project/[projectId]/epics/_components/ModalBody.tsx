@@ -47,8 +47,6 @@ export default function ModalBody({
   const [currentDeadline, setCurrentDeadline] = useState(deadline);
   const [previousDeadline, setpreviousDeadline] = useState(deadline);
 
-  // const [message, setMessage] = useState('');
-  // const [success, setSuccess] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
   const [currentAssigneeName, setCurrentAssigneeName] = useState(assignee);
@@ -101,15 +99,6 @@ export default function ModalBody({
     );
   };
 
-  // function showToast(message: string, success: boolean) {
-  //   setMessage(message);
-  //   setSuccess(success);
-  //   setTimeout(() => {
-  //     setMessage('');
-  //     setSuccess(false);
-  //   }, 3000);
-  // }
-
   async function handleFieldUpdate(
     field: 'title' | 'description' | 'assignee_id' | 'deadline' | 'assignee',
     previousValue: string,
@@ -124,10 +113,7 @@ export default function ModalBody({
     }
 
     function handleSuccess(currentValue: string) {
-      console.log(currentValue, 'currentValue');
-
       const displayField = field === 'assignee_id' ? 'assignee' : field;
-      console.log(displayField, 'kk');
 
       showToast(
         `${displayField.charAt(0).toUpperCase() + displayField.slice(1)} updated successfully`,

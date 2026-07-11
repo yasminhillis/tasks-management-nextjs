@@ -6,7 +6,6 @@ export default async function AddNewTask({
   params: Promise<{ projectId: string }>;
 }){
     const { projectId } = await params;
-    console.log(projectId, 'projectId');
     
     return <PageWrapper>
         <header className="mb-8">

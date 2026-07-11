@@ -57,7 +57,6 @@ export default function Epics() {
       setIsFetched(true);
       setLoading('success');
     } catch (error) {
-      console.log(error);
       setError('Network error. Please try again later');
       setLoading('failed');
     }
@@ -89,7 +88,6 @@ export default function Epics() {
       setIsFetched(true);
       setLoading('success');
     } catch (error) {
-      console.log(error);
       setError('Network error. Please try again later');
       setLoading('failed');
     }
@@ -105,16 +103,13 @@ export default function Epics() {
   }
 
   function onEpicUpdate(id: string, data: Partial<Epic>){
-      console.log('onEpicUpdate called:', data)  
     setDesktopEpics(prev => updateEpics(prev, id, data))
     setMobileEpics(prev => updateEpics(prev, id, data))
   }
 
 
   useEffect(() => {
-    fetchEpics(1);
-    console.log(desktopEpics, 'desktopEpics');
-    
+    fetchEpics(1);    
   }, []);
 
   return (

@@ -28,7 +28,6 @@ export async function GET(
 
     if (!res.ok) {
       const error = await res.json();
-      console.log(error, 'error');
       return Response.json(
         { success: false, message: 'Something went wrong', error },
         { status: 404 }
