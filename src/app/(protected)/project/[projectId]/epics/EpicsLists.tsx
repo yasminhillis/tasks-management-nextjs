@@ -154,9 +154,7 @@ export default function EpicsList({
             />
 
             <div className="grid sm:grid-cols-2 md:grid-cols-2 justify-items-center gap-6 mb-6 md:mb-10">
-              {epics.map((epic: Epic) => (
-                // console.log('epic', epic),
-                
+              {epics.map((epic: Epic) => (                
                 <EpicCard
                   sendEpicIdToParent={() => setEpicId(epic.id)}
                   id={epic.epic_id}

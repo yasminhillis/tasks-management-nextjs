@@ -40,16 +40,13 @@ export default function Project() {
       setLoading('loading')
       if (!res.ok) {
         const error = await res.json();
-        console.log(error);
         setError(error.message || 'fetching projects failed');
         setLoading('failed');
         return;
       }
       const { data, totalCount } = await res.json();
       setProjects(data);
-
       setMobileProjects(data)
-      
       setError('')
       setIsFetched(true);
       setTotalCount(totalCount);
@@ -70,7 +67,6 @@ export default function Project() {
     setLoading('loading')
     if (!res.ok) {
       const error = await res.json();
-      console.log(error);
       setError(error.message || 'fetching projects failed');
       setLoading('failed');
       return;

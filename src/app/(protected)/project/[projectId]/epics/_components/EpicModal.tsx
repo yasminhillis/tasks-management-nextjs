@@ -26,18 +26,13 @@ export default function EpicModal({ epicId, projectId, onClose, onEpicUpdate }: 
   const [membersStatus, setMembersStatus] = useState<'idle' | 'loading' | 'failed' | 'success'>('idle')
 
   useEffect(() => {
-    const fetchEpic = async () => {
-      // console.log(epicId, 'epicId');
-      
+    const fetchEpic = async () => {      
       if (!epicId) return;
       setStatus('loading');
       try {
         const res = await fetch(`/api/epics/${epicId}?projectId=${projectId}`);
 
-        if (!res.ok) {
-          const error = await res.json();
-          console.log(error, 'errpr');
-          
+        if (!res.ok) {          
           setStatus('fetchError');
           return;
         }
