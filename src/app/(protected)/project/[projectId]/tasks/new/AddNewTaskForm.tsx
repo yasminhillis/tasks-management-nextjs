@@ -40,12 +40,6 @@ export default function AddNewTaskForm({ projectId }: { projectId: string }) {
     return title.length > 100 ? title.slice(0, 100) + '...' : title;
   }
 
-  const options = [
-    { value: 'chcolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' },
-  ];
-
   const statusOptions = Object.values(Status).map((statusOption) => ({
     value: statusOption,
     label: statusOption.replace(/_/g, ' '),
@@ -198,10 +192,10 @@ export default function AddNewTaskForm({ projectId }: { projectId: string }) {
             control={control}
             render={({ field }) => (
               <FormSelect
-                value={
-                  options.find((option) => option.value === field.value) ?? null
-                }
-                onChange={(selected) => field.onChange(selected?.value ?? '')}
+                // value={
+                //   options.find((option) => option.value === field.value) ?? null
+                // }
+                // onChange={(selected) => field.onChange(selected?.value ?? '')}
                 inputId="epic"
                 instanceId="epic-select"
               />
