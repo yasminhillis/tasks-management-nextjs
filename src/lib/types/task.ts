@@ -5,7 +5,7 @@ export type Task = {
     title: string
     assignee_id?: string
     description?: string
-    due_date?: string
+    due_date?: Date | null
     epic_id?: string
     status?:  Status
 }
