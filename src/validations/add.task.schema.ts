@@ -6,7 +6,7 @@ export const AddTaskSchema = z.object({
     epic_id: z.string().optional(), 
     description: z.string().optional(),
     assignee_id: z.string().optional(), 
-    due_date: z.string().optional(), 
+    due_date: z.date().nullable().optional(), 
     status: z.enum(Status).optional()
 })
 

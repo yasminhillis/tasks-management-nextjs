@@ -11,6 +11,8 @@ import { useToast } from '@/lib/hooks/useToast';
 import { getProjectMembers } from '@/lib/actions/projectMembersActions';
 import { useEffect, useState } from 'react';
 import type { MemberData } from '@/lib/types/index';
+import { DatePicker } from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 export default function AddNewTaskForm({ projectId }: { projectId: string }) {
   const { message, success, showToast } = useToast();
@@ -220,6 +222,24 @@ export default function AddNewTaskForm({ projectId }: { projectId: string }) {
         >
           Due date
         </label>
+
+        {
+          <Controller
+            name="due_date"
+            control={control}
+            render={({ field }) => (
+              <DatePicker
+                isClearable
+                placeholderText="mm/dd/yyyy"
+                portalId="root"
+                dateFormat={'MM/dd/yyyy'}
+                className="form-input input-text px-4 py-3 w-full cursor-pointer"
+                selected={field.value}
+                onChange={field.onChange}
+              />
+            )}
+          />
+        }
       </div>
 
       <div className="flex flex-col gap-2">
