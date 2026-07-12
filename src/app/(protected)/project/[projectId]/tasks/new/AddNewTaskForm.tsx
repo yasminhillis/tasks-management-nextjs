@@ -31,14 +31,10 @@ export default function AddNewTaskForm({ projectId }: { projectId: string }) {
     getMemebers();
   }, [projectId]);
 
-  console.log(members);
-
   const assigneeOptions = members.map((member: MemberData) => ({
     value: member.user_id,
     label: member.metadata.name,
   }));
-
-  console.log(assigneeOptions, 'assignee options');
 
   function formateEpicTitle(title: string) {
     return title.length > 100 ? title.slice(0, 100) + '...' : title;
@@ -166,7 +162,6 @@ export default function AddNewTaskForm({ projectId }: { projectId: string }) {
               control={control}
               name="assignee_id"
               render={({ field }) => (
-                console.log(field, 'field'),
                 (
                   <FormSelect
                     isClearable
