@@ -48,12 +48,10 @@ export default function AddNewTaskForm({ projectId }: { projectId: string }) {
     );
     if (!res.ok) {
       const error = await res.json();
-      console.log(error);
-      return;
       // setError()
+      return;
     }
     const { data } = await res.json();
-    console.log(data, 'data');
 
     setEpics(data);
   }
