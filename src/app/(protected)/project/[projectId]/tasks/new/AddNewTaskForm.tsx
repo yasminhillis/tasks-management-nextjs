@@ -13,10 +13,13 @@ import { useEffect, useState } from 'react';
 import type { MemberData } from '@/lib/types/index';
 import { DatePicker } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import type { Epic } from '@/lib/types/index';
+import { components, OptionProps } from 'react-select';
 
 export default function AddNewTaskForm({ projectId }: { projectId: string }) {
   const { message, success, showToast } = useToast();
   const [members, setMemebers] = useState<MemberData[]>([]);
+  const [epics, setEpics] = useState<Epic[]>([]);
 
   async function getMemebers() {
     const result = await getProjectMembers(projectId);
@@ -27,13 +30,47 @@ export default function AddNewTaskForm({ projectId }: { projectId: string }) {
     setMemebers(result.data);
   }
 
+  const EpicOption = () => {
+    return <div className="flex">
+
+    </div>
+  }
+
+  const customEpicOption = (props: OptionProps) => {
+    <components.Option {...props}>
+      <EpicOption />
+    </components.Option>
+  };
+
+  async function fetchEpics() {
+    const res = await fetch(
+      `/api/epics?projectId=${projectId}&limit=5&offset=0`
+    );
+    if (!res.ok) {
+      const error = await res.json();
+      console.log(error);
+      return;
+      // setError()
+    }
+    const { data } = await res.json();
+    console.log(data, 'data');
+
+    setEpics(data);
+  }
+
   useEffect(() => {
     getMemebers();
+    fetchEpics();
   }, [projectId]);
 
   const assigneeOptions = members.map((member: MemberData) => ({
     value: member.user_id,
     label: member.metadata.name,
+  }));
+
+  const epicOptions = epics.map((epic) => ({
+    label: `${epic.epic_id} ${epic.title}`,
+    value: epic.id,
   }));
 
   function formateEpicTitle(title: string) {
@@ -156,23 +193,19 @@ export default function AddNewTaskForm({ projectId }: { projectId: string }) {
               control={control}
               name="assignee_id"
               render={({ field }) => (
-                (
-                  <FormSelect
-                    isClearable
-                    placeholder={'Select Team Member'}
-                    value={
-                      assigneeOptions.find(
-                        (option) => option.value === field.value
-                      ) ?? null
-                    }
-                    options={assigneeOptions}
-                    onChange={(selected) =>
-                      field.onChange(selected?.value ?? '')
-                    }
-                    inputId="assignee"
-                    instanceId="assignee-select"
-                  />
-                )
+                <FormSelect
+                  isClearable
+                  placeholder={'Select Team Member'}
+                  value={
+                    assigneeOptions.find(
+                      (option) => option.value === field.value
+                    ) ?? null
+                  }
+                  options={assigneeOptions}
+                  onChange={(selected) => field.onChange(selected?.value ?? '')}
+                  inputId="assignee"
+                  instanceId="assignee-select"
+                />
               )}
             />
           }
@@ -192,10 +225,12 @@ export default function AddNewTaskForm({ projectId }: { projectId: string }) {
             control={control}
             render={({ field }) => (
               <FormSelect
-                // value={
-                //   options.find((option) => option.value === field.value) ?? null
-                // }
-                // onChange={(selected) => field.onChange(selected?.value ?? '')}
+                options={epicOptions}
+                value={
+                  epicOptions.find((option) => option.value === field.value) ??
+                  null
+                }
+                onChange={(selected) => field.onChange(selected?.value ?? '')}
                 inputId="epic"
                 instanceId="epic-select"
               />
@@ -219,9 +254,10 @@ export default function AddNewTaskForm({ projectId }: { projectId: string }) {
             render={({ field }) => (
               <DatePicker
                 isClearable
+                showTimeSelect
                 placeholderText="mm/dd/yyyy"
                 portalId="root"
-                dateFormat={'MM/dd/yyyy'}
+                dateFormat={'MM/dd/yyyy h:mm a'}
                 className="form-input input-text px-4 py-3 w-full cursor-pointer"
                 selected={field.value}
                 onChange={field.onChange}

@@ -5,8 +5,7 @@ import { Epic } from '@/lib/types';
 import { useState } from 'react';
 import updateField from '../_utils/updateFiled';
 import type { MemberData } from '@/lib/types';
-import Select, { OptionProps, SingleValueProps } from 'react-select';
-import { components } from 'react-select';
+import Select, { OptionProps, SingleValueProps, components } from 'react-select';
 import { useToast } from '@/lib/hooks/useToast';
 
 type ModalBodyProps = {
