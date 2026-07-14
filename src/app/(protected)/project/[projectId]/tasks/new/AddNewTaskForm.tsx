@@ -15,6 +15,7 @@ import { DatePicker } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import type { Epic } from '@/lib/types/index';
 import { components, OptionProps } from 'react-select';
+import CardIdBadge from '../../../_components/CardIdBadge';
 
 export default function AddNewTaskForm({ projectId }: { projectId: string }) {
   const { message, success, showToast } = useToast();
@@ -32,19 +33,35 @@ export default function AddNewTaskForm({ projectId }: { projectId: string }) {
     setMemebers(result.data);
   }
 
-  const EpicOption = () => {
-    return <div className="flex"></div>;
+  type EpicOptions = {
+    label: string, 
+    value: string
+  }
+
+  const EpicOption = ({ data }: {data: EpicOptions}) => {
+    // console.log(data.label.slice(0,6), 'id');
+    // console.log(data.label.slice(6), 'title');
+    const displayId = data.label.slice(0,6)
+    const title = data.label.slice(6)
+    return <div className="flex items-center gap-2">
+      <CardIdBadge id={displayId} extraStyles='px-[8px] py-[4px] md:px-[6px] md:py-[3px]'/>
+      {title}
+    </div>;
   };
 
-  const customEpicOption = (props: OptionProps) => {
-    <components.Option {...props}>
-      <EpicOption />
+  const customEpicOption = (props: OptionProps<EpicOptions>) => {
+    // console.log(props, 'props');
+    
+    return <components.Option {...props}>
+      <EpicOption data={props.data}/>
     </components.Option>;
   };
 
   async function fetchEpics(page: number, limit = 5) {
     if (isLoading) return;
     setIsLoading(true);
+    console.log(page, 'PAGE');
+    
     const offset = (page - 1) * limit;
     const res = await fetch(
       `/api/epics?projectId=${projectId}&limit=${limit}&offset=${offset}&order=created_at.asc`
@@ -75,7 +92,7 @@ export default function AddNewTaskForm({ projectId }: { projectId: string }) {
   }));
 
   const epicOptions = epics.map((epic) => ({
-    label: `${epic.epic_id} ${epic.title}`,
+    label: `${epic.epic_id} ${formateEpicTitle(epic.title)}`,
     value: epic.id,
   }));
 
@@ -234,7 +251,9 @@ export default function AddNewTaskForm({ projectId }: { projectId: string }) {
             name="epic_id"
             control={control}
             render={({ field }) => (
-              <FormSelect
+              <FormSelect<EpicOptions>
+                components={{Option: customEpicOption}}
+                menuIsOpen={true}
                 onMenuScrollToBottom={handleMenuScrollToBottom}
                 options={epicOptions}
                 value={
