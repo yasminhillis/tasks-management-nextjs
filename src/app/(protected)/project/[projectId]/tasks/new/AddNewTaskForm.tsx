@@ -47,7 +47,7 @@ export default function AddNewTaskForm({ projectId }: { projectId: string }) {
     setIsLoading(true);
     const offset = (page - 1) * limit;
     const res = await fetch(
-      `/api/epics?projectId=${projectId}&limit=${limit}&offset=${offset}`
+      `/api/epics?projectId=${projectId}&limit=${limit}&offset=${offset}&order=created_at.asc`
     );
     if (!res.ok) {
       const error = await res.json();

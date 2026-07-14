@@ -7,9 +7,9 @@ export async function GET(req: NextRequest) {
   const limit = req.nextUrl.searchParams.get('limit');
   const cookieStore = await cookies();
   const token = cookieStore.get('access_token')?.value;
-
+  const order = req.nextUrl.searchParams.get('order')
   const res = await fetch(
-    `${process.env.SUPABASE_URL}/rest/v1/project_epics?project_id=eq.${projectId}&limit=${limit}&offset=${offset}`,
+    `${process.env.SUPABASE_URL}/rest/v1/project_epics?project_id=eq.${projectId}&limit=${limit}&offset=${offset}&order=${order}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -22,6 +22,8 @@ export async function GET(req: NextRequest) {
 
   if (!res.ok) {
     const error = await res.json();
+    console.log(error, 'error');
+    
     return Response.json({ message: 'Fetching epics failed' }, { status: 404 });
   }
 
