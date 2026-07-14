@@ -55,7 +55,6 @@ export default function AddNewTaskForm({ projectId }: { projectId: string }) {
       return;
     }
     const { data, totalCount } = await res.json();
-    console.log(totalCount);
     
     setEpics((prev) => {
       const existingIds = new Set(prev.map((epic: Epic) => epic.id));
