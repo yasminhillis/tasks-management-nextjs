@@ -39,8 +39,6 @@ export default function AddNewTaskForm({ projectId }: { projectId: string }) {
   }
 
   const EpicOption = ({ data }: {data: EpicOptions}) => {
-    // console.log(data.label.slice(0,6), 'id');
-    // console.log(data.label.slice(6), 'title');
     const displayId = data.label.slice(0,6)
     const title = data.label.slice(6)
     return <div className="flex items-center gap-2">
@@ -49,9 +47,7 @@ export default function AddNewTaskForm({ projectId }: { projectId: string }) {
     </div>;
   };
 
-  const customEpicOption = (props: OptionProps<EpicOptions>) => {
-    // console.log(props, 'props');
-    
+  const customEpicOption = (props: OptionProps<EpicOptions>) => {    
     return <components.Option {...props}>
       <EpicOption data={props.data}/>
     </components.Option>;
