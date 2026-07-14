@@ -20,6 +20,8 @@ export default function AddNewTaskForm({ projectId }: { projectId: string }) {
   const { message, success, showToast } = useToast();
   const [members, setMemebers] = useState<MemberData[]>([]);
   const [epics, setEpics] = useState<Epic[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [page, setPage] = useState(1);
 
   async function getMemebers() {
     const result = await getProjectMembers(projectId);
@@ -31,35 +33,42 @@ export default function AddNewTaskForm({ projectId }: { projectId: string }) {
   }
 
   const EpicOption = () => {
-    return <div className="flex">
-
-    </div>
-  }
+    return <div className="flex"></div>;
+  };
 
   const customEpicOption = (props: OptionProps) => {
     <components.Option {...props}>
       <EpicOption />
-    </components.Option>
+    </components.Option>;
   };
 
-  async function fetchEpics() {
+  async function fetchEpics(page: number, limit = 5) {
+    if (isLoading) return;
+    setIsLoading(true);
+    const offset = (page - 1) * limit;
     const res = await fetch(
-      `/api/epics?projectId=${projectId}&limit=5&offset=0`
+      `/api/epics?projectId=${projectId}&limit=${limit}&offset=${offset}`
     );
     if (!res.ok) {
       const error = await res.json();
       // setError()
       return;
     }
-    const { data } = await res.json();
-
-    setEpics(data);
+    const { data, totalCount } = await res.json();
+    console.log(totalCount);
+    
+    setEpics((prev) => {
+      const existingIds = new Set(prev.map((epic: Epic) => epic.id));
+      const newEpics = data.filter((epic: Epic) => !existingIds.has(epic.id));
+      return [...prev, ...newEpics];
+    });
+    setIsLoading(false)
   }
 
   useEffect(() => {
     getMemebers();
-    fetchEpics();
-  }, [projectId]);
+    fetchEpics(page);
+  }, [projectId, page]);
 
   const assigneeOptions = members.map((member: MemberData) => ({
     value: member.user_id,
@@ -109,6 +118,10 @@ export default function AddNewTaskForm({ projectId }: { projectId: string }) {
         1500
       );
     }
+  }
+  function handleMenuScrollToBottom(e: TouchEvent | WheelEvent){
+     console.log("Reached the bottom of the menu!");
+     setPage(prev => prev + 1)
   }
 
   return (
@@ -223,6 +236,7 @@ export default function AddNewTaskForm({ projectId }: { projectId: string }) {
             control={control}
             render={({ field }) => (
               <FormSelect
+                onMenuScrollToBottom={handleMenuScrollToBottom}
                 options={epicOptions}
                 value={
                   epicOptions.find((option) => option.value === field.value) ??
