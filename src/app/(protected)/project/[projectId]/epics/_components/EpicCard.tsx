@@ -28,7 +28,7 @@ export default function EpicCard({
   return (
     <Card onClick={() => sendEpicIdToParent(id)} extraStyles="shadow-sm md:border-l-[4px] md:border-l-[#004E32] w-auto">
       <div className="flex justify-between">
-        <CardIdBadge id={id} />
+        <CardIdBadge id={id} extraStyles='mb-[11px] md:mb-[16px] px-[8px] py-[4px] md:px-[10px] md:py-[4px]'/>
         <div className="md:hidden">
           <span className="material-symbols-outlined">more_horiz</span>
         </div>
