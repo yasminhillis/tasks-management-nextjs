@@ -14,7 +14,7 @@ import type { MemberData } from '@/lib/types/index';
 import { DatePicker } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import type { Epic } from '@/lib/types/index';
-import { components, OptionProps } from 'react-select';
+import { components, OptionProps, SingleValueProps } from 'react-select';
 import CardIdBadge from '../../../_components/CardIdBadge';
 
 export default function AddNewTaskForm({ projectId }: { projectId: string }) {
@@ -38,13 +38,26 @@ export default function AddNewTaskForm({ projectId }: { projectId: string }) {
     value: string
   }
 
-  const EpicOption = ({ data }: {data: EpicOptions}) => {
-    const displayId = data.label.slice(0,6)
-    const title = data.label.slice(6)
+  const DisplayEpic = ({data}: {data: EpicOptions}) => {
+    
+    
+    const displayId = data.label.split(' ')[0]
+    const title = data.label.split(' ').slice(1)
     return <div className="flex items-center gap-2">
       <CardIdBadge id={displayId} extraStyles='px-[8px] py-[4px] md:px-[6px] md:py-[3px]'/>
       {title}
     </div>;
+  }
+
+  const EpicOption = ({ data }: {data: EpicOptions}) => {
+    // console.log(data.label.split(' ')[0], 'data label split77');
+    return <DisplayEpic data={data}/>
+    // const displayId = data.label.slice(0,6)
+    // const title = data.label.slice(6)
+    // return <div className="flex items-center gap-2">
+    //   <CardIdBadge id={displayId} extraStyles='px-[8px] py-[4px] md:px-[6px] md:py-[3px]'/>
+    //   {title}
+    // </div>;
   };
 
   const customEpicOption = (props: OptionProps<EpicOptions>) => {    
@@ -52,6 +65,12 @@ export default function AddNewTaskForm({ projectId }: { projectId: string }) {
       <EpicOption data={props.data}/>
     </components.Option>;
   };
+
+  const customSingleValue = (props: SingleValueProps<EpicOptions>) => {
+    return <components.SingleValue {...props}>
+      <DisplayEpic data={props.data}/>
+    </components.SingleValue>
+  }
 
   async function fetchEpics(page: number, limit = 5) {
     if (isLoading) return;
@@ -248,8 +267,8 @@ export default function AddNewTaskForm({ projectId }: { projectId: string }) {
             control={control}
             render={({ field }) => (
               <FormSelect<EpicOptions>
-                components={{Option: customEpicOption}}
-                menuIsOpen={true}
+                isClearable
+                components={{Option: customEpicOption, SingleValue: customSingleValue}}
                 onMenuScrollToBottom={handleMenuScrollToBottom}
                 options={epicOptions}
                 value={
