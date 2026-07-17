@@ -37,7 +37,7 @@ export default function Epics() {
       const offset = (page - 1) * EPICS_PAGE_SIZE;
 
       const res = await fetch(
-        `/api/epics?projectId=${projectId}&limit=${EPICS_PAGE_SIZE}&offset=${offset}`
+        `/api/epics?projectId=${projectId}&limit=${EPICS_PAGE_SIZE}&offset=${offset}&order=created_at.asc`
       );
       setLoading('loading');
       if (!res.ok) {
@@ -67,7 +67,7 @@ export default function Epics() {
       const offset = (page - 1) * EPICS_PAGE_SIZE;
 
       const res = await fetch(
-        `/api/epics?projectId=${projectId}&limit=${EPICS_PAGE_SIZE}&offset=${offset}`
+        `/api/epics?projectId=${projectId}&limit=${EPICS_PAGE_SIZE}&offset=${offset}&order=created_at.asc`
       );
 
       if (!res.ok) {
@@ -106,7 +106,6 @@ export default function Epics() {
     setDesktopEpics(prev => updateEpics(prev, id, data))
     setMobileEpics(prev => updateEpics(prev, id, data))
   }
-
 
   useEffect(() => {
     fetchEpics(1);    

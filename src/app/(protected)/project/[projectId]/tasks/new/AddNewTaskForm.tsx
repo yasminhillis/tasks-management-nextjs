@@ -299,10 +299,9 @@ export default function AddNewTaskForm({ projectId }: { projectId: string }) {
             render={({ field }) => (
               <DatePicker
                 isClearable
-                showTimeSelect
                 placeholderText="mm/dd/yyyy"
                 portalId="root"
-                dateFormat={'MM/dd/yyyy h:mm a'}
+                dateFormat={'MM/dd/yyyy'}
                 className="form-input input-text px-4 py-3 w-full cursor-pointer"
                 selected={field.value}
                 onChange={field.onChange}
