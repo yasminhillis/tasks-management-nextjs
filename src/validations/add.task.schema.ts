@@ -6,7 +6,18 @@ export const AddTaskSchema = z.object({
     epic_id: z.string().optional(), 
     description: z.string().optional(),
     assignee_id: z.string().optional(), 
-    due_date: z.date().nullable().optional(), 
+    due_date: z.date().nullable().optional().refine(
+      (value) => {
+        if (!value) return true;
+        const deadline = new Date(value);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        return deadline >= today;
+      },
+      {
+        message: 'Deadline must be today or in the future',
+      }
+    ), 
     status: z.enum(Status).optional()
 })
 
