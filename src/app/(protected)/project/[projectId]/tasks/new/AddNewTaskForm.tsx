@@ -50,14 +50,7 @@ export default function AddNewTaskForm({ projectId }: { projectId: string }) {
   }
 
   const EpicOption = ({ data }: {data: EpicOptions}) => {
-    // console.log(data.label.split(' ')[0], 'data label split77');
     return <DisplayEpic data={data}/>
-    // const displayId = data.label.slice(0,6)
-    // const title = data.label.slice(6)
-    // return <div className="flex items-center gap-2">
-    //   <CardIdBadge id={displayId} extraStyles='px-[8px] py-[4px] md:px-[6px] md:py-[3px]'/>
-    //   {title}
-    // </div>;
   };
 
   const customEpicOption = (props: OptionProps<EpicOptions>) => {    
