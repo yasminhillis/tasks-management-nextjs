@@ -7,7 +7,7 @@ export async function GET(req: NextRequest) {
   const limit = req.nextUrl.searchParams.get('limit');
   const cookieStore = await cookies();
   const token = cookieStore.get('access_token')?.value;
-  const order = req.nextUrl.searchParams.get('order')
+  const order = req.nextUrl.searchParams.get('order') 
   const res = await fetch(
     `${process.env.SUPABASE_URL}/rest/v1/project_epics?project_id=eq.${projectId}&limit=${limit}&offset=${offset}&order=${order}`,
     {
