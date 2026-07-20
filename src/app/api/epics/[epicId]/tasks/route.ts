@@ -1,7 +1,9 @@
 import { getApiHeaders } from "@/lib/utils/getApiHeaders";
+import { NextRequest } from "next/server";
 
-export async function GET({ params }: { params: Promise<{ epicId: string }> }) {
-    const {epicId} = await params;
+export async function GET(_req: NextRequest, { params }: { params: Promise<{ epicId: string }> }) {
+    const { epicId } = await params;
+    
     try {
         const res = await fetch(`${process.env.SUPABASE_URL}/rest/v1/project_tasks?epic_id=eq.${epicId}`, {
             headers: await getApiHeaders()
@@ -13,9 +15,11 @@ export async function GET({ params }: { params: Promise<{ epicId: string }> }) {
             return Response.json({ success: false, message: 'Something went wrong. Please try again', error }, { status: statusCode })
         }
 
-        Response.json({ success: true, message: 'Epic tasks are fetched successfully' }, { status: 200 })
+        const tasks = await res.json();
+
+        return Response.json({ success: true, message: 'Epic tasks are fetched successfully', tasks: tasks, taskCount: tasks.length }, { status: 200 })
 
     } catch (error) {
-        Response.json({ success: false, message: 'Network error. Please check your connection and try again', error}, { status: 500})
+        return Response.json({ success: false, message: 'Network error. Please check your connection and try again', error }, { status: 500 })
     }
 }

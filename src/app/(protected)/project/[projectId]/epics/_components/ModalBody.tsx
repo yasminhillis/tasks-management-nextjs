@@ -2,11 +2,12 @@ import { formatDate } from '@/app/(protected)/_utils/formatDate';
 import Initials from '@/components/Initials';
 import Toast from '@/components/Toast';
 import { Epic } from '@/lib/types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import updateField from '../_utils/updateFiled';
 import type { MemberData } from '@/lib/types';
 import Select, { OptionProps, SingleValueProps, components } from 'react-select';
 import { useToast } from '@/lib/hooks/useToast';
+import ModalTaskListItem from './ModalTaskListItem';
 
 type ModalBodyProps = {
   description: string;
@@ -53,6 +54,18 @@ export default function ModalBody({
   const [previousAssigneeName, setPreviousAssigneeName] = useState(assignee);
 
   const { message, success, showToast } = useToast()
+
+  async function fetchTasksInsideEpics(){
+    if (!epicId) return;
+    console.log(epicId, 'epicId');
+    
+    const res = await fetch(`/api/epics/${epicId}/tasks`);
+    console.log(res, 'res');
+    
+  }
+  useEffect(() => {
+    // fetchTasksInsideEpics()
+  }, [epicId])
 
   const DisplayAssignee = ({ data }: { data: AssigneeOptions }) => {
     const isUnassigned = data.value === "";
@@ -336,11 +349,11 @@ export default function ModalBody({
         </div>
       </div>
 
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between bg-red-100">
         <h2 className="text-[11px] md:text-[18px] font-semibold leading-[28px]">
           Tasks
         </h2>
-        <div className="flex items-center gap-[3px] cursor-pointer hidden md:flex">
+        <div className="bg-green-100 flex items-center gap-[3px] cursor-pointer hidden md:flex">
           <span
             className="material-symbols-outlined inline-flex items-center"
             style={{
@@ -361,7 +374,9 @@ export default function ModalBody({
           0 tasks
         </div>
       </div>
-
+      {/* <ul className="">
+          <ModalTaskListItem taskTitle="Initial architectural wireframes" assingeeName="John Doe" dueDate="12 Oct 2025"/>
+      </ul> */}
       
     </div>
   );
