@@ -1,3 +1,4 @@
+import { formatDate } from '@/app/(protected)/_utils/formatDate';
 import Initials from '@/components/Initials';
 
 type ModalTaskListItemProps = {
@@ -12,17 +13,17 @@ export default function ModalTaskListItem({
   dueDate,
 }: ModalTaskListItemProps) {
   return (
-    <li className="flex justify-between">
+    <li className="flex justify-between p-4 border-t border-t-[#C3C6D626]">
         <div>
-            <h3 className="title-md">{taskTitle}</h3>
+            <h3 className="body-lg-medium">{taskTitle}</h3>
             <div className="flex items-center gap-2">
-                <Initials name="John Doe" mode="desktop" state="success" extraStyles="rounded-full w-[20px] h-[20px] text-[8px] leading-[12px] font-bold"/>
-                <h5 className="caption-xs font-normal opacity-60">{assingeeName}</h5>
+                <Initials name={assingeeName} mode="desktop" state="success" extraStyles="rounded-full w-[20px] h-[20px] text-[8px] text-[#51617E] leading-[12px] font-bold bg-[#CDDDFF]"/>
+                <h5 className="caption-xs font-normal">{assingeeName}</h5>
             </div>
         </div>
         <div className="flex flex-col items-end">
             <h5 className="label-xs-muted">Due Date</h5>
-            <span className="body-md-medium opacity-70">{dueDate}</span>
+            <span className="caption-xs opacity-70">{formatDate(dueDate)}</span>
         </div>
 
     </li>

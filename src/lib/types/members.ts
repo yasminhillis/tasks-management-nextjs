@@ -1,6 +1,6 @@
 export type MemberRole = 'owner' | 'admin' | 'member' | 'viewer' | '' | string;
 
-export type Members = {
+export type Member = {
   member_id: string;
   name: string;
   email: string;

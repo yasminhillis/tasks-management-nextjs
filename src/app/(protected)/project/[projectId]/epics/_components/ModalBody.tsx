@@ -8,6 +8,7 @@ import type { MemberData } from '@/lib/types';
 import Select, { OptionProps, SingleValueProps, components } from 'react-select';
 import { useToast } from '@/lib/hooks/useToast';
 import ModalTaskListItem from './ModalTaskListItem';
+import type { EpicTask } from '@/lib/types';
 
 type ModalBodyProps = {
   description: string;
@@ -53,6 +54,9 @@ export default function ModalBody({
   const [previousAssigneeId, setPreviousAssigneeId] = useState(assigneeId);
   const [previousAssigneeName, setPreviousAssigneeName] = useState(assignee);
 
+  const [tasks, setTasks] = useState<EpicTask[]>([])
+  const [taskCount, setTaskCount] = useState(0)
+
   const { message, success, showToast } = useToast()
 
   async function fetchTasksInsideEpics(){
@@ -60,11 +64,14 @@ export default function ModalBody({
     console.log(epicId, 'epicId');
     
     const res = await fetch(`/api/epics/${epicId}/tasks`);
-    console.log(res, 'res');
+    const {tasks, taskCount} = await res.json();
+    console.log(tasks, 'tasks');
     
+    setTasks(tasks)
+    setTaskCount(taskCount)    
   }
   useEffect(() => {
-    // fetchTasksInsideEpics()
+    fetchTasksInsideEpics()
   }, [epicId])
 
   const DisplayAssignee = ({ data }: { data: AssigneeOptions }) => {
@@ -374,9 +381,17 @@ export default function ModalBody({
           0 tasks
         </div>
       </div>
-      {/* <ul className="">
-          <ModalTaskListItem taskTitle="Initial architectural wireframes" assingeeName="John Doe" dueDate="12 Oct 2025"/>
-      </ul> */}
+      <ul className="rounded-[8px] border border-[#C3C6D626] ">
+          {/* <ModalTaskListItem taskTitle="Initial architectural wireframes" assingeeName="John Doe" dueDate="12 Oct 2025"/>
+          <ModalTaskListItem taskTitle="Initial architectural wireframes" assingeeName="John Doe" dueDate="12 Oct 2025"/> */}
+          {
+            tasks.map(task => 
+            {
+              console.log(task.assignee, 'task')
+            return <ModalTaskListItem taskTitle={task.title} assingeeName={task.assignee?.name} dueDate={task.due_date}/>
+          })
+          }
+      </ul>
       
     </div>
   );
