@@ -213,7 +213,7 @@ body {
     line-height: var(--line-height-error-md);
     letter-spacing: var(--letter-spacing-normal);
     color: var(--color-error-input);
-    background-color: #FFDAD6;
+    background-color: #ffdad6;
   }
 
   .label-sm-muted {
@@ -303,6 +303,14 @@ body {
     font-size: var(--font-size-body-xs);
     font-weight: var(--font-weight-medium);
     line-height: 1.25rem;
+    letter-spacing: var(--letter-spacing-normal);
+    color: var(--color-slate-900);
+  }
+
+  .body-lg-medium {
+    font-size: var(--font-size-body-lg);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-btn-label);
     letter-spacing: var(--letter-spacing-normal);
     color: var(--color-slate-900);
   }
