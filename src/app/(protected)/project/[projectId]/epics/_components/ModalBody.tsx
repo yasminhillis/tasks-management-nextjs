@@ -5,10 +5,16 @@ import { Epic } from '@/lib/types';
 import { useEffect, useState } from 'react';
 import updateField from '../_utils/updateFiled';
 import type { MemberData } from '@/lib/types';
-import Select, { OptionProps, SingleValueProps, components } from 'react-select';
+import Select, {
+  OptionProps,
+  SingleValueProps,
+  components,
+} from 'react-select';
 import { useToast } from '@/lib/hooks/useToast';
 import ModalTaskListItem from './ModalTaskListItem';
 import type { EpicTask } from '@/lib/types';
+import EpicTasksEmptyState from './EpicTasksEpmtyState';
+import ErrorScreen from '@/app/(protected)/_components/ErrorScreen';
 
 type ModalBodyProps = {
   description: string;
@@ -54,28 +60,39 @@ export default function ModalBody({
   const [previousAssigneeId, setPreviousAssigneeId] = useState(assigneeId);
   const [previousAssigneeName, setPreviousAssigneeName] = useState(assignee);
 
-  const [tasks, setTasks] = useState<EpicTask[]>([])
-  const [taskCount, setTaskCount] = useState(0)
+  const [tasks, setTasks] = useState<EpicTask[]>([]);
+  const [taskCount, setTaskCount] = useState(0);
+  const [taskStatus, setTaskStatus] = useState<
+    'idle' | 'loading' | 'fetchError' | 'networkError' | 'success'
+  >('idle');
 
-  const { message, success, showToast } = useToast()
+  const { message, success, showToast } = useToast();
 
-  async function fetchTasksInsideEpics(){
+  async function fetchTasksInsideEpics() {
     if (!epicId) return;
-    console.log(epicId, 'epicId');
-    
-    const res = await fetch(`/api/epics/${epicId}/tasks`);
-    const {tasks, taskCount} = await res.json();
-    console.log(tasks, 'tasks');
-    
-    setTasks(tasks)
-    setTaskCount(taskCount)    
+    // console.log(epicId, 'epicId');
+    try {
+      const res = await fetch(`/api/epics/${epicId}/tasks`);
+      setTaskStatus('loading');
+      if (!res.ok) {
+        setTaskStatus('fetchError');
+        return;
+      }
+      const { tasks, taskCount } = await res.json();
+      // console.log(tasks, 'tasks');
+      setTasks(tasks);
+      setTaskCount(taskCount);
+      setTaskStatus('success');
+    } catch (error) {
+      setTaskStatus('networkError');
+    }
   }
   useEffect(() => {
-    fetchTasksInsideEpics()
-  }, [epicId])
+    fetchTasksInsideEpics();
+  }, [epicId]);
 
   const DisplayAssignee = ({ data }: { data: AssigneeOptions }) => {
-    const isUnassigned = data.value === "";
+    const isUnassigned = data.value === '';
     return (
       <div className="flex items-center gap-2 body-md-medium font-normal">
         {isUnassigned ? (
@@ -232,37 +249,41 @@ export default function ModalBody({
               Option: customOption,
               SingleValue: customSingleValue,
             }}
-            isLoading={membersStatus === "loading"}
+            isLoading={membersStatus === 'loading'}
             isDisabled={isSaving}
             styles={{
               control: (base, state) => ({
-                ...base, 
-                borderColor: state.isFocused ? '#0052cc' :'#D7E2FF',
+                ...base,
+                borderColor: state.isFocused ? '#0052cc' : '#D7E2FF',
                 borderRadius: '8px',
                 boxShadow: 'none',
                 height: '40px',
-                display: 'flex', 
+                display: 'flex',
                 alignItems: 'center',
                 '&:hover': {
-                  borderColor: '#0052cc'
-                }
+                  borderColor: '#0052cc',
+                },
               }),
-              indicatorSeparator: () => ({display: 'none'}),
+              indicatorSeparator: () => ({ display: 'none' }),
               valueContainer: (base) => ({
-                ...base, 
-                padding: '0 8px'
-              }), 
+                ...base,
+                padding: '0 8px',
+              }),
               dropdownIndicator: (base) => ({
-                ...base, 
+                ...base,
                 color: '#6B7280',
                 cursor: 'pointer',
-                "&:hover": {
-                  color: '#0052cc'
-                }
-              }), 
+                '&:hover': {
+                  color: '#0052cc',
+                },
+              }),
               option: (base, state) => ({
                 ...base,
-                backgroundColor: state.isSelected ? '#E0E8FF' : state.isFocused ? '#F1F3FF' : 'white',
+                backgroundColor: state.isSelected
+                  ? '#E0E8FF'
+                  : state.isFocused
+                    ? '#F1F3FF'
+                    : 'white',
                 color: '#041B3C',
                 cursor: 'pointer',
                 borderRadius: '2px',
@@ -382,17 +403,38 @@ export default function ModalBody({
         </div>
       </div>
       <ul className="rounded-[8px] border border-[#C3C6D626] ">
-          {/* <ModalTaskListItem taskTitle="Initial architectural wireframes" assingeeName="John Doe" dueDate="12 Oct 2025"/>
+        {/* <ModalTaskListItem taskTitle="Initial architectural wireframes" assingeeName="John Doe" dueDate="12 Oct 2025"/>
           <ModalTaskListItem taskTitle="Initial architectural wireframes" assingeeName="John Doe" dueDate="12 Oct 2025"/> */}
-          {
-            tasks.map(task => 
-            {
-              console.log(task.assignee, 'task')
-            return <ModalTaskListItem taskTitle={task.title} assingeeName={task.assignee?.name} dueDate={task.due_date}/>
-          })
-          }
+        {tasks.length == 0 &&
+          taskStatus !== 'loading' &&
+          taskStatus !== 'fetchError' &&
+          taskStatus !== 'networkError' &&
+          taskStatus === 'success' && <EpicTasksEmptyState />}
+        {taskStatus === 'fetchError' && (
+          <ErrorScreen
+          component
+            message={`We're having trouble retrieving your epic tasks right now. Please try again in a moment.`}
+            buttonElement
+            onRetry={fetchTasksInsideEpics}
+          />
+        )}
+        {tasks.length > 0 &&
+          taskStatus !== 'loading' &&
+          taskStatus !== 'fetchError' &&
+          taskStatus !== 'networkError' &&
+          taskStatus === 'success' &&
+          tasks.map((task) => {
+            // console.log(task, 'task')
+            return (
+              <ModalTaskListItem
+                key={task.id}
+                taskTitle={task.title}
+                assingeeName={task.assignee?.name}
+                dueDate={task.due_date}
+              />
+            );
+          })}
       </ul>
-      
     </div>
   );
 }
