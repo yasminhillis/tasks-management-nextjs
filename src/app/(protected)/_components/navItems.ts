@@ -33,7 +33,7 @@ export const projectNavItems = (projectId: string) => [
     label: 'Project Tasks',
     icon: 'checklist',
     collapsedIcon: 'checklist',
-    href: `/project/${projectId}/tasks`,
+    href: `/project/${projectId}/tasks?view=board`,
     mobileIcon: 'checklist',
     mobileLabel: 'Tasks',
     mobileIconFilled: false,
