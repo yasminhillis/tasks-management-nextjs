@@ -1,9 +1,11 @@
+import React from 'react';
 import { shimmer } from './loadingStyle';
 
 type HeaderProps = {
   mobileTitle?: string;
   desktopTitle?: string;
   desktopDescription?: string;
+  desktopDescriptionExtraStyles: string;
   mobileDescription?: string;
   buttonLabel?: string;
   materialIcon?: string;
@@ -11,12 +13,14 @@ type HeaderProps = {
   searchBar?: React.ReactNode;
   loading?: boolean;
   handleBtnClick?: () => void;
+  headerControls?: React.ReactNode;
 };
 
 export default function Header({
   mobileTitle,
   desktopTitle,
   desktopDescription,
+  desktopDescriptionExtraStyles,
   mobileDescription,
   buttonLabel,
   materialIcon,
@@ -24,6 +28,7 @@ export default function Header({
   searchBar,
   loading,
   handleBtnClick,
+  headerControls
 }: HeaderProps) {
   if (loading) {
     return (
@@ -78,18 +83,19 @@ export default function Header({
           <h2 className="hidden md:block font-semibold md:text-3xl text-[#041B3C]">
             {desktopTitle}
           </h2>
-          <p className="hidden md:block text-[#434654]">{desktopDescription}</p>
+          <p className={`hidden md:block text-[#434654] ${desktopDescriptionExtraStyles}`}>{desktopDescription}</p>
         </div>
 
         <div className="flex gap-8 items-center">
-          {searchBar}
-          <button
+          { searchBar }
+          { headerControls }
+          {buttonLabel && <button
             onClick={handleBtnClick}
             className="hidden md:inline-flex rounded-xs items-center justify-center gap-2 px-[24px] py-[12px] shadow-blue-md bg-radial from-[#003D9B] to-[#0052CC] text-white text-sm cursor-pointer hover:from-[#1259cb] hover:to-[#0657d1] transition-colors font-bold"
           >
             <span className="material-symbols-outlined">{materialIcon}</span>
             {buttonLabel}
-          </button>
+          </button>}
         </div>
       </div>
     </div>
