@@ -3,7 +3,7 @@ import { NextRequest } from "next/server";
 
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ epicId: string }> }) {
     const { epicId } = await params;
-    
+
     try {
         const res = await fetch(`${process.env.SUPABASE_URL}/rest/v1/project_tasks?epic_id=eq.${epicId}`, {
             headers: await getApiHeaders()
