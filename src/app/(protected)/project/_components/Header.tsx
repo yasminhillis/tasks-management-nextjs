@@ -5,7 +5,7 @@ type HeaderProps = {
   mobileTitle?: string;
   desktopTitle?: string;
   desktopDescription?: string;
-  desktopDescriptionExtraStyles: string;
+  desktopDescriptionExtraStyles?: string;
   mobileDescription?: string;
   buttonLabel?: string;
   materialIcon?: string;
