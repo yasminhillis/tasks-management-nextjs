@@ -2,7 +2,7 @@ import { getApiHeaders } from "@/lib/utils/getApiHeaders";
 import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
-    const projectId = req.nextUrl.searchParams.get('project_id'); 
+    const projectId = req.nextUrl.searchParams.get('projectId'); 
     const status = req.nextUrl.searchParams.get('status');
     console.log(projectId, 'projectId');
     console.log(status, 'status');
@@ -19,7 +19,7 @@ export async function GET(req: NextRequest) {
         }
         const tasks =  await res.json(); 
         // console.log(tasks, 'tasks');
-        return Response.json({success: true, message: 'tasks fetched successfully', tasks})
+        return Response.json({success: true, message: 'tasks fetched successfully', tasks, taskCount: tasks.length})
         
     } catch (error) {
         return Response.json({ success: false, message: 'Network error. Please try again' })

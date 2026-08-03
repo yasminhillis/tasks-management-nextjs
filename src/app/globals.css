@@ -79,7 +79,7 @@
   --letter-spacing-label-sm: 0.06875rem;
   --letter-spacing-label-sm-tight: -0.034375rem;
   --letter-spacing-error-sm: 0.034375rem;
-  --letter-spacing-headline-xl: -0.046875rem; 
+  --letter-spacing-headline-xl: -0.046875rem;
 
   /* Border Radius */
   --radius-xs: 0.125rem;
@@ -106,11 +106,13 @@
     0px 10px 15px -3px rgba(0, 61, 155, 0.2);
 
   --gradient-btn-primary: linear-gradient(135deg, #003d9b, #0052cc);
-  --shadow-soft-xl: '0px 24px 48px 0px rgba(4, 27, 60, 0.06)';
-  --shadow-soft: '0 4px 12px rgba(0, 0, 0, 0.1)';
-  --shadow-soft-lg: '0 24px 48px 0px rgba(4, 27, 60, 0.06)';
-  --shadow-blue-md: '0 4px 6px -4px rgba(0,61,155,0.2), 0 10px 15px -3px rgba(0,61,155,0.2)';
+  --shadow-soft-xl: 0px 24px 48px 0px rgba(4, 27, 60, 0.06);
+  --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow-soft-lg: 0 24px 48px 0px rgba(4, 27, 60, 0.06);
+  --shadow-blue-md:
+    0 4px 6px -4px rgba(0, 61, 155, 0.2), 0 10px 15px -3px rgba(0, 61, 155, 0.2);
   --shadow-card: 0px 24px 48px -12px rgba(4, 27, 60, 0.06);
+    --shadow-card-subtle: 0px 2px 8px 0px rgba(0, 0, 0, 0.02);
   --shadow-modal: 0px 25px 50px -12px rgba(0, 0, 0, 0.25);
 }
 
@@ -251,6 +253,15 @@ body {
     color: #434654;
   }
 
+  .label-xs-status {
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 16.5px;
+    letter-spacing: 1.1px;
+    text-transform: uppercase;
+    color: #64748b;
+  }
+
   .btn-primary {
     display: inline-flex;
     align-items: center;
@@ -291,6 +302,14 @@ body {
     opacity: 0.6;
   }
 
+  .badge-count {
+    font-size: 0.625rem;
+    font-weight: var(--font-weight-bold);
+    line-height: 0.9375rem;
+    letter-spacing: 0;
+    color: var(--color-primary);
+  }
+
   .title-xl {
     font-size: var(--font-size-title-xl);
     font-weight: var(--font-weight-bold);
@@ -322,6 +341,22 @@ body {
     font-weight: var(--font-weight-medium);
     line-height: var(--line-height-btn-label);
     letter-spacing: var(--letter-spacing-normal);
+    color: var(--color-slate-900);
+  }
+
+  .caption-xs-muted {
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 15px;
+    letter-spacing: 0;
+    color: #94a3b8;
+  }
+
+  .caption-xs-dark {
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 15px;
+    letter-spacing: 0;
     color: var(--color-slate-900);
   }
 
