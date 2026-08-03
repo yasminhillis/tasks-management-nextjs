@@ -129,7 +129,9 @@ export default function AddNewTaskForm({ projectId }: { projectId: string }) {
 
   async function onSubmit(data: AddTaskFormData) {
     try {
-      const result = await addNewTask({ ...data, project_id: projectId });
+      const result = await addNewTask({ ...data,
+      project_id: projectId,
+      due_date: data.due_date ? data.due_date.toISOString() : null, });
       if (!result.success) {
         showToast(result.message, false, 1500);
         return;
@@ -302,6 +304,20 @@ export default function AddNewTaskForm({ projectId }: { projectId: string }) {
             )}
           />
         }
+        {errors.due_date && (
+          <div
+            role="alert"
+            className="error-sm inline-flex items-center gap-[3px]"
+          >
+            <span
+              className="material-symbols-outlined"
+              style={{ fontSize: '14px' }}
+            >
+              info
+            </span>
+            {errors.due_date.message}
+          </div>
+        )}
       </div>
 
       <div className="flex flex-col gap-2">

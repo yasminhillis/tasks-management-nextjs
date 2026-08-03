@@ -3,13 +3,15 @@ import type { Member } from "./members"
 import type { Epic } from "./epic";
 
 export type Task = {
+    id?: string,
     project_id: string
     title: string
     assignee_id?: string
     description?: string
-    due_date?: Date | null
+    due_date?: string | null
     epic_id?: string
-    status?: Status
+    status?: Status,
+    assignee?: Member;
 }
 
 export type EpicTask = {
