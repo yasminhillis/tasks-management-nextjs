@@ -8,12 +8,9 @@ import ViewSelect from "./_components/ViewSelect";
 import { useSearchParams } from "next/navigation";
 
 export default  function Tasks({params}:{params: Promise<{projectId:string}>}) {
-  const { projectId } = use(params);
-  // console.log(projectId, 'id');
-  
+  const { projectId } = use(params);  
   const searchParams = useSearchParams();
   const view = searchParams.get('view');
-  // console.log(view, 'view');
   
   return (
     <PageWrapper>

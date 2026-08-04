@@ -5,9 +5,8 @@ export default function BoardView({ projectId }: { projectId: string }) {
   const taskStatusForDisplay = Object.values(Status).map((status) =>
     status.replaceAll('_', ' ')
   );
+  
   const statusArr = Object.values(Status).map((status) => status);
-  // console.log(taskStatus, 'taskStatus');
-  // console.log(statusArr, 'statusArr');
 
   const statusColorMap = {
     'TO_DO': '#94A3B8',
@@ -22,10 +21,7 @@ export default function BoardView({ projectId }: { projectId: string }) {
 
   return (
     <div className="flex gap-6 w-[945px] overflow-x-scroll">
-      {statusArr.map((status) => (
-        // console.log(status),
-        // console.log(statusColorMap[status]),
-        
+      {statusArr.map((status) => (       
         <TaskColumn
           key={status}
           statusColor={statusColorMap[status]}

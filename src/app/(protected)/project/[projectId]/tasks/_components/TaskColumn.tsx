@@ -33,64 +33,6 @@ export default function TaskColumn({
     fetchTasksByStatus();
   }, []);
 
-  // let tasks = [
-  //   {
-  //     id: 'be23e42d-1119-4262-ad9d-e6bcec67eacc',
-  //     project_id: 'ddc3f2e6-588c-41d7-9d2f-3fc43fbf78ea',
-  //     epic_id: 'a773cc02-f09f-43d8-b5bd-0ea90320967b',
-  //     title: 'بسم الله الرحمن الرحيم2',
-  //     description: 'يارب يا الله',
-  //     status: 'TO_DO',
-  //     created_at: '2026-07-08T16:56:04.319441+00:00',
-  //     due_date: null,
-  //     task_id: 'TASK-3',
-  //     epic: {
-  //       id: 'a773cc02-f09f-43d8-b5bd-0ea90320967b',
-  //       title: 'title fsdssd isjdfkhdsfjfhkds fsjfdkjfhsdkf sdfjkdshf',
-  //       epic_id: 'EPIC-4',
-  //     },
-  //     created_by: {
-  //       id: '031b7dc1-326c-4f32-b0a6-bf2267b0a8ef',
-  //       name: 'Yasmin Ayman',
-  //       email: 'yasminhillis7@gmail.com',
-  //       department: 'Frontend',
-  //     },
-  //     assignee: {
-  //       id: null,
-  //       name: null,
-  //       email: null,
-  //       department: null,
-  //     },
-  //   },
-  //   {
-  //     id: 'ffbd8122-b0a1-48ab-8011-8ea0c32b82f8',
-  //     project_id: 'ddc3f2e6-588c-41d7-9d2f-3fc43fbf78ea',
-  //     epic_id: 'a773cc02-f09f-43d8-b5bd-0ea90320967b',
-  //     title: 'بسم الله الرحمن الرحيم2',
-  //     description: 'يارب يا الله',
-  //     status: 'TO_DO',
-  //     created_at: '2026-07-08T16:56:10.516798+00:00',
-  //     due_date: null,
-  //     task_id: 'TASK-4',
-  //     epic: {
-  //       id: 'a773cc02-f09f-43d8-b5bd-0ea90320967b',
-  //       title: 'title fsdssd isjdfkhdsfjfhkds fsjfdkjfhsdkf sdfjkdshf',
-  //       epic_id: 'EPIC-4',
-  //     },
-  //     created_by: {
-  //       id: '031b7dc1-326c-4f32-b0a6-bf2267b0a8ef',
-  //       name: 'Yasmin Ayman',
-  //       email: 'yasminhillis7@gmail.com',
-  //       department: 'Frontend',
-  //     },
-  //     assignee: {
-  //       id: null,
-  //       name: null,
-  //       email: null,
-  //       department: null,
-  //     },
-  //   },
-  // ];
   return (
     <div className="flex flex-col gap-4 h-full w-[288px] max-h-[757px]">
       <div className="flex items-center justify-between gap-2">
@@ -126,7 +68,6 @@ export default function TaskColumn({
       </button>
       <ul className="flex flex-col gap-3">
         {tasks.map((task) => (
-          console.log(task.due_date, 'task.due_date'),
           <TaskCard
             key={task.id}
             title={task.title}
