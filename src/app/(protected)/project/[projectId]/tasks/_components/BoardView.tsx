@@ -2,10 +2,6 @@ import { Status } from '@/lib/types';
 import TaskColumn from './TaskColumn';
 
 export default function BoardView({ projectId }: { projectId: string }) {
-  const taskStatusForDisplay = Object.values(Status).map((status) =>
-    status.replaceAll('_', ' ')
-  );
-  
   const statusArr = Object.values(Status).map((status) => status);
 
   const statusColorMap = {
