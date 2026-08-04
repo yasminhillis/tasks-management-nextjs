@@ -73,6 +73,7 @@ export default function TaskColumn({
             title={task.title}
             assigneeName={task.assignee?.name ?? 'Unassigned'}
             dueDate={task.due_date ? formatDate(task.due_date) : ''}
+            status={statusForDisplay}
           />
         ))}
       </ul>
