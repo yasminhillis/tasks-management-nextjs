@@ -126,6 +126,7 @@ export default function TaskColumn({
       </button>
       <ul className="flex flex-col gap-3">
         {tasks.map((task) => (
+          console.log(task.due_date, 'task.due_date'),
           <TaskCard
             key={task.id}
             title={task.title}
