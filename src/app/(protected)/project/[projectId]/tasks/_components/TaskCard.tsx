@@ -65,7 +65,6 @@ export default function TaskCard({
             { dateInfo.status === 'delayed' ? 'warning' : 'calendar_today' }
           </span>
           <h3 className={`mb-0 leading-none ${dateInfo.textClass} ${dateInfo.status === 'delayed' ? 'text-[#BA1A1A]' : dateInfo.status === 'today' ? 'text-[#003D9B]' : 'text-[#94A3B8]'}`}>
-            {/* {formatDate(dueDate)} */}
             {dateInfo.label}
           </h3>
         </div>

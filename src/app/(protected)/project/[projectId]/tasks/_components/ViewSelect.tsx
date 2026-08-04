@@ -48,7 +48,6 @@ const options: OptionType[] = [
 ];
 
 export default function ViewSelect() {
-  // options.find(option => option.label === e?.value)
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
