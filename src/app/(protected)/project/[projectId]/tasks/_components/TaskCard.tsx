@@ -4,10 +4,12 @@ type TaskCardProps = {
   title: string;
   assigneeName: string;
   dueDate: string;
+  status: string;
 };
 
-function formatDate(dateString: string) : {label: string, message: string} {
-  if (dateString === '') return {label: 'No Deadline specified', message: 'no deadline'};
+function formatDate(dateString: string): { label: string; message: string } {
+  if (dateString === '')
+    return { label: 'No Deadline specified', message: 'no deadline' };
 
   const date = new Date(dateString);
 
@@ -16,11 +18,20 @@ function formatDate(dateString: string) : {label: string, message: string} {
     month: 'short',
   });
 
-  return {label: formatted.toUpperCase(), message: 'formatted successfully'};
+  return { label: formatted.toUpperCase(), message: 'formatted successfully' };
 }
 
+// function InProgressCard(){
+//   retuen
+// }
+
 function displayDate(date: string) {
-  if (formatDate(date).label === 'No Deadline specified') return { label: 'No Deadline specified', status: 'none', textClass: 'caption-xs-medium' };
+  if (formatDate(date).label === 'No Deadline specified')
+    return {
+      label: 'No Deadline specified',
+      status: 'none',
+      textClass: 'caption-xs-medium',
+    };
   const today = new Date();
   const dueDate = new Date(date);
 
@@ -40,31 +51,58 @@ function displayDate(date: string) {
   }
 
   if (dueDay < dayToday) {
-    return { label: 'Delayed', status: 'delayed', textClass: 'caption-xs-muted' };
+    return {
+      label: 'Delayed',
+      status: 'delayed',
+      textClass: 'caption-xs-muted',
+    };
   }
 
-  return { label: formatDate(date).label, status: 'upcoming', textClass: 'caption-xs-muted' };
+  return {
+    label: formatDate(date).label,
+    status: 'upcoming',
+    textClass: 'caption-xs-muted',
+  };
 }
 
 export default function TaskCard({
   title,
   assigneeName,
   dueDate,
+  status,
 }: TaskCardProps) {
-  const dateInfo = displayDate(dueDate); 
+  const dateInfo = displayDate(dueDate);
 
   return (
-    <div className="flex flex-col gap-4 bg-white w-[288px] rounded-md p-4 border border-[#C3C6D61A] shadow-card-subtle">
+    console.log(status, 'status'),
+    
+    <div className={`flex flex-col relative gap-4  rounded-md p-4 border border-[#C3C6D61A] shadow-card-subtle ${status === "BLOCKED" ? 'bg-[#FFDAD633] border border-[#BA1A1A1A]/10' : 'bg-white w-[288px]'}`}>
+      {status === 'IN PROGRESS' && (
+        <div
+          className="absolute left-0 top-0 bottom-0 w-1 rounded-l-lg border-l border-l-4 border-l-[#003D9B]"
+          
+        />
+      )}
       <h3 className="body-md-medium">{title}</h3>
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-1">
           <span
             className="material-symbols-outlined leading-none"
-            style={{ fontSize: '14px', color: dateInfo.status === 'delayed' ? '#BA1A1A'  : dateInfo.status === 'today' ? "#003D9B" : '#94A3B8' }}
+            style={{
+              fontSize: '14px',
+              color:
+                dateInfo.status === 'delayed'
+                  ? '#BA1A1A'
+                  : dateInfo.status === 'today'
+                    ? '#003D9B'
+                    : '#94A3B8',
+            }}
           >
-            { dateInfo.status === 'delayed' ? 'warning' : 'calendar_today' }
+            {dateInfo.status === 'delayed' ? 'warning' : 'calendar_today'}
           </span>
-          <h3 className={`mb-0 leading-none ${dateInfo.textClass} ${dateInfo.status === 'delayed' ? 'text-[#BA1A1A]' : dateInfo.status === 'today' ? 'text-[#003D9B]' : 'text-[#94A3B8]'}`}>
+          <h3
+            className={`mb-0 leading-none ${dateInfo.textClass} ${dateInfo.status === 'delayed' ? 'text-[#BA1A1A]' : dateInfo.status === 'today' ? 'text-[#003D9B]' : 'text-[#94A3B8]'}`}
+          >
             {dateInfo.label}
           </h3>
         </div>
