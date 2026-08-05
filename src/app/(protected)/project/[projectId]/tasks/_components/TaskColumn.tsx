@@ -34,7 +34,7 @@ export default function TaskColumn({
   }, []);
 
   return (
-    <div className="flex flex-col gap-4 h-full w-[288px] max-h-[757px]">
+    <div className="flex flex-col gap-4 h-full w-[288px] max-h-[757px] min-h-0">
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <div
@@ -66,7 +66,7 @@ export default function TaskColumn({
         </span>
         Add New Task
       </button>
-      <ul className="flex flex-col gap-3">
+      <ul className="flex flex-col gap-3 flex-1 overflow-y-auto overflow-x-hidden min-h-0 mb-3 scrollbar">
         {tasks.map((task) => (
           <TaskCard
             key={task.id}

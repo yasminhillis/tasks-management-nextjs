@@ -28,7 +28,7 @@ export default function Sidebar() {
     <>
       {isMobileOpen && (
         <div
-          className="fixed inset-0  z-40 md:hidden bg-[#041B3C66]/40 backdrop-blur-[1px]"
+          className="fixed inset-0 z-40 md:hidden bg-[#041B3C66]/40 backdrop-blur-[1px]"
           onClick={() => dispatch(toggleMobile())}
         ></div>
       )}
@@ -37,7 +37,7 @@ export default function Sidebar() {
                     ${isSidebarOpen ? 'w-[224px]' : 'w-[70px]'}
                     fixed top-0 left-0 z-50
                     ${isMobileOpen ? 'block' : 'hidden'}
-
+                    flex-shrink-0
                     md:flex md:sticky md:top-0 md:min-h-screen md:z-auto
                     md:left-auto md:relative-none overflow-y-auto
                     `}

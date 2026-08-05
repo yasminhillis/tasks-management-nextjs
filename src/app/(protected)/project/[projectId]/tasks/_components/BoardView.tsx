@@ -2,6 +2,10 @@ import { Status } from '@/lib/types';
 import TaskColumn from './TaskColumn';
 
 export default function BoardView({ projectId }: { projectId: string }) {
+  const taskStatusForDisplay = Object.values(Status).map((status) =>
+    status.replaceAll('_', ' ')
+  );
+  
   const statusArr = Object.values(Status).map((status) => status);
 
   const statusColorMap = {
@@ -16,7 +20,7 @@ export default function BoardView({ projectId }: { projectId: string }) {
   };
 
   return (
-    <div className="flex gap-6 w-[945px] overflow-x-scroll">
+    <div className="flex gap-6 w-[975px] overflow-x-scroll">
       {statusArr.map((status) => (       
         <TaskColumn
           key={status}
