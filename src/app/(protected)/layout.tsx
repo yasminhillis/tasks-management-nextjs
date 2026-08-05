@@ -11,7 +11,7 @@ export default function ProtectedLayout({
       <Sidebar />
       <div className="flex flex-col flex-1 relative">
         <Navbar />
-        <main>{children}</main>
+        <main className='min-w-0'>{children}</main>
         <BottomBar />
       </div>
     </div>

@@ -7,13 +7,14 @@ import ListView from "./_components/ListView";
 import ViewSelect from "./_components/ViewSelect";
 import { useSearchParams } from "next/navigation";
 
+
 export default  function Tasks({params}:{params: Promise<{projectId:string}>}) {
   const { projectId } = use(params);  
   const searchParams = useSearchParams();
   const view = searchParams.get('view');
-  
+  const isBoard = view === 'board';
   return (
-    <PageWrapper>
+    <PageWrapper fillHeight={isBoard}>
       <Header 
         desktopTitle="Active Workboard"
         desktopDescription="Curating Project Alpha's production pipeline and milestones."

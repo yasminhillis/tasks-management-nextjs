@@ -76,14 +76,14 @@ export default function TaskCard({
   return (
     console.log(status, 'status'),
     
-    <div className={`flex flex-col relative gap-4  rounded-md p-4 border border-[#C3C6D61A] shadow-card-subtle ${status === "BLOCKED" ? 'bg-[#FFDAD633] border border-[#BA1A1A1A]/10' : 'bg-white w-[288px]'}`}>
+    <div className={`flex flex-col relative gap-4 rounded-md p-4 border border-[#C3C6D61A] shadow-card-subtle ${status === "BLOCKED" ? 'bg-[#FFDAD633] border border-[#BA1A1A1A]/10' : 'bg-white w-[288px]'}`}>
       {status === 'IN PROGRESS' && (
         <div
           className="absolute left-0 top-0 bottom-0 w-1 rounded-l-lg border-l border-l-4 border-l-[#003D9B]"
           
         />
       )}
-      <h3 className="body-md-medium">{title}</h3>
+      <h3 className="body-md-medium word-break">{title}</h3>
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-1">
           <span
