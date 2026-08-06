@@ -112,7 +112,7 @@
   --shadow-blue-md:
     0 4px 6px -4px rgba(0, 61, 155, 0.2), 0 10px 15px -3px rgba(0, 61, 155, 0.2);
   --shadow-card: 0px 24px 48px -12px rgba(4, 27, 60, 0.06);
-    --shadow-card-subtle: 0px 2px 8px 0px rgba(0, 0, 0, 0.02);
+  --shadow-card-subtle: 0px 2px 8px 0px rgba(0, 0, 0, 0.02);
   --shadow-modal: 0px 25px 50px -12px rgba(0, 0, 0, 0.25);
 }
 
@@ -438,88 +438,119 @@ body {
   }
 
   @layer utilities {
-  .scrollbar {
-    scrollbar-width: thin;
-    scrollbar-color: transparent transparent;
-    transition: scrollbar-color 0.2s ease;
-     scrollbar-color: #C3C6D6 transparent;
+    .scrollbar {
+      scrollbar-width: thin;
+      scrollbar-color: transparent transparent;
+      transition: scrollbar-color 0.2s ease;
+      scrollbar-color: #c3c6d6 transparent;
+    }
+
+    .scrollbar:hover {
+      scrollbar-color: #e2e8f0 transparent;
+    }
+
+    .scrollbar::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .scrollbar::-webkit-scrollbar-thumb {
+      background-color: transparent;
+      border-radius: 9999px;
+      transition: background-color 0.2s ease;
+    }
+
+    .scrollbar:hover::-webkit-scrollbar-thumb {
+      background-color: #e2e8f0;
+    }
+
+    .scrollbar::-webkit-scrollbar-thumb:hover {
+      background-color: #94a3b8;
+    }
   }
 
-  .scrollbar:hover {
-    scrollbar-color: #E2E8F0 transparent;
+  .btn-add-task {
+    font-size: var(--font-size-label-xs);
+    font-weight: var(--font-weight-bold);
+    line-height: 1rem;
+    letter-spacing: var(--letter-spacing-label-sm);
+    text-transform: uppercase;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    width: 100%;
+    padding: 1rem;
+
+    color: var(--color-slate-500);
+    background: #fff;
+    border: 2px dashed rgb(from var(--color-slate-200) r g b / 0.3);
+    border-radius: var(--radius-md);
+
+    cursor: pointer;
+
+    transition:
+      background-color 150ms ease,
+      border-color 150ms ease,
+      color 150ms ease,
+      opacity 150ms ease,
+      transform 150ms ease;
   }
 
-  .scrollbar::-webkit-scrollbar {
-    width: 4px;
+  .btn-add-task .material-symbols-outlined {
+    font-size: 16px;
   }
 
-  .scrollbar::-webkit-scrollbar-track {
-    background: transparent;
+  .btn-add-task:hover {
+    color: var(--color-primary-container);
+    background: var(--color-surface-low);
+    border-color: var(--color-primary-container);
+    opacity: 1;
   }
 
-  .scrollbar::-webkit-scrollbar-thumb {
-    background-color: transparent;
-    border-radius: 9999px;
-    transition: background-color 0.2s ease;
+  .btn-add-task:active {
+    transform: scale(0.99);
   }
 
-  .scrollbar:hover::-webkit-scrollbar-thumb {
-    background-color: #E2E8F0;
+  .btn-add-task:focus-visible {
+    outline: 2px solid var(--color-primary-container);
+    outline-offset: 2px;
   }
 
-  .scrollbar::-webkit-scrollbar-thumb:hover {
-    background-color: #94A3B8;
+  .add-task-btn {
+    width: 28px;
+    height: 28px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: var(--radius-sm);
+    color: #94a3b8;
+    width: 10px;
+    height: 10px;
+    transition: background-color 150ms ease;
   }
-}
 
-.btn-add-task {
-  font-size: var(--font-size-label-xs);
-  font-weight: var(--font-weight-bold);
-  line-height: 1rem;
-  letter-spacing: var(--letter-spacing-label-sm);
-  text-transform: uppercase;
+  .add-task-btn:hover {
+    color: var(--color-surface-low);
+  }
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
+  .add-task-btn:hover .add-task-icon {
+    color: var(--color-primary-container);
+  }
 
-  width: 100%;
-  padding: 1rem;
+  .add-task-btn:active .add-task-icon {
+    transform: scale(0.92);
+  }
 
-  color: var(--color-slate-500);
-  background: #fff;
-  border: 2px dashed rgb(from var(--color-slate-200) r g b / 0.3);
-  border-radius: var(--radius-md);
-
-  cursor: pointer;
-
-  transition:
-    background-color 150ms ease,
-    border-color 150ms ease,
-    color 150ms ease,
-    opacity 150ms ease,
-    transform 150ms ease;
-}
-
-.btn-add-task .material-symbols-outlined {
-  font-size: 16px;
-}
-
-.btn-add-task:hover {
-  color: var(--color-primary-container);
-  background: var(--color-surface-low);
-  border-color: var(--color-primary-container);
-  opacity: 1;
-}
-
-.btn-add-task:active {
-  transform: scale(0.99);
-}
-
-.btn-add-task:focus-visible {
-  outline: 2px solid var(--color-primary-container);
-  outline-offset: 2px;
-}
-
+  .add-task-btn:focus-visible {
+    outline: 2px solid var(--color-primary-container);
+    outline-offset: 2px;
+  }
 }
