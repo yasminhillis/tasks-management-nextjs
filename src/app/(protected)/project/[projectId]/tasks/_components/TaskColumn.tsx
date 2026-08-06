@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import TaskCard from './TaskCard';
 import type { Task } from '@/lib/types';
 import { formatDate } from '@/app/(protected)/_utils/formatDate';
+import { useRouter } from 'next/navigation';
 
 type TaskColumnProps = {
   statusForRequest: string;
@@ -18,6 +19,7 @@ export default function TaskColumn({
 }: TaskColumnProps) {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [taskCount, setTaskCount] = useState(0);
+  const router = useRouter();
 
   async function fetchTasksByStatus() {
     const res = await fetch(
@@ -57,7 +59,7 @@ export default function TaskColumn({
           </span>
         </button>
       </div>
-      <button className="label-xs-muted tracking-[1.2px] text-[#434654] opacity-60 text-xs uppercase border-2 border-dashed border-[#C3C6D64D] w-[288px] rounded-md flex justify-center items-center py-4 gap-2 cursor-pointer">
+      <button onClick={() => router.push(`/project/${projectId}/tasks/new?status=${statusForRequest}`)} className="btn-add-task tracking-[1.2px] text-[#434654] opacity-60 text-xs uppercase border-2 border-dashed border-[#C3C6D64D] w-[288px] rounded-md flex justify-center items-center py-4 gap-2 cursor-pointer">
         <span
           className="material-symbols-outlined"
           style={{ color: '#434654', fontSize: '16px' }}

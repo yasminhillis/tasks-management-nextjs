@@ -471,5 +471,55 @@ body {
     background-color: #94A3B8;
   }
 }
- 
+
+.btn-add-task {
+  font-size: var(--font-size-label-xs);
+  font-weight: var(--font-weight-bold);
+  line-height: 1rem;
+  letter-spacing: var(--letter-spacing-label-sm);
+  text-transform: uppercase;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  width: 100%;
+  padding: 1rem;
+
+  color: var(--color-slate-500);
+  background: #fff;
+  border: 2px dashed rgb(from var(--color-slate-200) r g b / 0.3);
+  border-radius: var(--radius-md);
+
+  cursor: pointer;
+
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease,
+    color 150ms ease,
+    opacity 150ms ease,
+    transform 150ms ease;
+}
+
+.btn-add-task .material-symbols-outlined {
+  font-size: 16px;
+}
+
+.btn-add-task:hover {
+  color: var(--color-primary-container);
+  background: var(--color-surface-low);
+  border-color: var(--color-primary-container);
+  opacity: 1;
+}
+
+.btn-add-task:active {
+  transform: scale(0.99);
+}
+
+.btn-add-task:focus-visible {
+  outline: 2px solid var(--color-primary-container);
+  outline-offset: 2px;
+}
+
 }
