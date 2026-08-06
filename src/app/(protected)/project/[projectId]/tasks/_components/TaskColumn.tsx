@@ -50,16 +50,32 @@ export default function TaskColumn({
             {taskCount}
           </div>
         </div>
-        <button className="cursor-pointer">
+        <button
+          className="cursor-pointer add-task-btn"
+          onClick={() =>
+            router.push(
+              `/project/${projectId}/tasks/new?status=${statusForRequest}`
+            )
+          }
+        >
           <span
-            className="material-symbols-outlined"
-            style={{ color: '#94A3B8', fontSize: '17px' }}
+            className="material-symbols-outlined add-task-icon"
+            style={{
+              fontSize: '17px',
+            }}
           >
             add
           </span>
         </button>
       </div>
-      <button onClick={() => router.push(`/project/${projectId}/tasks/new?status=${statusForRequest}`)} className="btn-add-task tracking-[1.2px] text-[#434654] opacity-60 text-xs uppercase border-2 border-dashed border-[#C3C6D64D] w-[288px] rounded-md flex justify-center items-center py-4 gap-2 cursor-pointer">
+      <button
+        onClick={() =>
+          router.push(
+            `/project/${projectId}/tasks/new?status=${statusForRequest}`
+          )
+        }
+        className="btn-add-task tracking-[1.2px] text-[#434654] opacity-60 text-xs uppercase border-2 border-dashed border-[#C3C6D64D] w-[288px] rounded-md flex justify-center items-center py-4 gap-2 cursor-pointer"
+      >
         <span
           className="material-symbols-outlined"
           style={{ color: '#434654', fontSize: '16px' }}
