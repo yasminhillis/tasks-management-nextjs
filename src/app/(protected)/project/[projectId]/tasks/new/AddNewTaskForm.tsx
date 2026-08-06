@@ -16,8 +16,11 @@ import 'react-datepicker/dist/react-datepicker.css';
 import type { Epic } from '@/lib/types/index';
 import { components, OptionProps, SingleValueProps } from 'react-select';
 import CardIdBadge from '../../../_components/CardIdBadge';
+import { useParams } from 'next/navigation';
 
-export default function AddNewTaskForm({ projectId }: { projectId: string }) {
+export default function AddNewTaskForm({ projectId, status }: { projectId: string, status?: Status }) {
+    console.log(status, 'kkkk');
+
   const { message, success, showToast } = useToast();
   const [members, setMemebers] = useState<MemberData[]>([]);
   const [epics, setEpics] = useState<Epic[]>([]);
@@ -111,7 +114,7 @@ export default function AddNewTaskForm({ projectId }: { projectId: string }) {
   const statusOptions = Object.values(Status).map((statusOption) => ({
     value: statusOption,
     label: statusOption.replace(/_/g, ' '),
-  }));
+  }));  
 
   const {
     register,
@@ -122,7 +125,7 @@ export default function AddNewTaskForm({ projectId }: { projectId: string }) {
   } = useForm({
     resolver: zodResolver(AddTaskSchema),
     defaultValues: {
-      status: Status.TO_DO,
+      status:  status ? status : Status.TO_DO,
     },
     mode: 'onChange',
   });
