@@ -34,8 +34,8 @@ export default  function Tasks({params}:{params: Promise<{projectId:string}>}) {
                 </div>}
         headerControls={<ViewSelect />}        
       />
-    { view === 'board' && <BoardView projectId={projectId}/> }
-    { view === 'list' && <ListView  projectId={projectId}/> }
+    { view === 'board' && <BoardView projectId={projectId} /> }
+    { view === 'list' && <ListView  projectId={projectId} /> }
     </PageWrapper>
   );
 }
