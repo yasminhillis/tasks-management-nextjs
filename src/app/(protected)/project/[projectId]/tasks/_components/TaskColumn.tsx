@@ -3,6 +3,7 @@ import TaskCard from './TaskCard';
 import type { Task } from '@/lib/types';
 import { formatDate } from '@/app/(protected)/_utils/formatDate';
 import { useRouter } from 'next/navigation';
+import ErrorScreen from '@/app/(protected)/_components/ErrorScreen';
 
 type TaskColumnProps = {
   statusForRequest: string;
@@ -19,21 +20,69 @@ export default function TaskColumn({
 }: TaskColumnProps) {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [taskCount, setTaskCount] = useState(0);
+  const [fetchError, setFetchError] = useState('');
+  const [networkError, setNetworkError] = useState('');
+
   const router = useRouter();
 
   async function fetchTasksByStatus() {
-    const res = await fetch(
-      `/api/tasks?projectId=${projectId}&status=${statusForRequest}`
-    );
-    const { tasks, taskCount } = await res.json();
-    setTasks(tasks ?? []);
-    console.log(tasks, 'taskssaSaS');
-    setTaskCount(taskCount);
+    console.log('kk');
+    setFetchError('');
+    setNetworkError('')
+        try {
+      const res = await fetch(
+        `/api/tasks?projectId=${projectId}&status=${statusForRequest}`
+      );
+
+      console.log(res, 'res');
+
+      if (!res.ok) {
+        const error = await res.json();
+        console.log(error, 'error fetching tasks');
+        setFetchError(`We're having trouble retrieving your
+                 project tasks right now. Please try again in a moment.`);
+                 return;
+        // return <ErrorScreen message="We're having trouble retrieving your
+        //         project tasks right now. Please try
+        //         again in a moment."/>;
+      }
+      const { tasks, taskCount } = await res.json();
+      setTasks(tasks ?? []);
+      console.log(tasks, 'taskssaSaS');
+      setTaskCount(taskCount);
+    } catch (error) {
+      console.log('network error');
+      setNetworkError('Network error. Please check your connection and try again.');
+      return;
+      // return (
+      //   <ErrorScreen
+      //     title="You're offline"
+      //     message={`Network error. Please check your connection and try again.`}
+      //     buttonElement={true}
+      //   />
+      // );
+    }
   }
 
   useEffect(() => {
     fetchTasksByStatus();
   }, []);
+
+  if (fetchError) {
+     return <ErrorScreen message="We're having trouble retrieving your
+                project tasks right now. Please try
+                again in a moment."/>;
+  }
+
+  if (networkError) {
+      return (
+        <ErrorScreen
+          title="You're offline"
+          message={`Network error. Please check your connection and try again.`}
+          buttonElement={true}
+        />
+      );
+  }
 
   return (
     <div className="flex flex-col gap-4 h-full w-[288px] max-h-[757px] min-h-0">
@@ -50,6 +99,9 @@ export default function TaskColumn({
             {taskCount}
           </div>
         </div>
+
+        {/* <button onClick={fetchTasksByStatus}>Load HERE</button> */}
+
         <button
           className="cursor-pointer add-task-btn"
           onClick={() =>
