@@ -20,16 +20,19 @@ export default function TaskColumn({
 }: TaskColumnProps) {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [taskCount, setTaskCount] = useState(0);
-  const [fetchError, setFetchError] = useState('');
-  const [networkError, setNetworkError] = useState('');
-
+  // const [fetchError, setFetchError] = useState('');
+  // const [networkError, setNetworkError] = useState('');
+  const [fetchStatus, setFetchStatus] = useState<
+    'idle' | 'loading' | 'success' | 'fetchError' | 'networkError'
+  >('idle');
   const router = useRouter();
 
   async function fetchTasksByStatus() {
-    console.log('kk');
-    setFetchError('');
-    setNetworkError('')
-        try {
+    // console.log('kk');
+    // setFetchError('');
+    // setNetworkError('')
+    try {
+      setFetchStatus('loading');
       const res = await fetch(
         `/api/tasks?projectId=${projectId}&status=${statusForRequest}`
       );
@@ -39,20 +42,23 @@ export default function TaskColumn({
       if (!res.ok) {
         const error = await res.json();
         console.log(error, 'error fetching tasks');
-        setFetchError(`We're having trouble retrieving your
-                 project tasks right now. Please try again in a moment.`);
-                 return;
+        setFetchStatus('fetchError');
+        // setFetchError(`We're having trouble retrieving your
+        //          project tasks right now. Please try again in a moment.`);
+        //          return;
         // return <ErrorScreen message="We're having trouble retrieving your
         //         project tasks right now. Please try
         //         again in a moment."/>;
       }
+      setFetchStatus('success');
       const { tasks, taskCount } = await res.json();
       setTasks(tasks ?? []);
       console.log(tasks, 'taskssaSaS');
       setTaskCount(taskCount);
     } catch (error) {
       console.log('network error');
-      setNetworkError('Network error. Please check your connection and try again.');
+      setFetchStatus('networkError');
+      // setNetworkError('Network error. Please check your connection and try again.');
       return;
       // return (
       //   <ErrorScreen
@@ -66,23 +72,42 @@ export default function TaskColumn({
 
   useEffect(() => {
     fetchTasksByStatus();
-  }, []);
+  }, [projectId]);
 
-  if (fetchError) {
-     return <ErrorScreen message="We're having trouble retrieving your
-                project tasks right now. Please try
-                again in a moment."/>;
-  }
+  // if (fetchStatus === 'fetchError') {
+  //   return (
+  //     <ErrorScreen
+  //       message="We're having trouble retrieving your
+  //               project tasks right now. Please try
+  //               again in a moment."
+  //     />
+  //   );
+  // }
 
-  if (networkError) {
-      return (
-        <ErrorScreen
-          title="You're offline"
-          message={`Network error. Please check your connection and try again.`}
-          buttonElement={true}
-        />
-      );
-  }
+  // if (fetchStatus === 'networkError') {
+  //   return (
+  //     <ErrorScreen
+  //       title="You're offline"
+  //       message={`Network error. Please check your connection and try again.`}
+  //       buttonElement={true}
+  //     />
+  //   );
+  // }
+
+  // if (fetchStatus === 'loading') {
+  //   return <div>Loading....</div>;
+  // }
+
+  const emptyStateText: Record<string, string> = {
+    'TO DO': 'No upcoming tasks',
+    'IN PROGRESS': 'Nothing in progress',
+    BLOCKED: 'Nothing blocked',
+    'IN REVIEW': 'Nothing in review',
+    'READY FOR QA': 'Nothing ready for QA',
+    REOPENED: 'Nothing reopened',
+    'READY FOR PRODUCTION': 'Nothing ready for production',
+    DONE: 'Nothing done',
+  };
 
   return (
     <div className="flex flex-col gap-4 h-full w-[288px] max-h-[757px] min-h-0">
@@ -136,7 +161,7 @@ export default function TaskColumn({
         </span>
         Add New Task
       </button>
-      <ul className="flex flex-col gap-3 flex-1 overflow-y-auto overflow-x-hidden min-h-0 mb-3 scrollbar">
+      {/* <ul className="flex flex-col gap-3 flex-1 overflow-y-auto overflow-x-hidden min-h-0 mb-3 scrollbar">
         {tasks.map((task) => (
           <TaskCard
             key={task.id}
@@ -146,7 +171,39 @@ export default function TaskColumn({
             status={statusForDisplay}
           />
         ))}
-      </ul>
+      </ul> */}
+
+      {taskCount === 0 ? (
+        <div className="border-dashed-custom flex flex-col justify-center items-center flex-1 min-h-0 w-full bg-surface-low">
+          <div
+            className="w-8 h-8 rounded-full flex items-center justify-center mb-3"
+            style={{ backgroundColor: `${statusColor}1A` }}
+          >
+            <span
+              className="material-symbols-outlined"
+              style={{ fontSize: '16px', color: statusColor }}
+            >
+              inbox
+            </span>
+          </div>
+          <h3 className="body-lg-medium">{emptyStateText[statusForDisplay]}</h3>
+          <p className="hint">Drag a task here or add one below</p>
+        </div>
+      ) : (
+        <ul className="flex flex-col gap-3 flex-1 overflow-y-auto overflow-x-hidden min-h-0 mb-3 scrollbar">
+          {tasks.map((task) => (
+            <TaskCard
+              key={task.id}
+              title={task.title}
+              assigneeName={task.assignee?.name ?? 'Unassigned'}
+              dueDate={task.due_date ? formatDate(task.due_date) : ''}
+              status={statusForDisplay}
+            />
+          ))}
+        </ul>
+      )}
+
+      
     </div>
   );
 }
