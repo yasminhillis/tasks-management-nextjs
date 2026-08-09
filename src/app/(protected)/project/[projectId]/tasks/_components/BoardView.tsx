@@ -20,7 +20,7 @@ export default function BoardView({ projectId }: { projectId: string }) {
   };
 
   return (
-    <div className="flex gap-6 w-[975px] overflow-x-scroll">
+    <div className="flex gap-6 w-[990px] h-[calc(100vh-190px)] overflow-x-scroll">
       {statusArr.map((status) => (       
         <TaskColumn
           key={status}
