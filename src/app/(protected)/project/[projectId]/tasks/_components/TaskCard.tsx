@@ -21,10 +21,6 @@ function formatDate(dateString: string): { label: string; message: string } {
   return { label: formatted.toUpperCase(), message: 'formatted successfully' };
 }
 
-// function InProgressCard(){
-//   retuen
-// }
-
 function displayDate(date: string) {
   if (formatDate(date).label === 'No Deadline specified')
     return {
@@ -73,9 +69,7 @@ export default function TaskCard({
 }: TaskCardProps) {
   const dateInfo = displayDate(dueDate);
 
-  return (
-    // console.log(status, 'status'),
-    
+  return (    
     <div className={`flex flex-col relative gap-4 rounded-md p-4 border border-[#C3C6D61A] shadow-card-subtle ${status === "BLOCKED" ? 'bg-[#FFDAD633] border border-[#BA1A1A1A]/10' : 'bg-white w-[288px]'}`}>
       {status === 'IN PROGRESS' && (
         <div
