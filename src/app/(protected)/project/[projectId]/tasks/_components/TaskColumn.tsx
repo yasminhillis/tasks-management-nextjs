@@ -1,11 +1,9 @@
 import { useEffect, useState } from 'react';
-import TaskCard from './TaskCard';
 import type { Task } from '@/lib/types';
-import { formatDate } from '@/app/(protected)/_utils/formatDate';
 import { useRouter } from 'next/navigation';
-import LoadingTaskCard from './LoadingTaskCard';
 import ColumnEmptyState from './ColumnEmptyState';
 import ColumnPopulatedState from './ColumnPopulatedState';
+import ColumnLoadingState from './ColumnLoadingState';
 
 type TaskColumnProps = {
   statusForRequest: string;
@@ -13,7 +11,7 @@ type TaskColumnProps = {
   projectId: string;
   statusColor: string;
   onFetchError: (error: 'fetchError' | 'networkError') => void;
-  error: 'fetchError' | 'networkError' | null
+  error: 'fetchError' | 'networkError' | null;
 };
 
 export default function TaskColumn({
@@ -22,11 +20,13 @@ export default function TaskColumn({
   projectId,
   statusColor,
   onFetchError,
-  error
+  error,
 }: TaskColumnProps) {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [taskCount, setTaskCount] = useState(0);
-  const [fetchStatus, setFetchStatus] = useState<'idle' | 'loading' | 'success'>('idle');
+  const [fetchStatus, setFetchStatus] = useState<
+    'idle' | 'loading' | 'success'
+  >('idle');
   const router = useRouter();
 
   async function fetchTasksByStatus() {
@@ -38,8 +38,8 @@ export default function TaskColumn({
 
       if (!res.ok) {
         const error = await res.json();
-        console.error(error, `Error fetching ${statusForRequest} column`)
-        onFetchError("fetchError")
+        console.error(error, `Error fetching ${statusForRequest} column`);
+        onFetchError('fetchError');
         return;
       }
       setFetchStatus('success');
@@ -56,17 +56,6 @@ export default function TaskColumn({
     fetchTasksByStatus();
   }, [projectId]);
 
-  const emptyStateText: Record<string, string> = {
-    'TO DO': 'No upcoming tasks',
-    'IN PROGRESS': 'Nothing in progress',
-    'BLOCKED': 'Nothing blocked',
-    'IN REVIEW': 'Nothing in review',
-    'READY FOR QA': 'Nothing ready for QA',
-    'REOPENED': 'Nothing reopened',
-    'READY FOR PRODUCTION': 'Nothing ready for production',
-    'DONE': 'Nothing done',
-  };
-  
   return (
     <div className="flex flex-col gap-4 h-full w-[288px] max-h-[757px] min-h-0">
       <div className="flex items-center justify-between gap-2">
@@ -117,33 +106,22 @@ export default function TaskColumn({
         </span>
         Add New Task
       </button>
-  
-      {(fetchStatus !== 'idle' && fetchStatus === 'loading' && error === null && tasks.length === 0) ? 
-      (
-        <ul className="flex flex-col gap-3 flex-1 overflow-y-auto overflow-x-hidden min-h-0 mb-3 scrollbar">
-          {Array.from({ length: 3 }).map((_, i) => (
-            <LoadingTaskCard key={i} />
-          ))}
-        </ul>
-      ) :
 
-      (taskCount === 0 && fetchStatus === "success" && error === null) ? ( 
-
-        <ColumnEmptyState statusColor={statusColor} statusForDisplay={statusForDisplay} />
-
-      ) : (fetchStatus === "success" && error === null) ? (
-        // <ul className="flex flex-col gap-3 flex-1 overflow-y-auto overflow-x-hidden min-h-0 mb-3 scrollbar">
-        //   {tasks.map((task) => (
-        //     <TaskCard
-        //       key={task.id}
-        //       title={task.title}
-        //       assigneeName={task.assignee?.name ?? 'Unassigned'}
-        //       dueDate={task.due_date ? formatDate(task.due_date) : ''}
-        //       status={statusForDisplay}
-        //     />
-        //   ))}
-        // </ul>
-        <ColumnPopulatedState tasks={tasks} statusForDisplay={statusForDisplay}/>
+      {fetchStatus !== 'idle' &&
+      fetchStatus === 'loading' &&
+      error === null &&
+      tasks.length === 0 ? (
+        <ColumnLoadingState />
+      ) : taskCount === 0 && fetchStatus === 'success' && error === null ? (
+        <ColumnEmptyState
+          statusColor={statusColor}
+          statusForDisplay={statusForDisplay}
+        />
+      ) : fetchStatus === 'success' && error === null ? (
+        <ColumnPopulatedState
+          tasks={tasks}
+          statusForDisplay={statusForDisplay}
+        />
       ) : null}
     </div>
   );
