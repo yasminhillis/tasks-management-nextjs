@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import ColumnEmptyState from './ColumnEmptyState';
 import ColumnPopulatedState from './ColumnPopulatedState';
 import ColumnLoadingState from './ColumnLoadingState';
+import { shimmer } from '../../../_components/loadingStyle';
 
 type TaskColumnProps = {
   statusForRequest: string;
@@ -66,9 +67,9 @@ export default function TaskColumn({
           ></div>
           <h2 className="label-xs-status">{statusForDisplay}</h2>
           <div
-            className={`badge-count px-[6px] py-[2px] rounded-xs ${statusForDisplay === 'BLOCKED' ? 'bg-[#FFDAD6] text-[#93000A]' : 'bg-[#0052CC1A]'}`}
+            className={`badge-count ${fetchStatus === 'loading' ? `${shimmer} w-[18px] h-[19px]`: ''} px-[6px] py-[2px] rounded-xs ${statusForDisplay === 'BLOCKED' ? 'bg-[#FFDAD6] text-[#93000A]' : 'bg-[#0052CC1A]'}`}
           >
-            {taskCount}
+           {fetchStatus === 'loading' ? '' : taskCount}
           </div>
         </div>
 
