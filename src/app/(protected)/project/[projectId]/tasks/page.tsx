@@ -16,11 +16,8 @@ export default  function Tasks({params}:{params: Promise<{projectId:string}>}) {
 
   async function getProjectName(projectId: string){
     const res = await fetch(`/api/projects/${projectId}`); 
-    console.log(res, 'res 999');
     const { projectName: name} = await res.json(); 
     setProjectName(name)
-    console.log(name, 'name');
-    
   }
 
   useEffect(() => {

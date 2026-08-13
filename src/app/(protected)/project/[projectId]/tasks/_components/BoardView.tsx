@@ -4,10 +4,6 @@ import ErrorScreen from '@/app/(protected)/_components/ErrorScreen';
 import { useState } from 'react';
 
 export default function BoardView({ projectId }: { projectId: string }) {
-  // const taskStatusForDisplay = Object.values(Status).map((status) =>
-  //   status.replaceAll('_', ' ')
-  // );
-
   const [error, setError] = useState<'fetchError' | 'networkError' | null>(
     null
   );

@@ -3,7 +3,6 @@ import TaskCard from './TaskCard';
 import type { Task } from '@/lib/types';
 import { formatDate } from '@/app/(protected)/_utils/formatDate';
 import { useRouter } from 'next/navigation';
-import ErrorScreen from '@/app/(protected)/_components/ErrorScreen';
 import LoadingTaskCard from './LoadingTaskCard';
 
 type TaskColumnProps = {
@@ -25,83 +24,35 @@ export default function TaskColumn({
 }: TaskColumnProps) {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [taskCount, setTaskCount] = useState(0);
-  // const [fetchError, setFetchError] = useState('');
-  // const [networkError, setNetworkError] = useState('');
   const [fetchStatus, setFetchStatus] = useState<'idle' | 'loading' | 'success'>('idle');
   const router = useRouter();
 
   async function fetchTasksByStatus() {
-    // console.log('kk');
-    // setFetchError('');
-    // setNetworkError('')
     try {
       setFetchStatus('loading');
       const res = await fetch(
         `/api/tasks?projectId=${projectId}&status=${statusForRequest}`
       );
 
-      // console.log(res, 'res');
-
       if (!res.ok) {
         const error = await res.json();
-        console.log(error, 'error fetching tasks');
-        // setFetchStatus('fetchError');
+        console.error(error, `Error fetching ${statusForRequest} column`)
         onFetchError("fetchError")
         return;
-        // setFetchError(`We're having trouble retrieving your
-        //          project tasks right now. Please try again in a moment.`);
-        //          return;
-        // return <ErrorScreen message="We're having trouble retrieving your
-        //         project tasks right now. Please try
-        //         again in a moment."/>;
       }
       setFetchStatus('success');
       const { tasks, taskCount } = await res.json();
       setTasks(tasks ?? []);
-      // console.log(tasks, 'taskssaSaS');
       setTaskCount(taskCount);
     } catch (error) {
-      console.log('network error');
       onFetchError('networkError');
-      // setNetworkError('Network error. Please check your connection and try again.');
       return;
-      // return (
-      //   <ErrorScreen
-      //     title="You're offline"
-      //     message={`Network error. Please check your connection and try again.`}
-      //     buttonElement={true}
-      //   />
-      // );
     }
   }
 
   useEffect(() => {
     fetchTasksByStatus();
   }, [projectId]);
-
-  // if (fetchStatus === 'fetchError') {
-  //   return (
-  //     <ErrorScreen
-  //       message="We're having trouble retrieving your
-  //               project tasks right now. Please try
-  //               again in a moment."
-  //     />
-  //   );
-  // }
-
-  // if (fetchStatus === 'networkError') {
-  //   return (
-  //     <ErrorScreen
-  //       title="You're offline"
-  //       message={`Network error. Please check your connection and try again.`}
-  //       buttonElement={true}
-  //     />
-  //   );
-  // }
-
-  // if (fetchStatus === 'loading') {
-  //   return <div>Loading....</div>;
-  // }
 
   const emptyStateText: Record<string, string> = {
     'TO DO': 'No upcoming tasks',
@@ -130,8 +81,6 @@ export default function TaskColumn({
             {taskCount}
           </div>
         </div>
-
-        {/* <button onClick={fetchTasksByStatus}>Load HERE</button> */}
 
         <button
           className="cursor-pointer add-task-btn"
@@ -167,29 +116,11 @@ export default function TaskColumn({
         </span>
         Add New Task
       </button>
-      {/* <ul className="flex flex-col gap-3 flex-1 overflow-y-auto overflow-x-hidden min-h-0 mb-3 scrollbar">
-        {tasks.map((task) => (
-          <TaskCard
-            key={task.id}
-            title={task.title}
-            assigneeName={task.assignee?.name ?? 'Unassigned'}
-            dueDate={task.due_date ? formatDate(task.due_date) : ''}
-            status={statusForDisplay}
-          />
-        ))}
-      </ul> */}
-
+  
       {(fetchStatus !== 'idle' && fetchStatus === 'loading' && error === null && tasks.length === 0) ? 
       (
         <ul className="flex flex-col gap-3 flex-1 overflow-y-auto overflow-x-hidden min-h-0 mb-3 scrollbar">
           {Array.from({ length: 3 }).map((_, i) => (
-            // <TaskCard
-            //   key={task.id}
-            //   title={task.title}
-            //   assigneeName={task.assignee?.name ?? 'Unassigned'}
-            //   dueDate={task.due_date ? formatDate(task.due_date) : ''}
-            //   status={statusForDisplay}
-            // />
             <LoadingTaskCard key={i} />
           ))}
         </ul>
@@ -221,12 +152,9 @@ export default function TaskColumn({
               dueDate={task.due_date ? formatDate(task.due_date) : ''}
               status={statusForDisplay}
             />
-            // <LoadingTaskCard key={task.id} />
           ))}
         </ul>
       ) : null}
-
-      
     </div>
   );
 }
