@@ -6,3 +6,6 @@ export const shimmer = `relative overflow-hidden bg-[#E8EDFF]
   before:from-transparent
   before:via-white/60
   before:to-transparent`;
+
+// export const shimmer = `bg-[#E8EDFF]`;
+
