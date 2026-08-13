@@ -64,7 +64,6 @@ export default function TaskColumn({
     'READY FOR PRODUCTION': 'Nothing ready for production',
     'DONE': 'Nothing done',
   };
-  console.log(fetchStatus, 'fetchStatus');
   
   return (
     <div className="flex flex-col gap-4 h-full w-[288px] max-h-[757px] min-h-0">
