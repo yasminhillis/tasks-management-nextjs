@@ -5,6 +5,7 @@ import { formatDate } from '@/app/(protected)/_utils/formatDate';
 import { useRouter } from 'next/navigation';
 import LoadingTaskCard from './LoadingTaskCard';
 import ColumnEmptyState from './ColumnEmptyState';
+import ColumnPopulatedState from './ColumnPopulatedState';
 
 type TaskColumnProps = {
   statusForRequest: string;
@@ -127,21 +128,22 @@ export default function TaskColumn({
       ) :
 
       (taskCount === 0 && fetchStatus === "success" && error === null) ? ( 
-        
+
         <ColumnEmptyState statusColor={statusColor} statusForDisplay={statusForDisplay} />
 
       ) : (fetchStatus === "success" && error === null) ? (
-        <ul className="flex flex-col gap-3 flex-1 overflow-y-auto overflow-x-hidden min-h-0 mb-3 scrollbar">
-          {tasks.map((task) => (
-            <TaskCard
-              key={task.id}
-              title={task.title}
-              assigneeName={task.assignee?.name ?? 'Unassigned'}
-              dueDate={task.due_date ? formatDate(task.due_date) : ''}
-              status={statusForDisplay}
-            />
-          ))}
-        </ul>
+        // <ul className="flex flex-col gap-3 flex-1 overflow-y-auto overflow-x-hidden min-h-0 mb-3 scrollbar">
+        //   {tasks.map((task) => (
+        //     <TaskCard
+        //       key={task.id}
+        //       title={task.title}
+        //       assigneeName={task.assignee?.name ?? 'Unassigned'}
+        //       dueDate={task.due_date ? formatDate(task.due_date) : ''}
+        //       status={statusForDisplay}
+        //     />
+        //   ))}
+        // </ul>
+        <ColumnPopulatedState tasks={tasks} statusForDisplay={statusForDisplay}/>
       ) : null}
     </div>
   );
