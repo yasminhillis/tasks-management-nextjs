@@ -4,12 +4,15 @@ import type { Task } from '@/lib/types';
 import { formatDate } from '@/app/(protected)/_utils/formatDate';
 import { useRouter } from 'next/navigation';
 import ErrorScreen from '@/app/(protected)/_components/ErrorScreen';
+import LoadingTaskCard from './LoadingTaskCard';
 
 type TaskColumnProps = {
   statusForRequest: string;
   statusForDisplay: string;
   projectId: string;
   statusColor: string;
+  onFetchError: (error: 'fetchError' | 'networkError') => void;
+  error: 'fetchError' | 'networkError' | null
 };
 
 export default function TaskColumn({
@@ -17,14 +20,14 @@ export default function TaskColumn({
   statusForDisplay,
   projectId,
   statusColor,
+  onFetchError,
+  error
 }: TaskColumnProps) {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [taskCount, setTaskCount] = useState(0);
   // const [fetchError, setFetchError] = useState('');
   // const [networkError, setNetworkError] = useState('');
-  const [fetchStatus, setFetchStatus] = useState<
-    'idle' | 'loading' | 'success' | 'fetchError' | 'networkError'
-  >('idle');
+  const [fetchStatus, setFetchStatus] = useState<'idle' | 'loading' | 'success'>('idle');
   const router = useRouter();
 
   async function fetchTasksByStatus() {
@@ -37,12 +40,14 @@ export default function TaskColumn({
         `/api/tasks?projectId=${projectId}&status=${statusForRequest}`
       );
 
-      console.log(res, 'res');
+      // console.log(res, 'res');
 
       if (!res.ok) {
         const error = await res.json();
         console.log(error, 'error fetching tasks');
-        setFetchStatus('fetchError');
+        // setFetchStatus('fetchError');
+        onFetchError("fetchError")
+        return;
         // setFetchError(`We're having trouble retrieving your
         //          project tasks right now. Please try again in a moment.`);
         //          return;
@@ -53,11 +58,11 @@ export default function TaskColumn({
       setFetchStatus('success');
       const { tasks, taskCount } = await res.json();
       setTasks(tasks ?? []);
-      console.log(tasks, 'taskssaSaS');
+      // console.log(tasks, 'taskssaSaS');
       setTaskCount(taskCount);
     } catch (error) {
       console.log('network error');
-      setFetchStatus('networkError');
+      onFetchError('networkError');
       // setNetworkError('Network error. Please check your connection and try again.');
       return;
       // return (
@@ -101,14 +106,15 @@ export default function TaskColumn({
   const emptyStateText: Record<string, string> = {
     'TO DO': 'No upcoming tasks',
     'IN PROGRESS': 'Nothing in progress',
-    BLOCKED: 'Nothing blocked',
+    'BLOCKED': 'Nothing blocked',
     'IN REVIEW': 'Nothing in review',
     'READY FOR QA': 'Nothing ready for QA',
-    REOPENED: 'Nothing reopened',
+    'REOPENED': 'Nothing reopened',
     'READY FOR PRODUCTION': 'Nothing ready for production',
-    DONE: 'Nothing done',
+    'DONE': 'Nothing done',
   };
-
+  console.log(fetchStatus, 'fetchStatus');
+  
   return (
     <div className="flex flex-col gap-4 h-full w-[288px] max-h-[757px] min-h-0">
       <div className="flex items-center justify-between gap-2">
@@ -173,7 +179,23 @@ export default function TaskColumn({
         ))}
       </ul> */}
 
-      {taskCount === 0 ? (
+      {(fetchStatus !== 'idle' && fetchStatus === 'loading' && error === null && tasks.length === 0) ? 
+      (
+        <ul className="flex flex-col gap-3 flex-1 overflow-y-auto overflow-x-hidden min-h-0 mb-3 scrollbar">
+          {Array.from({ length: 3 }).map((_, i) => (
+            // <TaskCard
+            //   key={task.id}
+            //   title={task.title}
+            //   assigneeName={task.assignee?.name ?? 'Unassigned'}
+            //   dueDate={task.due_date ? formatDate(task.due_date) : ''}
+            //   status={statusForDisplay}
+            // />
+            <LoadingTaskCard key={i} />
+          ))}
+        </ul>
+      ) :
+
+      (taskCount === 0 && fetchStatus === "success" && error === null) ? ( 
         <div className="border-dashed-custom flex flex-col justify-center items-center flex-1 min-h-0 w-full bg-surface-low">
           <div
             className="w-8 h-8 rounded-full flex items-center justify-center mb-3"
@@ -189,7 +211,7 @@ export default function TaskColumn({
           <h3 className="body-lg-medium">{emptyStateText[statusForDisplay]}</h3>
           <p className="hint">Drag a task here or add one below</p>
         </div>
-      ) : (
+      ) : (fetchStatus === "success" && error === null) ? (
         <ul className="flex flex-col gap-3 flex-1 overflow-y-auto overflow-x-hidden min-h-0 mb-3 scrollbar">
           {tasks.map((task) => (
             <TaskCard
@@ -199,9 +221,10 @@ export default function TaskColumn({
               dueDate={task.due_date ? formatDate(task.due_date) : ''}
               status={statusForDisplay}
             />
+            // <LoadingTaskCard key={task.id} />
           ))}
         </ul>
-      )}
+      ) : null}
 
       
     </div>
