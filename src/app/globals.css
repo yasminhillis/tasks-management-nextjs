@@ -104,6 +104,7 @@
   --shadow-btn-primary:
     0px 4px 6px -4px rgba(0, 61, 155, 0.2),
     0px 10px 15px -3px rgba(0, 61, 155, 0.2);
+  --shadow-btn-sm: 0px 1px 2px rgba(0, 0, 0, 0.05);
 
   --gradient-btn-primary: linear-gradient(135deg, #003d9b, #0052cc);
   --shadow-soft-xl: 0px 24px 48px 0px rgba(4, 27, 60, 0.06);
@@ -114,6 +115,10 @@
   --shadow-card: 0px 24px 48px -12px rgba(4, 27, 60, 0.06);
   --shadow-card-subtle: 0px 2px 8px 0px rgba(0, 0, 0, 0.02);
   --shadow-modal: 0px 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+  --shadow-card-task: 0px 4px 24px 0px rgba(4, 27, 60, 0.04);
+  --line-height-title-card: 24.75px;
+  --color-avatar-text: #001848;
 }
 
 @keyframes shimmer {
@@ -290,6 +295,29 @@ body {
   }
 
   .btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .btn-primary-sm {
+    @apply inline-flex items-center justify-center cursor-pointer transition-[background,box-shadow,transform] duration-150 ease-in-out;
+    background: var(--gradient-btn-primary);
+    color: white;
+    padding: 8px 16px;
+    border-radius: var(--radius-sm); /* 4px */
+    font-size: 14px;
+    font-weight: var(--font-weight-semibold); /* 600 */
+    line-height: 20px;
+    letter-spacing: var(--letter-spacing-normal);
+    text-align: center;
+    box-shadow: var(--shadow-btn-sm);
+  }
+
+  .btn-primary-sm:hover {
+    filter: brightness(1.2);
+  }
+
+  .btn-primary-sm:disabled {
     opacity: 0.5;
     cursor: not-allowed;
   }
@@ -552,5 +580,59 @@ body {
   .add-task-btn:focus-visible {
     outline: 2px solid var(--color-primary-container);
     outline-offset: 2px;
+  }
+
+  .task-card {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border-radius: var(--radius-md);
+    padding: var(--spacing-4);
+    gap: var(--spacing-3);
+    box-shadow: var(--shadow-card-task);
+  }
+
+  .task-card-title {
+    font-size: var(--font-size-title-md);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-title-card);
+    letter-spacing: var(--letter-spacing-normal);
+    color: var(--color-slate-900);
+  }
+
+  .task-card-label {
+    font-size: var(--font-size-label-sm);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-label-sm);
+    letter-spacing: var(--letter-spacing-normal);
+    text-transform: uppercase;
+    color: #434654;
+    opacity: 0.7;
+  }
+
+  .task-card-date {
+    font-size: var(--font-size-caption-xs);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-caption-xs);
+    letter-spacing: var(--letter-spacing-normal);
+    color: var(--color-slate-900);
+  }
+
+  .task-card-avatar {
+    font-size: var(--font-size-label-sm);
+    font-weight: var(--font-weight-bold);
+    line-height: 1;
+    letter-spacing: var(--letter-spacing-normal);
+    text-align: center;
+    color: var(--color-avatar-text);
+  }
+
+  .badge-urgent {
+    font-size: var(--font-size-label-sm);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-label-sm);
+    letter-spacing: var(--letter-spacing-normal);
+    text-transform: uppercase;
+    color: var(--color-error-input);
   }
 }

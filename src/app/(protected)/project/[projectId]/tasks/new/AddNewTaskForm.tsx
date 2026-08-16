@@ -15,7 +15,7 @@ import { DatePicker } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import type { Epic } from '@/lib/types/index';
 import { components, OptionProps, SingleValueProps } from 'react-select';
-import CardIdBadge from '../../../_components/CardIdBadge';
+import CardIdBadge from '../../../_components/CardBadge';
 import { useParams } from 'next/navigation';
 
 export default function AddNewTaskForm({ projectId, status }: { projectId: string, status?: Status }) {
