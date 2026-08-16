@@ -57,7 +57,7 @@ export default function TaskColumn({
     fetchTasksByStatus();
   }, [projectId]);
 
-  return (
+  return (    
     <div className="flex flex-col gap-4 h-full w-[288px] max-h-[757px] min-h-0">
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
@@ -69,7 +69,7 @@ export default function TaskColumn({
           <div
             className={`badge-count ${fetchStatus === 'loading' ? `${shimmer} w-[18px] h-[19px]`: ''} px-[6px] py-[2px] rounded-xs ${statusForDisplay === 'BLOCKED' ? 'bg-[#FFDAD6] text-[#93000A]' : 'bg-[#0052CC1A]'}`}
           >
-           {fetchStatus === 'loading' ? '' : taskCount}
+           {fetchStatus === 'success' ? taskCount : ''}
           </div>
         </div>
 
