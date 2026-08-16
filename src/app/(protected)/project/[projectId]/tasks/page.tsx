@@ -67,7 +67,7 @@ export default function Tasks({
       />
 
       {isMobile ? (
-        <MobileView />
+        <MobileView projectId={projectId} />
       ) : view === 'board' ? (
         <BoardView projectId={projectId} />
       ) : view === 'list' ? (
