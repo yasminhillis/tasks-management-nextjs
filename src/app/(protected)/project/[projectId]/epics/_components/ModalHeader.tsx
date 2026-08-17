@@ -22,8 +22,9 @@ export default function ModalHeader({
 }: ModalHeaderProps) {
   const [previousTitleValue, setPreviousTitleValue] = useState(title);
   const [currentTitleValue, setCurrentTitleValue] = useState(title);
+  const [copied, setCopied] = useState(false)
   const [isSaving, setIsSaving] = useState(false);
-  const { message, success, showToast } = useToast()
+  const { message, success, showToast } = useToast();
 
   async function updateFieldHandler(
     field: 'title' | 'description' | 'assignee' | 'deadline',
@@ -56,29 +57,55 @@ export default function ModalHeader({
     setIsSaving(false);
   }
 
+  function handleCopy(){
+    const currentUrl = window.location.href;
+    console.log(currentUrl, 'curr url');
+    navigator.clipboard.writeText(currentUrl);
+    setCopied(true)
+    setTimeout(() => setCopied(false), 1500)
+  }
+
   return (
     <div className="w-full bg-linear-to-b from-white to-[#F1F3FF] md:bg-none bg-white pt-[24px] pr-[24px] pb-[8px] pl-[24px] md:p-[32px] border-b border-b-[#C3C6D626]">
       {message && <Toast success={success}>{message}</Toast>}
       <div>
         <div className="flex items-center justify-between mb-4 ">
-            <div className="flex items-center gap-[8px]">
+          <div className="flex items-center gap-[8px]">
             <EpicIcon />
             <p
-                className="text-[10px] font-bold uppercase tracking-[0.06em] text-[#003D9B] 
+              className="text-[10px] font-bold uppercase tracking-[0.06em] text-[#003D9B] 
                 md:text-[12px] md:tracking-[0.6px] md:text-[#041B3C] md:opacity-60"
             >
-                {displayId}
+              {displayId}
             </p>
+          </div>
 
-            </div>
-            <button onClick={onClose} className="cursor-pointer flex items-center hover:text-red-400">
-                <span
+          <div className="flex gap-4">
+            {copied ? <span className='flex items-center justify-center text-emerald-600'>
+                copied!
+              </span> : <button onClick={handleCopy} className="flex items-center gap-2 cursor-pointer hover-primary caption-md">
+              <span
                 className="material-symbols-outlined"
-                style={{ fontSize: '19px', color: '#041B3C99' }}
+                style={{ fontSize: '16px' }}
+              >
+                link
+              </span>
+              Copy link
+            </button>}
+            <div className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-[#BA1A1A1A]">
+              <button
+                onClick={onClose}
+                className="cursor-pointer flex items-center hover:text-red-400"
+              >
+                <span
+                  className="material-symbols-outlined text-[#041B3C99] hover:text-[#BA1A1A]"
+                  style={{ fontSize: '19px' }}
                 >
-                close
+                  close
                 </span>
-            </button>
+              </button>
+            </div>
+          </div>
         </div>
         <input
           className="border border-[#D7E2FF] rounded-lg w-full title-xl p-2 focus:border focus:border-primary-container appearance-none outline-none"

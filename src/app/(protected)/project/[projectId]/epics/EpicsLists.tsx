@@ -6,7 +6,7 @@ import ErrorScreen from '@/app/(protected)/_components/ErrorScreen';
 import PageWrapper from '../../_components/PageWrapper';
 import EpicCardSkeleton from './EpicCardSkeleton';
 import EmptyState from '@/app/(protected)/_components/EmptyState';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Pagination from '@/app/(protected)/_components/Pagination';
 import type { Epic } from '@/lib/types/index';
 import MobilePlusButton from '../../_components/MobilePlusButton';
@@ -39,8 +39,10 @@ export default function EpicsList({
   pageSize,
   onEpicUpdate
 }: EpicListProps) {
-  const [epicId, setEpicId] = useState('');
+  // const [epicId, setEpicId] = useState('');
   const [networkError, setNetworkError] = useState('');
+  const searchParams = useSearchParams()
+  const epicId = searchParams.get('epicId') ?? '';
   const router = useRouter();
 
   if (loading === 'failed' && error?.length > 0) {
@@ -114,7 +116,7 @@ export default function EpicsList({
       </PageWrapper>
     );
   }
-
+  
   return (
     <div>
       {loading === 'success' &&
@@ -156,7 +158,7 @@ export default function EpicsList({
             <div className="grid sm:grid-cols-2 md:grid-cols-2 justify-items-center gap-6 mb-6 md:mb-10">
               {epics.map((epic: Epic) => (                
                 <EpicCard
-                  sendEpicIdToParent={() => setEpicId(epic.id)}
+                  sendEpicIdToParent={() => router.push(`/project/${projectId}/epics?epicId=${epic.id}`)}
                   id={epic.epic_id}
                   key={epic.epic_id}
                   title={epic.title}
@@ -171,7 +173,7 @@ export default function EpicsList({
               <EpicModal
                 projectId={projectId}
                 epicId={epicId}
-                onClose={() => setEpicId('')}
+                onClose={() => router.push(`/project/${projectId}/epics`)}
                 onEpicUpdate={onEpicUpdate}
               />
             )}
