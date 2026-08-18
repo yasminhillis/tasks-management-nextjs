@@ -18,9 +18,10 @@ import { components, OptionProps, SingleValueProps } from 'react-select';
 import CardIdBadge from '../../../_components/CardBadge';
 import { useParams } from 'next/navigation';
 
-export default function AddNewTaskForm({ projectId, status }: { projectId: string, status?: Status }) {
+export default function AddNewTaskForm({ projectId, status, epicId }: { projectId: string, status?: Status, epicId?: string }) {
     console.log(status, 'kkkk');
-
+    console.log(epicId, 'epicId asljdkls');
+    
   const { message, success, showToast } = useToast();
   const [members, setMemebers] = useState<MemberData[]>([]);
   const [epics, setEpics] = useState<Epic[]>([]);
@@ -42,8 +43,6 @@ export default function AddNewTaskForm({ projectId, status }: { projectId: strin
   }
 
   const DisplayEpic = ({data}: {data: EpicOptions}) => {
-    
-    
     const displayId = data.label.split(' ')[0]
     const title = data.label.split(' ').slice(1)
     return <div className="flex items-center gap-2">
@@ -102,10 +101,23 @@ export default function AddNewTaskForm({ projectId, status }: { projectId: strin
     label: member.metadata.name,
   }));
 
+  console.log(epics, 'epics');
+  
+
   const epicOptions = epics.map((epic) => ({
     label: `${epic.epic_id} ${formateEpicTitle(epic.title)}`,
     value: epic.id,
   }));
+
+  const epicFromPopup = epics.filter(epic => epic.id === epicId).map((epic) => ({
+    label: `${epic.epic_id} ${formateEpicTitle(epic.title)}`,
+    value: epic.id,
+  })); 
+  // const epicFromPopupOptions = {
+  //   label: 
+  // }
+  // console.log(epicFromPopup, 'epicFromPopup');
+  
 
   function formateEpicTitle(title: string) {
     return title.length > 100 ? title.slice(0, 100) + '...' : title;
@@ -126,6 +138,7 @@ export default function AddNewTaskForm({ projectId, status }: { projectId: strin
     resolver: zodResolver(AddTaskSchema),
     defaultValues: {
       status:  status ? status : Status.TO_DO,
+      epic_id: epicId ? epicId : ''
     },
     mode: 'onChange',
   });

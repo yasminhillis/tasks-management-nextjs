@@ -9,6 +9,7 @@ import Select, { OptionProps, SingleValueProps, components } from 'react-select'
 import { useToast } from '@/lib/hooks/useToast';
 import ModalTaskListItem from './ModalTaskListItem';
 import type { EpicTask } from '@/lib/types';
+import { useRouter } from 'next/navigation';
 
 type ModalBodyProps = {
   description: string;
@@ -21,6 +22,7 @@ type ModalBodyProps = {
   onEpicUpdate: (id: string, data: Partial<Epic>) => void;
   members: MemberData[];
   membersStatus: 'idle' | 'loading' | 'failed' | 'success';
+  projectId: string;
 };
 
 type AssigneeOptions = {
@@ -39,11 +41,14 @@ export default function ModalBody({
   onEpicUpdate,
   members,
   membersStatus,
+  projectId
 }: ModalBodyProps) {
   const [currentDescriptionValue, setCurrentDescriptionValue] =
     useState(description);
   const [previousDescriptionValue, setPreviousDescriptionValue] =
     useState(description);
+
+  const router = useRouter()  
 
   const [currentDeadline, setCurrentDeadline] = useState(deadline);
   const [previousDeadline, setpreviousDeadline] = useState(deadline);
@@ -70,9 +75,15 @@ export default function ModalBody({
     setTasks(tasks)
     setTaskCount(taskCount)    
   }
+
+  async function fetchEpicById(epicId: string){
+    const epic = await fetch(`/api/${epicId}?projectId=${projectId}`)
+  }
+
   useEffect(() => {
     fetchTasksInsideEpics()
   }, [epicId])
+
 
   const DisplayAssignee = ({ data }: { data: AssigneeOptions }) => {
     const isUnassigned = data.value === "";
@@ -360,7 +371,7 @@ export default function ModalBody({
         <h2 className="text-[11px] md:text-[18px] font-semibold leading-[28px]">
           Tasks
         </h2>
-        <div className="flex items-center gap-[3px] cursor-pointer hidden md:flex">
+        <button onClick={() => router.push(`/project/${projectId}/tasks/new?epicId=${epicId}`)} className="flex items-center gap-[3px] cursor-pointer hidden md:flex text-[14px] font-semibold text-primary hover:text-blue-700">
           <span
             className="material-symbols-outlined inline-flex items-center"
             style={{
@@ -372,10 +383,8 @@ export default function ModalBody({
           >
             add
           </span>
-          <span className="text-[14px] font-semibold text-primary hover:text-blue-700">
             Add Task
-          </span>
-        </div>
+        </button>
 
         <div className="md:hidden rounded-[12px] w-[58px] h-[19px] px-[8px] py-[2px] bg-[#E0E8FF] font-bold text-[9px] uppercase">
           0 tasks
@@ -388,7 +397,7 @@ export default function ModalBody({
             tasks.map(task => 
             {
               console.log(task.assignee, 'task')
-            return <ModalTaskListItem taskTitle={task.title} assingeeName={task.assignee?.name} dueDate={task.due_date}/>
+            return <ModalTaskListItem key={task.id} taskTitle={task.title} assingeeName={task.assignee?.name} dueDate={task.due_date}/>
           })
           }
       </ul>
