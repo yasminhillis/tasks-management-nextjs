@@ -18,10 +18,18 @@ import { components, OptionProps, SingleValueProps } from 'react-select';
 import CardIdBadge from '../../../_components/CardBadge';
 import { useParams } from 'next/navigation';
 
-export default function AddNewTaskForm({ projectId, status, epicId }: { projectId: string, status?: Status, epicId?: string }) {
-    console.log(status, 'kkkk');
-    console.log(epicId, 'epicId asljdkls');
-    
+export default function AddNewTaskForm({
+  projectId,
+  status,
+  epicId,
+}: {
+  projectId: string;
+  status?: Status;
+  epicId?: string;
+}) {
+  console.log(status, 'status');
+  console.log(epicId, 'epicId before return');
+
   const { message, success, showToast } = useToast();
   const [members, setMemebers] = useState<MemberData[]>([]);
   const [epics, setEpics] = useState<Epic[]>([]);
@@ -38,40 +46,49 @@ export default function AddNewTaskForm({ projectId, status, epicId }: { projectI
   }
 
   type EpicOptions = {
-    label: string, 
-    value: string
-  }
-
-  const DisplayEpic = ({data}: {data: EpicOptions}) => {
-    const displayId = data.label.split(' ')[0]
-    const title = data.label.split(' ').slice(1)
-    return <div className="flex items-center gap-2">
-      <CardIdBadge id={displayId} extraStyles='px-[8px] py-[4px] md:px-[6px] md:py-[3px]'/>
-      {title}
-    </div>;
-  }
-
-  const EpicOption = ({ data }: {data: EpicOptions}) => {
-    return <DisplayEpic data={data}/>
+    label: string;
+    value: string;
   };
 
-  const customEpicOption = (props: OptionProps<EpicOptions>) => {    
-    return <components.Option {...props}>
-      <EpicOption data={props.data}/>
-    </components.Option>;
+  const DisplayEpic = ({ data }: { data: EpicOptions }) => {
+    const displayId = data.label.split(' ')[0];
+    const title = data.label.split(' ').slice(1);
+    return (
+      <div className="flex items-center gap-2">
+        <CardIdBadge
+          id={displayId}
+          extraStyles="px-[8px] py-[4px] md:px-[6px] md:py-[3px]"
+        />
+        {title}
+      </div>
+    );
+  };
+
+  const EpicOption = ({ data }: { data: EpicOptions }) => {
+    return <DisplayEpic data={data} />;
+  };
+
+  const customEpicOption = (props: OptionProps<EpicOptions>) => {
+    return (
+      <components.Option {...props}>
+        <EpicOption data={props.data} />
+      </components.Option>
+    );
   };
 
   const customSingleValue = (props: SingleValueProps<EpicOptions>) => {
-    return <components.SingleValue {...props}>
-      <DisplayEpic data={props.data}/>
-    </components.SingleValue>
-  }
+    return (
+      <components.SingleValue {...props}>
+        <DisplayEpic data={props.data} />
+      </components.SingleValue>
+    );
+  };
 
   async function fetchEpics(page: number, limit = 5) {
     if (isLoading) return;
     setIsLoading(true);
     console.log(page, 'PAGE');
-    
+
     const offset = (page - 1) * limit;
     const res = await fetch(
       `/api/epics?projectId=${projectId}&limit=${limit}&offset=${offset}&order=created_at.asc`
@@ -82,42 +99,63 @@ export default function AddNewTaskForm({ projectId, status, epicId }: { projectI
       return;
     }
     const { data, totalCount } = await res.json();
-    
+
     setEpics((prev) => {
       const existingIds = new Set(prev.map((epic: Epic) => epic.id));
       const newEpics = data.filter((epic: Epic) => !existingIds.has(epic.id));
       return [...prev, ...newEpics];
     });
-    setIsLoading(false)
+    setIsLoading(false);
+  }
+
+  async function fetchEpicById(epicId: string | undefined) {
+    console.log(epicId, 'epicId from fetch epics by id');
+    
+    const res = await fetch(`/api/epics/${epicId}?projectId=${projectId}`);
+    if (!res.ok) return;
+    const { epic } = await res.json();
+    // console.log(epic, 'epic from fetch epic by id');
+    
+    setEpics((prev) => {
+      if (prev.some((item) => item.id === epic.id)) {
+        return prev;
+      }
+      console.log(epics, 'epics from fetch epics by id');
+      return [...prev, epic];
+    });
+
   }
 
   useEffect(() => {
     getMemebers();
     fetchEpics(page);
-  }, [projectId, page]);
+    fetchEpicById(epicId)
+    // console.log(epics, 'epics 100101010101010');
+    
+  }, [projectId, page, epicId]);
 
   const assigneeOptions = members.map((member: MemberData) => ({
     value: member.user_id,
     label: member.metadata.name,
   }));
 
-  console.log(epics, 'epics');
-  
+  // console.log(epics, 'epics 9999999999999');
 
   const epicOptions = epics.map((epic) => ({
-    label: `${epic.epic_id} ${formateEpicTitle(epic.title)}`,
+    label: `${epic.epic_id} ${epic.title}`,
     value: epic.id,
   }));
 
-  const epicFromPopup = epics.filter(epic => epic.id === epicId).map((epic) => ({
-    label: `${epic.epic_id} ${formateEpicTitle(epic.title)}`,
-    value: epic.id,
-  })); 
+  // const epicFromPopup = epics
+  //   .filter((epic) => epic.id === epicId)
+  //   .map((epic) => ({
+  //     label: `${epic.epic_id} ${formateEpicTitle(epic.title)}`,
+  //     value: epic.id,
+  //   }));
   // const epicFromPopupOptions = {
-  //   label: 
+  //   label:
   // }
   // console.log(epicFromPopup, 'epicFromPopup');
-  
 
   function formateEpicTitle(title: string) {
     return title.length > 100 ? title.slice(0, 100) + '...' : title;
@@ -126,7 +164,7 @@ export default function AddNewTaskForm({ projectId, status, epicId }: { projectI
   const statusOptions = Object.values(Status).map((statusOption) => ({
     value: statusOption,
     label: statusOption.replace(/_/g, ' '),
-  }));  
+  }));
 
   const {
     register,
@@ -137,17 +175,19 @@ export default function AddNewTaskForm({ projectId, status, epicId }: { projectI
   } = useForm({
     resolver: zodResolver(AddTaskSchema),
     defaultValues: {
-      status:  status ? status : Status.TO_DO,
-      epic_id: epicId ? epicId : ''
+      status: status ? status : Status.TO_DO,
+      epic_id: epicId ? epicId : '',
     },
     mode: 'onChange',
   });
 
   async function onSubmit(data: AddTaskFormData) {
     try {
-      const result = await addNewTask({ ...data,
-      project_id: projectId,
-      due_date: data.due_date ? data.due_date.toISOString() : null, });
+      const result = await addNewTask({
+        ...data,
+        project_id: projectId,
+        due_date: data.due_date ? data.due_date.toISOString() : null,
+      });
       if (!result.success) {
         showToast(result.message, false, 1500);
         return;
@@ -161,12 +201,14 @@ export default function AddNewTaskForm({ projectId, status, epicId }: { projectI
       );
     }
   }
-  function handleMenuScrollToBottom(e: TouchEvent | WheelEvent){
-     console.log("Reached the bottom of the menu!");
-     setPage(prev => prev + 1)
+  function handleMenuScrollToBottom(e: TouchEvent | WheelEvent) {
+    console.log('Reached the bottom of the menu!');
+    setPage((prev) => prev + 1);
   }
 
   return (
+    console.log(epics, 'epics inside return'),
+    
     <form
       onSubmit={handleSubmit(onSubmit)}
       className="w-full max-w-[928px] md:bg-white rounded-md shadow-card px-6 py-4 flex flex-col gap-8"
@@ -279,7 +321,10 @@ export default function AddNewTaskForm({ projectId, status, epicId }: { projectI
             render={({ field }) => (
               <FormSelect<EpicOptions>
                 isClearable
-                components={{Option: customEpicOption, SingleValue: customSingleValue}}
+                components={{
+                  Option: customEpicOption,
+                  SingleValue: customSingleValue,
+                }}
                 onMenuScrollToBottom={handleMenuScrollToBottom}
                 options={epicOptions}
                 value={

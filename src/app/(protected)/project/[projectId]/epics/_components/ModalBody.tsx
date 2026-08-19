@@ -76,10 +76,6 @@ export default function ModalBody({
     setTaskCount(taskCount)    
   }
 
-  async function fetchEpicById(epicId: string){
-    const epic = await fetch(`/api/${epicId}?projectId=${projectId}`)
-  }
-
   useEffect(() => {
     fetchTasksInsideEpics()
   }, [epicId])
