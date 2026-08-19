@@ -1,5 +1,6 @@
 import Initials from '@/components/Initials';
 import { shimmer } from '../../../_components/loadingStyle';
+import EpicTasksLoadingState from './EpicTasksLoadingState';
 
 export default function ModalBodyLoading() {
   return (
@@ -57,13 +58,14 @@ export default function ModalBodyLoading() {
         </div>
       </div>
 
-      <div className="border-dashed-custom bg-[#F1F3FF] p-[48px] rounded-[8px] flex flex-col items-center justify-center gap-[16px]">
+      {/* <div className="border-dashed-custom bg-[#F1F3FF] p-[48px] rounded-[8px] flex flex-col items-center justify-center gap-[16px]">
         <div
           className={`flex items-center justify-center w-[48px] h-[48px] rounded-[12px] bg-[#D7E2FF] ${shimmer}`}
         ></div>
         <div className={`w-[318px] h-[24px] ${shimmer}`}></div>
         <div className={`w-[141px] h-[44px] ${shimmer} rounded-[2px]`}></div>
-      </div>
+      </div> */}
+      <EpicTasksLoadingState />
     </div>
   );
 }

@@ -5,11 +5,18 @@ import { Epic } from '@/lib/types';
 import { useEffect, useState } from 'react';
 import updateField from '../_utils/updateFiled';
 import type { MemberData } from '@/lib/types';
-import Select, { OptionProps, SingleValueProps, components } from 'react-select';
+import Select, {
+  OptionProps,
+  SingleValueProps,
+  components,
+} from 'react-select';
 import { useToast } from '@/lib/hooks/useToast';
 import ModalTaskListItem from './ModalTaskListItem';
 import type { EpicTask } from '@/lib/types';
 import { useRouter } from 'next/navigation';
+import EpicTasksEmptyState from './EpicTasksEmptyState';
+import ModalError from './ModalError';
+import EpicTasksLoadingState from './EpicTasksLoadingState';
 
 type ModalBodyProps = {
   description: string;
@@ -41,14 +48,14 @@ export default function ModalBody({
   onEpicUpdate,
   members,
   membersStatus,
-  projectId
+  projectId,
 }: ModalBodyProps) {
   const [currentDescriptionValue, setCurrentDescriptionValue] =
     useState(description);
   const [previousDescriptionValue, setPreviousDescriptionValue] =
     useState(description);
 
-  const router = useRouter()  
+  const router = useRouter();
 
   const [currentDeadline, setCurrentDeadline] = useState(deadline);
   const [previousDeadline, setpreviousDeadline] = useState(deadline);
@@ -59,30 +66,43 @@ export default function ModalBody({
   const [previousAssigneeId, setPreviousAssigneeId] = useState(assigneeId);
   const [previousAssigneeName, setPreviousAssigneeName] = useState(assignee);
 
-  const [tasks, setTasks] = useState<EpicTask[]>([])
-  const [taskCount, setTaskCount] = useState(0)
+  const [tasks, setTasks] = useState<EpicTask[]>([]);
+  const [taskCount, setTaskCount] = useState(0);
 
-  const { message, success, showToast } = useToast()
+  const { message, success, showToast } = useToast();
 
-  async function fetchTasksInsideEpics(){
-    if (!epicId) return;
-    console.log(epicId, 'epicId');
-    
-    const res = await fetch(`/api/epics/${epicId}/tasks`);
-    const {tasks, taskCount} = await res.json();
-    console.log(tasks, 'tasks');
-    
-    setTasks(tasks)
-    setTaskCount(taskCount)    
+  const [tasksFetchingState, setTasksFetchingState] = useState<
+    'idle' | 'loading' | 'success' | 'networkError' | 'fetchError'
+  >('idle');
+
+  async function fetchTasksInsideEpics() {
+    try {
+      if (!epicId) return;
+      console.log(epicId, 'epicId');
+      setTasksFetchingState('loading');
+      const res = await fetch(`/api/epics/${epicId}/tasks`);
+
+      if (!res.ok) {
+        setTasksFetchingState('fetchError');
+        return;
+      }
+      const { tasks, taskCount } = await res.json();
+      console.log(tasks, 'tasks');
+
+      setTasks(tasks);
+      setTaskCount(taskCount);
+      setTasksFetchingState('success');
+    } catch (error) {
+      setTasksFetchingState('networkError');
+    }
   }
 
   useEffect(() => {
-    fetchTasksInsideEpics()
-  }, [epicId])
-
+    fetchTasksInsideEpics();
+  }, [epicId]);
 
   const DisplayAssignee = ({ data }: { data: AssigneeOptions }) => {
-    const isUnassigned = data.value === "";
+    const isUnassigned = data.value === '';
     return (
       <div className="flex items-center gap-2 body-md-medium font-normal">
         {isUnassigned ? (
@@ -239,37 +259,41 @@ export default function ModalBody({
               Option: customOption,
               SingleValue: customSingleValue,
             }}
-            isLoading={membersStatus === "loading"}
+            isLoading={membersStatus === 'loading'}
             isDisabled={isSaving}
             styles={{
               control: (base, state) => ({
-                ...base, 
-                borderColor: state.isFocused ? '#0052cc' :'#D7E2FF',
+                ...base,
+                borderColor: state.isFocused ? '#0052cc' : '#D7E2FF',
                 borderRadius: '8px',
                 boxShadow: 'none',
                 height: '40px',
-                display: 'flex', 
+                display: 'flex',
                 alignItems: 'center',
                 '&:hover': {
-                  borderColor: '#0052cc'
-                }
+                  borderColor: '#0052cc',
+                },
               }),
-              indicatorSeparator: () => ({display: 'none'}),
+              indicatorSeparator: () => ({ display: 'none' }),
               valueContainer: (base) => ({
-                ...base, 
-                padding: '0 8px'
-              }), 
+                ...base,
+                padding: '0 8px',
+              }),
               dropdownIndicator: (base) => ({
-                ...base, 
+                ...base,
                 color: '#6B7280',
                 cursor: 'pointer',
-                "&:hover": {
-                  color: '#0052cc'
-                }
-              }), 
+                '&:hover': {
+                  color: '#0052cc',
+                },
+              }),
               option: (base, state) => ({
                 ...base,
-                backgroundColor: state.isSelected ? '#E0E8FF' : state.isFocused ? '#F1F3FF' : 'white',
+                backgroundColor: state.isSelected
+                  ? '#E0E8FF'
+                  : state.isFocused
+                    ? '#F1F3FF'
+                    : 'white',
                 color: '#041B3C',
                 cursor: 'pointer',
                 borderRadius: '2px',
@@ -367,7 +391,12 @@ export default function ModalBody({
         <h2 className="text-[11px] md:text-[18px] font-semibold leading-[28px]">
           Tasks
         </h2>
-        <button onClick={() => router.push(`/project/${projectId}/tasks/new?epicId=${epicId}`)} className="flex items-center gap-[3px] cursor-pointer hidden md:flex text-[14px] font-semibold text-primary hover:text-blue-700">
+        <button
+          onClick={() =>
+            router.push(`/project/${projectId}/tasks/new?epicId=${epicId}`)
+          }
+          className="flex items-center gap-[3px] cursor-pointer hidden md:flex text-[14px] font-semibold text-primary hover:text-blue-700"
+        >
           <span
             className="material-symbols-outlined inline-flex items-center"
             style={{
@@ -379,25 +408,52 @@ export default function ModalBody({
           >
             add
           </span>
-            Add Task
+          Add Task
         </button>
 
         <div className="md:hidden rounded-[12px] w-[58px] h-[19px] px-[8px] py-[2px] bg-[#E0E8FF] font-bold text-[9px] uppercase">
           0 tasks
         </div>
       </div>
-      <ul className="rounded-[8px] border border-[#C3C6D626] ">
-          {/* <ModalTaskListItem taskTitle="Initial architectural wireframes" assingeeName="John Doe" dueDate="12 Oct 2025"/>
+      {/* <button onClick={() => fetchTasksInsideEpics()}>load tasks</button> */}
+      <ul className="rounded-[8px] border border-[#C3C6D626]">
+        {/* <ModalTaskListItem taskTitle="Initial architectural wireframes" assingeeName="John Doe" dueDate="12 Oct 2025"/>
           <ModalTaskListItem taskTitle="Initial architectural wireframes" assingeeName="John Doe" dueDate="12 Oct 2025"/> */}
-          {
-            tasks.map(task => 
-            {
-              console.log(task.assignee, 'task')
-            return <ModalTaskListItem key={task.id} taskTitle={task.title} assingeeName={task.assignee?.name} dueDate={task.due_date}/>
+
+        {tasksFetchingState === 'loading' ? (
+          <EpicTasksLoadingState />
+        ) : tasksFetchingState === 'success' && tasks.length === 0 ? (
+          <EpicTasksEmptyState epicId={epicId} projectId={projectId} />
+        ) : tasksFetchingState === 'success' && tasks.length > 0 ? (
+          tasks.map((task) => {
+            console.log(task.assignee, 'task');
+            return (
+              <ModalTaskListItem
+                key={task.id}
+                taskTitle={task.title}
+                assingeeName={task.assignee?.name}
+                dueDate={task.due_date}
+              />
+            );
           })
-          }
+        ) : tasksFetchingState === 'fetchError' && tasks.length > 0 ? (
+          <ModalError
+            message={`We're having trouble retrieving your
+        epic tasks right now. Please try
+        again in a moment.`}
+            onClose={() =>
+              router.push(`project/${projectId}/epics?epicId=${epicId}`)
+            }
+          />
+        ) : tasksFetchingState === 'networkError' ? (
+          <ModalError
+            message={`You're offline. Please check your connection and try again`}
+            onClose={() =>
+              router.push(`project/${projectId}/epics?epicId=${epicId}`)
+            }
+          />
+        ) : null}
       </ul>
-      
     </div>
   );
 }

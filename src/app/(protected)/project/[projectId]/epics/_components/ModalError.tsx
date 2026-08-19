@@ -1,6 +1,6 @@
 
 type ModalErrorProps = {
-    onClose: () => void, 
+    onClose?: () => void, 
     title?: string, 
     message?: string 
 }
