@@ -13,7 +13,7 @@ export default function ModalTaskListItem({
   dueDate,
 }: ModalTaskListItemProps) {
   return (
-    <li className="flex justify-between p-4 border-t border-t-[#C3C6D626]">
+    <li className="flex justify-between p-4 md:border-t md:border-t-[#C3C6D626]  shadow-sm md:shadow-none border-[#E8EDFF] rounded-md md:rounded-none">
         <div>
             <h3 className="body-lg-medium">{taskTitle}</h3>
             <div className="flex items-center gap-2">
