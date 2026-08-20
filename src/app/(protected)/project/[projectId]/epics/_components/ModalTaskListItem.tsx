@@ -27,7 +27,7 @@ export default function ModalTaskListItem({
         </div>
       </div>
       <div className="flex items-end">
-        <div className="hidden md:flex">
+        <div className="hidden md:flex flex-col items-end">
           <h5 className="label-xs-muted">Due Date</h5>
           <span className="caption-xs opacity-70">{formatDate(dueDate)}</span>
         </div>
