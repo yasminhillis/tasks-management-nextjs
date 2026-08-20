@@ -412,11 +412,11 @@ export default function ModalBody({
         </button>
 
         <div className="md:hidden rounded-[12px] w-[58px] h-[19px] px-[8px] py-[2px] bg-[#E0E8FF] font-bold text-[9px] uppercase">
-          0 tasks
+          {taskCount} tasks
         </div>
       </div>
       {/* <button onClick={() => fetchTasksInsideEpics()}>load tasks</button> */}
-      <ul className="rounded-[8px] border border-[#C3C6D626]">
+      <ul className="rounded-[8px] md:border md:border-[#C3C6D626] flex flex-col gap-3">
         {/* <ModalTaskListItem taskTitle="Initial architectural wireframes" assingeeName="John Doe" dueDate="12 Oct 2025"/>
           <ModalTaskListItem taskTitle="Initial architectural wireframes" assingeeName="John Doe" dueDate="12 Oct 2025"/> */}
 
@@ -425,17 +425,33 @@ export default function ModalBody({
         ) : tasksFetchingState === 'success' && tasks.length === 0 ? (
           <EpicTasksEmptyState epicId={epicId} projectId={projectId} />
         ) : tasksFetchingState === 'success' && tasks.length > 0 ? (
-          tasks.map((task) => {
-            console.log(task.assignee, 'task');
-            return (
-              <ModalTaskListItem
-                key={task.id}
-                taskTitle={task.title}
-                assingeeName={task.assignee?.name}
-                dueDate={task.due_date}
-              />
-            );
-          })
+          <>
+            {tasks.map((task) => {
+              console.log(task.assignee, 'task');
+              return (
+                <ModalTaskListItem
+                  key={task.id}
+                  taskTitle={task.title}
+                  assingeeName={task.assignee?.name}
+                  dueDate={task.due_date}
+                />
+              );
+            })}
+            <button
+              onClick={() =>
+                router.push(`/project/${projectId}/tasks/new?epicId=${epicId}`)
+              }
+              className="md:hidden btn-add-task"
+            >
+              <span
+                className="material-symbols-outlined"
+                style={{ fontSize: '16px' }}
+              >
+                add_circle
+              </span>
+              add new task
+            </button>
+          </>
         ) : tasksFetchingState === 'fetchError' && tasks.length > 0 ? (
           <ModalError
             message={`We're having trouble retrieving your
