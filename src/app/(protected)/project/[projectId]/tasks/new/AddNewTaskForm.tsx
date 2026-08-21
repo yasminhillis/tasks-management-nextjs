@@ -43,45 +43,6 @@ export default function AddNewTaskForm({
     setMemebers(result.data);
   }
 
-  // type EpicOptions = {
-  //   label: string;
-  //   value: string;
-  // };
-
-  // const DisplayEpic = ({ data }: { data: EpicOptions }) => {
-  //   const displayId = data.label.split(' ')[0];
-  //   const title = data.label.split(' ').slice(1);
-  //   return (
-  //     <div className="flex items-center gap-2">
-  //       <CardIdBadge
-  //         id={displayId}
-  //         extraStyles="px-[8px] py-[4px] md:px-[6px] md:py-[3px]"
-  //       />
-  //       {title}
-  //     </div>
-  //   );
-  // };
-
-  // const EpicOption = ({ data }: { data: EpicOptions }) => {
-  //   return <DisplayEpic data={data} />;
-  // };
-
-  // const customEpicOption = (props: OptionProps<EpicOptions>) => {
-  //   return (
-  //     <components.Option {...props}>
-  //       <EpicOption data={props.data} />
-  //     </components.Option>
-  //   );
-  // };
-
-  // const customSingleValue = (props: SingleValueProps<EpicOptions>) => {
-  //   return (
-  //     <components.SingleValue {...props}>
-  //       <DisplayEpic data={props.data} />
-  //     </components.SingleValue>
-  //   );
-  // };
-
   async function fetchEpics(page: number, limit = 5) {
     if (isLoading) return;
     setIsLoading(true);
