@@ -16,7 +16,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import type { Epic } from '@/lib/types/index';
 import { components, OptionProps, SingleValueProps } from 'react-select';
 import CardIdBadge from '../../../_components/CardBadge';
-import { useParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 export default function AddNewTaskForm({
   projectId,
@@ -27,14 +27,13 @@ export default function AddNewTaskForm({
   status?: Status;
   epicId?: string;
 }) {
-  console.log(status, 'status');
-  console.log(epicId, 'epicId before return');
-
   const { message, success, showToast } = useToast();
   const [members, setMemebers] = useState<MemberData[]>([]);
   const [epics, setEpics] = useState<Epic[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(1);
+
+  const router = useRouter()
 
   async function getMemebers() {
     const result = await getProjectMembers(projectId);
@@ -98,7 +97,7 @@ export default function AddNewTaskForm({
       // setError()
       return;
     }
-    const { data, totalCount } = await res.json();
+    const { data } = await res.json();
 
     setEpics((prev) => {
       const existingIds = new Set(prev.map((epic: Epic) => epic.id));
@@ -108,30 +107,23 @@ export default function AddNewTaskForm({
     setIsLoading(false);
   }
 
-  async function fetchEpicById(epicId: string | undefined) {
-    console.log(epicId, 'epicId from fetch epics by id');
-    
+  async function fetchEpicById(epicId: string | undefined) {    
     const res = await fetch(`/api/epics/${epicId}?projectId=${projectId}`);
     if (!res.ok) return;
     const { epic } = await res.json();
-    // console.log(epic, 'epic from fetch epic by id');
     
     setEpics((prev) => {
       if (prev.some((item) => item.id === epic.id)) {
         return prev;
       }
-      console.log(epics, 'epics from fetch epics by id');
       return [...prev, epic];
     });
-
   }
 
   useEffect(() => {
     getMemebers();
     fetchEpics(page);
-    fetchEpicById(epicId)
-    // console.log(epics, 'epics 100101010101010');
-    
+    fetchEpicById(epicId)    
   }, [projectId, page, epicId]);
 
   const assigneeOptions = members.map((member: MemberData) => ({
@@ -139,23 +131,10 @@ export default function AddNewTaskForm({
     label: member.metadata.name,
   }));
 
-  // console.log(epics, 'epics 9999999999999');
-
   const epicOptions = epics.map((epic) => ({
     label: `${epic.epic_id} ${epic.title}`,
     value: epic.id,
   }));
-
-  // const epicFromPopup = epics
-  //   .filter((epic) => epic.id === epicId)
-  //   .map((epic) => ({
-  //     label: `${epic.epic_id} ${formateEpicTitle(epic.title)}`,
-  //     value: epic.id,
-  //   }));
-  // const epicFromPopupOptions = {
-  //   label:
-  // }
-  // console.log(epicFromPopup, 'epicFromPopup');
 
   function formateEpicTitle(title: string) {
     return title.length > 100 ? title.slice(0, 100) + '...' : title;
@@ -412,7 +391,7 @@ export default function AddNewTaskForm({
       )}
 
       <div className="flex justify-end gap-4">
-        <button type="button" className="btn-secondary">
+        <button type="button" className="btn-secondary" onClick={() => router.push(`/project/${projectId}/tasks?view=board`)}>
           Back
         </button>
         <button type="submit" className="btn-primary">
