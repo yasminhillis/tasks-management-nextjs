@@ -14,9 +14,8 @@ import type { MemberData } from '@/lib/types/index';
 import { DatePicker } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import type { Epic } from '@/lib/types/index';
-import { components, OptionProps, SingleValueProps } from 'react-select';
-import CardIdBadge from '../../../_components/CardBadge';
 import { useRouter } from 'next/navigation';
+import { EpicSelectOption, EpicSelectSingleValue, EpicOption } from '@/components/ui/SelectComponents';
 
 export default function AddNewTaskForm({
   projectId,
@@ -44,44 +43,44 @@ export default function AddNewTaskForm({
     setMemebers(result.data);
   }
 
-  type EpicOptions = {
-    label: string;
-    value: string;
-  };
+  // type EpicOptions = {
+  //   label: string;
+  //   value: string;
+  // };
 
-  const DisplayEpic = ({ data }: { data: EpicOptions }) => {
-    const displayId = data.label.split(' ')[0];
-    const title = data.label.split(' ').slice(1);
-    return (
-      <div className="flex items-center gap-2">
-        <CardIdBadge
-          id={displayId}
-          extraStyles="px-[8px] py-[4px] md:px-[6px] md:py-[3px]"
-        />
-        {title}
-      </div>
-    );
-  };
+  // const DisplayEpic = ({ data }: { data: EpicOptions }) => {
+  //   const displayId = data.label.split(' ')[0];
+  //   const title = data.label.split(' ').slice(1);
+  //   return (
+  //     <div className="flex items-center gap-2">
+  //       <CardIdBadge
+  //         id={displayId}
+  //         extraStyles="px-[8px] py-[4px] md:px-[6px] md:py-[3px]"
+  //       />
+  //       {title}
+  //     </div>
+  //   );
+  // };
 
-  const EpicOption = ({ data }: { data: EpicOptions }) => {
-    return <DisplayEpic data={data} />;
-  };
+  // const EpicOption = ({ data }: { data: EpicOptions }) => {
+  //   return <DisplayEpic data={data} />;
+  // };
 
-  const customEpicOption = (props: OptionProps<EpicOptions>) => {
-    return (
-      <components.Option {...props}>
-        <EpicOption data={props.data} />
-      </components.Option>
-    );
-  };
+  // const customEpicOption = (props: OptionProps<EpicOptions>) => {
+  //   return (
+  //     <components.Option {...props}>
+  //       <EpicOption data={props.data} />
+  //     </components.Option>
+  //   );
+  // };
 
-  const customSingleValue = (props: SingleValueProps<EpicOptions>) => {
-    return (
-      <components.SingleValue {...props}>
-        <DisplayEpic data={props.data} />
-      </components.SingleValue>
-    );
-  };
+  // const customSingleValue = (props: SingleValueProps<EpicOptions>) => {
+  //   return (
+  //     <components.SingleValue {...props}>
+  //       <DisplayEpic data={props.data} />
+  //     </components.SingleValue>
+  //   );
+  // };
 
   async function fetchEpics(page: number, limit = 5) {
     if (isLoading) return;
@@ -94,7 +93,8 @@ export default function AddNewTaskForm({
     );
     if (!res.ok) {
       const error = await res.json();
-      // setError()
+      showToast('Failed to load epics', false, 1500)
+      setIsLoading(false)
       return;
     }
     const { data } = await res.json();
@@ -298,12 +298,9 @@ export default function AddNewTaskForm({
             name="epic_id"
             control={control}
             render={({ field }) => (
-              <FormSelect<EpicOptions>
+              <FormSelect<EpicOption>
                 isClearable
-                components={{
-                  Option: customEpicOption,
-                  SingleValue: customSingleValue,
-                }}
+                components={{ Option: EpicSelectOption, SingleValue: EpicSelectSingleValue }}
                 onMenuScrollToBottom={handleMenuScrollToBottom}
                 options={epicOptions}
                 value={
