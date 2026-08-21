@@ -341,16 +341,6 @@ export default function ModalBody({
             Deadline
           </label>
           <div className="flex items-center gap-[8px] body-md-medium">
-            {/* <span
-              className="material-symbols-outlined"
-              style={{ fontSize: '15px', color: '#041B3C66' }}
-            >
-              calendar_today
-            </span> */}
-            {/* <time className="text-[14px] w-full" dateTime={deadline ?? ''}>
-              {deadline ? formatDate(deadline) : 'No deadline'}
-            </time> */}
-
             <input
               type="date"
               className="cursor-pointer"
@@ -415,11 +405,7 @@ export default function ModalBody({
           {taskCount} tasks
         </div>
       </div>
-      {/* <button onClick={() => fetchTasksInsideEpics()}>load tasks</button> */}
       <ul className="rounded-[8px] md:border md:border-[#C3C6D626] flex flex-col gap-3">
-        {/* <ModalTaskListItem taskTitle="Initial architectural wireframes" assingeeName="John Doe" dueDate="12 Oct 2025"/>
-          <ModalTaskListItem taskTitle="Initial architectural wireframes" assingeeName="John Doe" dueDate="12 Oct 2025"/> */}
-
         {tasksFetchingState === 'loading' ? (
           <EpicTasksLoadingState />
         ) : tasksFetchingState === 'success' && tasks.length === 0 ? (

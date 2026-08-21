@@ -2,7 +2,6 @@ import { useRouter } from 'next/navigation';
 import Card from '../../../_components/Card';
 import Initials from '@/components/Initials';
 import CardIdBadge from '../../../_components/CardBadge';
-import { useEffect } from 'react';
 
 type EpicCardProps = {
   id: string;

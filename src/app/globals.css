@@ -635,13 +635,14 @@ body {
     text-transform: uppercase;
     color: var(--color-error-input);
   }
-  
+
   .hover-primary {
     color: var(--color-slate-500);
     transition: color 150ms ease-in-out;
   }
 
   .hover-primary:hover {
-    color: var(--color-primary-container);
+    color: var(--color-primary-container) !important;
+    transition: color 150ms ease-in-out;
   }
 }
