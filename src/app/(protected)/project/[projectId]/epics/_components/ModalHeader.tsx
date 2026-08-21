@@ -22,7 +22,7 @@ export default function ModalHeader({
 }: ModalHeaderProps) {
   const [previousTitleValue, setPreviousTitleValue] = useState(title);
   const [currentTitleValue, setCurrentTitleValue] = useState(title);
-  const [copied, setCopied] = useState(false)
+  const [copied, setCopied] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const { message, success, showToast } = useToast();
 
@@ -57,12 +57,12 @@ export default function ModalHeader({
     setIsSaving(false);
   }
 
-  function handleCopy(){
+  function handleCopy() {
     const currentUrl = window.location.href;
     console.log(currentUrl, 'curr url');
     navigator.clipboard.writeText(currentUrl);
-    setCopied(true)
-    setTimeout(() => setCopied(false), 1500)
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
   }
 
   return (
@@ -81,17 +81,27 @@ export default function ModalHeader({
           </div>
 
           <div className="flex gap-4">
-            {copied ? <span className='flex items-center justify-center text-emerald-600'>
-                copied!
-              </span> : <button onClick={handleCopy} className="flex items-center gap-2 cursor-pointer hover-primary caption-md">
-              <span
-                className="material-symbols-outlined"
-                style={{ fontSize: '16px' }}
+            {
+              <button
+                onClick={handleCopy}
+                disabled={copied}
+                className="hover-primary flex items-center gap-2 cursor-pointer caption-md"
               >
-                link
-              </span>
-              Copy link
-            </button>}
+                {copied ? (
+                  <span className="text-emerald-600">copied!</span>
+                ) : (
+                  <>
+                    <span
+                      className="material-symbols-outlined"
+                      style={{ fontSize: '16px' }}
+                    >
+                      link
+                    </span>
+                    Copy link
+                  </>
+                )}
+              </button>
+            }
             <div className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-[#BA1A1A1A]">
               <button
                 onClick={onClose}

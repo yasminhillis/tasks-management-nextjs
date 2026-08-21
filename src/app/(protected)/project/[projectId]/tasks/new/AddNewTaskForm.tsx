@@ -54,7 +54,7 @@ export default function AddNewTaskForm({
     );
     if (!res.ok) {
       const error = await res.json();
-      showToast('Failed to load epics', false, 1500)
+      showToast(error.message ?? 'Failed to load epics', false, 1500)
       setIsLoading(false)
       return;
     }
@@ -93,7 +93,7 @@ export default function AddNewTaskForm({
   }));
 
   const epicOptions = epics.map((epic) => ({
-    label: `${epic.epic_id} ${epic.title}`,
+    label: `${epic.epic_id} ${formateEpicTitle(epic.title)}`,
     value: epic.id,
   }));
 
@@ -110,7 +110,6 @@ export default function AddNewTaskForm({
     register,
     control,
     handleSubmit,
-    setError,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(AddTaskSchema),
