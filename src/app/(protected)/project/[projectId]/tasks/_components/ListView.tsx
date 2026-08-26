@@ -1,3 +1,6 @@
+import ListTable from "./ListTable"
+
+
 export default function ListView({projectId}: {projectId: string}){
-    return <div>List</div>
+    return <ListTable projectId={projectId} />
 }
