@@ -482,7 +482,6 @@ body {
     padding: 1rem;
 
     color: var(--color-slate-500);
-    background: #fff;
     border: 2px dashed rgb(from var(--color-slate-200) r g b / 0.3);
     border-radius: var(--radius-md);
 
