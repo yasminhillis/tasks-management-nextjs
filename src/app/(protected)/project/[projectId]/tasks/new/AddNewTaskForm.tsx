@@ -125,7 +125,7 @@ export default function AddNewTaskForm({
       const result = await addNewTask({
         ...data,
         project_id: projectId,
-        due_date: data.due_date ? data.due_date.toISOString() : null,
+        due_date: data.due_date ? data.due_date.toISOString() : undefined,
       });
       if (!result.success) {
         showToast(result.message, false, 1500);
