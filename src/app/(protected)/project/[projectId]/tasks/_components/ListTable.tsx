@@ -4,46 +4,50 @@ import Initials from '@/components/Initials';
 import { useEffect, useState } from 'react';
 import type { Task } from '@/lib/types';
 import type { Status } from '@/lib/types';
+import { useRouter } from 'next/navigation';
 
 export default function ListTable({ projectId }: { projectId: string }) {
-  const [tasks, setTasks] = useState<Task[]>([]);
+  // const [tasks, setTasks] = useState<Task[]>([]);
   const [taskFetchStatus, setTaskFetchStatus] = useState<
     'idle' | 'loading' | 'success' | 'fetchError' | 'networkError'
   >('idle');
-  async function fetchTasks() {
-    try {
-      setTaskFetchStatus('loading');
-      const res = await fetch(`/api/tasks?projectId=${projectId}`);
-      if (!res.ok) {
-        setTaskFetchStatus('fetchError');
-      }
-      const { tasks } = await res.json();
-      setTasks(tasks);
-      console.log(tasks, 'tasks 9999988888');
-      setTaskFetchStatus('success');
-    } catch (error) {
-      setTaskFetchStatus('networkError');
-    }
-  }
-  useEffect(() => {
-    fetchTasks();
-  }, []);
+  const router = useRouter();
+  // async function fetchTasks() {
+  //   try {
+  //     setTaskFetchStatus('loading');
+  //     const res = await fetch(`/api/tasks?projectId=${projectId}`);
+  //     if (!res.ok) {
+  //       setTaskFetchStatus('fetchError');
+  //     }
+  //     const { tasks } = await res.json();
+  //     setTasks(tasks);
+  //     console.log(tasks, 'tasks 9999988888');
+  //     setTaskFetchStatus('success');
+  //   } catch (error) {
+  //     setTaskFetchStatus('networkError');
+  //   }
+  // }
+  // useEffect(() => {
+  //   fetchTasks();
+  // }, []);
+
+  const tasks: Task[] = [];
 
   //   const tasks = [
-  //     {
-  //       "assignee": {"id": "031b7dc1-326c-4f32-b0a6-bf2267b0a8ef", "name": "Yasmin Ayman", "email": "yasminhillis7@gmail.com", "department": "Frontend"},
-  //       "created_at": "2026-08-21T09:12:00.000000+00:00",
-  //       "created_by": {"id": "8a4e2f10-7b3d-4c9a-9e1f-2d5c6b8a9f01", "name": "Omar Farouk", "email": "omar.farouk@example.com", "department": "Backend"},
-  //       "description": "Implement pagination for the tasks table view",
-  //       "due_date": "2026-08-29T21:00:00+00:00",
-  //       "epic": {"id": "c1d4fa7a-3c80-4ea0-8378-d79c7f11bd36", "title": "test upbjmbdate test 72816", "epic_id": "EPIC-1"},
-  //       "epic_id": "c1d4fa7a-3c80-4ea0-8378-d79c7f11bd36",
-  //       "id": "3f8a1c22-4e5b-4a6d-9f1e-7c8b9d0a1b2c",
-  //       "project_id": "ddc3f2e6-588c-41d7-9d2f-3fc43fbf78ea",
-  //       "status": "IN_PROGRESS",
-  //       "task_id": "TASK-42",
-  //       "title": "Add pagination to task list"
-  //     },
+  // {
+  //   "assignee": {"id": "031b7dc1-326c-4f32-b0a6-bf2267b0a8ef", "name": "Yasmin Ayman", "email": "yasminhillis7@gmail.com", "department": "Frontend"},
+  //   "created_at": "2026-08-21T09:12:00.000000+00:00",
+  //   "created_by": {"id": "8a4e2f10-7b3d-4c9a-9e1f-2d5c6b8a9f01", "name": "Omar Farouk", "email": "omar.farouk@example.com", "department": "Backend"},
+  //   "description": "Implement pagination for the tasks table view",
+  //   "due_date": "2026-08-29T21:00:00+00:00",
+  //   "epic": {"id": "c1d4fa7a-3c80-4ea0-8378-d79c7f11bd36", "title": "test upbjmbdate test 72816", "epic_id": "EPIC-1"},
+  //   "epic_id": "c1d4fa7a-3c80-4ea0-8378-d79c7f11bd36",
+  //   "id": "3f8a1c22-4e5b-4a6d-9f1e-7c8b9d0a1b2c",
+  //   "project_id": "ddc3f2e6-588c-41d7-9d2f-3fc43fbf78ea",
+  //   "status": "IN_PROGRESS",
+  //   "task_id": "TASK-42",
+  //   "title": "Add pagination to task list"
+  // },
   //     {
   //       "assignee": {"id": "5b6c7d8e-9f0a-4b1c-8d2e-3f4a5b6c7d8e", "name": "Laila Ahmed", "email": "laila.ahmed@example.com", "department": "Design"},
   //       "created_at": "2026-08-21T10:45:22.100000+00:00",
@@ -114,7 +118,7 @@ export default function ListTable({ projectId }: { projectId: string }) {
   };
 
   return (
-    <table className="rounded-lg shadow-card">
+    <table className="rounded-lg shadow-card w-full">
       <thead className="bg-[#F1F3FF80] border-b border-b-[#C3C6D61A] h-[47px] w-full">
         <tr className="text-left">
           <th className="table-header-label w-[175px] px-6 py-[18.5px]">
@@ -131,7 +135,31 @@ export default function ListTable({ projectId }: { projectId: string }) {
       <tbody>
         {tasks.length === 0 ? (
           <tr>
-            <td colSpan={5}>No tasks found. Add a new task</td>
+            <td colSpan={5}>
+              <div className="flex flex-col items-center justify-center gap-4 h-[280px]">
+                <h4 className="flex items-center gap-2">
+                  <span
+                    className="material-symbols-outlined"
+                    style={{ fontSize: '16px' }}
+                  >
+                    warning
+                  </span>
+                  No tasks found
+                </h4>
+                <button
+                  onClick={() => router.push(`/project/${projectId}/tasks/new`)}
+                  className="hidden md:inline-flex rounded-xs items-center justify-center gap-2 px-[16px] py-[8px] shadow-blue-md bg-radial from-[#003D9B] to-[#0052CC] text-white text-sm cursor-pointer hover:from-[#1259cb] hover:to-[#246fdf] transition-colors font-semibold"
+                >
+                  <span
+                    className="material-symbols-outlined"
+                    style={{ color: '#fff', fontSize: '16px' }}
+                  >
+                    add_circle
+                  </span>
+                  Add New Task
+                </button>
+              </div>
+            </td>
           </tr>
         ) : (
           tasks.map((task) => (
