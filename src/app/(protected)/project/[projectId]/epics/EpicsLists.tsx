@@ -39,7 +39,6 @@ export default function EpicsList({
   pageSize,
   onEpicUpdate
 }: EpicListProps) {
-  // const [epicId, setEpicId] = useState('');
   const [networkError, setNetworkError] = useState('');
   const searchParams = useSearchParams()
   const epicId = searchParams.get('epicId') ?? '';
