@@ -636,7 +636,7 @@ body {
   }
 
   .table-cell-title {
-    font-size: var(--font-size-body-xs); /* 14px */
+    font-size: var(--font-size-body-xs); 
     font-weight: var(--font-weight-medium);
     line-height: 1;
     letter-spacing: var(--letter-spacing-normal);
@@ -644,12 +644,13 @@ body {
   }
 
   .table-status-badge {
-    font-size: var(--font-size-label-sm); /* 11px */
+    font-size: var(--font-size-label-sm); 
     font-weight: var(--font-weight-bold);
     line-height: 1;
     letter-spacing: var(--letter-spacing-normal);
     text-transform: uppercase;
-    /* color intentionally omitted — set per status dynamically, like statusColor elsewhere */
+    padding: 4px 8px;
+    border-radius: 2px;
   }
 
   .table-cell-date {

@@ -4,8 +4,6 @@ import { NextRequest } from "next/server";
 export async function GET(req: NextRequest) {
     const projectId = req.nextUrl.searchParams.get('projectId'); 
     const status = req.nextUrl.searchParams.get('status');
-    console.log(status, 'status');
-    
 
     try {
         let url = `${process.env.SUPABASE_URL}/rest/v1/project_tasks?project_id=eq.${projectId}`
