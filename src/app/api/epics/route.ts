@@ -24,7 +24,7 @@ export async function GET(req: NextRequest) {
     const error = await res.json();
     console.log(error, 'error');
     
-    return Response.json({ message: 'Fetching epics failed' }, { status: 404 });
+    return Response.json({ message: 'Fetching epics failed', error }, { status: 404 });
   }
 
   const contentRange = res.headers.get('content-range');

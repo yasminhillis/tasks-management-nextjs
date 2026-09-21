@@ -117,6 +117,7 @@
   --shadow-modal: 0px 25px 50px -12px rgba(0, 0, 0, 0.25);
 
   --shadow-card-task: 0px 4px 24px 0px rgba(4, 27, 60, 0.04);
+  --shadow-ring: 0px 0px 0px 1px rgba(0, 0, 0, 0.1);
   --line-height-title-card: 24.75px;
   --color-avatar-text: #001848;
   --color-task-id-link: #003d9b;
@@ -636,7 +637,7 @@ body {
   }
 
   .table-cell-title {
-    font-size: var(--font-size-body-xs); 
+    font-size: var(--font-size-body-xs);
     font-weight: var(--font-weight-medium);
     line-height: 1;
     letter-spacing: var(--letter-spacing-normal);
@@ -644,7 +645,7 @@ body {
   }
 
   .table-status-badge {
-    font-size: var(--font-size-label-sm); 
+    font-size: var(--font-size-label-sm);
     font-weight: var(--font-weight-bold);
     line-height: 1;
     letter-spacing: var(--letter-spacing-normal);
@@ -667,6 +668,31 @@ body {
     line-height: 1;
     letter-spacing: var(--letter-spacing-normal);
     color: var(--color-slate-900);
+  }
+
+  .task-details-title {
+    font-size: var(--font-size-headline-xl);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-headline-xl);
+    letter-spacing: var(--letter-spacing-normal);
+    color: var(--color-slate-900);
+  }
+
+  .card-id-badge {
+    font-size: var(--font-size-caption-xs);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-caption-xs);
+    letter-spacing: 1.2;
+    color: var(--color-task-id-link);
+  }
+
+  .section-label {
+    font-size: 10px;
+    font-weight: var(--font-weight-bold);
+    line-height: 15px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #434654;
   }
 }
 
