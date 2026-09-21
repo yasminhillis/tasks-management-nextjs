@@ -9,8 +9,8 @@ type EpicCardProps = {
   assignee?: string;
   createdBy: string;
   createdAt?: string;
-  deadline?: string | null,
-  sendEpicIdToParent: (id: string) => void
+  deadline?: string | null;
+  sendEpicIdToParent: (id: string) => void;
 };
 
 export default function EpicCard({
@@ -20,14 +20,20 @@ export default function EpicCard({
   createdBy,
   createdAt,
   deadline,
-  sendEpicIdToParent
+  sendEpicIdToParent,
 }: EpicCardProps) {
   const router = useRouter();
 
   return (
-    <Card onClick={() => sendEpicIdToParent(id)} extraStyles="shadow-sm md:border-l-[4px] md:border-l-[#004E32] w-auto">
+    <Card
+      onClick={() => sendEpicIdToParent(id)}
+      extraStyles="shadow-sm md:border-l-[4px] md:border-l-[#004E32] w-auto"
+    >
       <div className="flex justify-between">
-        <CardIdBadge id={id} extraStyles='mb-[11px] md:mb-[16px] px-[8px] py-[4px] md:px-[10px] md:py-[4px]'/>
+        <CardIdBadge
+          id={id}
+          extraStyles="mb-[11px] md:mb-[16px] px-[8px] py-[4px] md:px-[10px] md:py-[4px]"
+        />
         <div className="md:hidden">
           <span className="material-symbols-outlined">more_horiz</span>
         </div>
@@ -44,7 +50,7 @@ export default function EpicCard({
             <div className="inline-flex items-center gap-3 md:mb-[24px]">
               <Initials
                 name={assignee}
-                extraStyles="rounded-[12px] bg-[#65DCA4] text-[#002113] text-[14px] font-bold"
+                extraStyles="rounded-[12px] bg-[#65DCA4] text-[#002113] text-[14px] font-bold w-10 h-10"
                 mode="desktop"
                 state="success"
               />
@@ -62,29 +68,33 @@ export default function EpicCard({
                 <h3 className="text-[10px] font-bold tracking-[-0.5px] uppercase text-[#737685]">
                   DEADLINE
                 </h3>
-                <h4 className="caption-xs text-slate-900">{deadline ? deadline : 'No deadline specified'}</h4>
+                <h4 className="caption-xs text-slate-900">
+                  {deadline ? deadline : 'No deadline specified'}
+                </h4>
               </div>
             </div>
           </>
         ) : (
           <>
-            <div className='flex items-center justify-center gap-3 md:my-[10px]'>
+            <div className="flex items-center justify-center gap-3 md:my-[10px]">
               <div className="flex items-center justify-center w-[24px] h-[24px] bg-[#E0E8FF] rounded-full">
-                  <span
-                    className="material-symbols-outlined"
-                    style={{ fontSize: '15px', color: '#4F5F7B' }}
-                  >
-                    person_off
-                  </span>
-                </div>
-                <p className="body-md-medium">Unassigned</p>
+                <span
+                  className="material-symbols-outlined"
+                  style={{ fontSize: '15px', color: '#4F5F7B' }}
+                >
+                  person_off
+                </span>
+              </div>
+              <p className="body-md-medium">Unassigned</p>
             </div>
             <div className="flex justify-end md:hidden">
               <div className="flex flex-col items-end">
                 <h3 className="text-[10px] font-bold tracking-[-0.5px] uppercase text-[#737685]">
                   DEADLINE
                 </h3>
-                <h4 className="caption-xs text-slate-900">{deadline ? deadline : 'No deadline specified'}</h4>
+                <h4 className="caption-xs text-slate-900">
+                  {deadline ? deadline : 'No deadline specified'}
+                </h4>
               </div>
             </div>
           </>
@@ -114,7 +124,9 @@ export default function EpicCard({
           >
             calendar_today
           </span>
-          <h4 className="caption-xs opacity-80">{deadline ? deadline : 'No deadline specified'}</h4>
+          <h4 className="caption-xs opacity-80">
+            {deadline ? deadline : 'No deadline specified'}
+          </h4>
         </div>
       </div>
     </Card>
