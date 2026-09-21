@@ -104,7 +104,7 @@ export default function NavbarClient() {
               mode="desktop"
               name={name}
               onClick={toggleDropDown}
-              extraStyles="rounded-md cursor-pointer bg-primary-container text-white"
+              extraStyles="rounded-md cursor-pointer bg-primary-container text-white w-10 h-10"
               state="success"
             />
             {isDropDownOpen && (
