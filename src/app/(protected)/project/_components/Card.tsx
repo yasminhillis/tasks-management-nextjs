@@ -13,7 +13,7 @@ export default function Card({
   return (
     <div
       onClick={onClick}
-      className={`bg-white shadow-sm md:shadow-none w-full rounded-md p-6 cursor-pointer hover:shadow-sm ${extraStyles}`}
+      className={`flex flex-col bg-white items-start bg-red-100 shadow-sm md:shadow-none w-full rounded-md p-6 cursor-pointer hover:shadow-sm ${extraStyles}`}
     >
       {children}
     </div>

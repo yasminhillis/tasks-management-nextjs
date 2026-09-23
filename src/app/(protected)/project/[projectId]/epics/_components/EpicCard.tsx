@@ -27,24 +27,24 @@ export default function EpicCard({
   return (
     <Card
       onClick={() => sendEpicIdToParent(id)}
-      extraStyles="shadow-sm md:border-l-[4px] md:border-l-[#004E32] w-auto"
+      extraStyles="shadow-sm md:border-l-[4px] md:border-l-[#004E32] w-full"
     >
       <div className="flex justify-between">
         <CardIdBadge
           id={id}
           extraStyles="mb-[11px] md:mb-[16px] px-[8px] py-[4px] md:px-[10px] md:py-[4px]"
         />
-        <div className="md:hidden">
+        {/* <div className="md:hidden">
           <span className="material-symbols-outlined">more_horiz</span>
         </div>
         <div className="hidden md:inline">
           <span className="material-symbols-outlined">more_vert</span>
-        </div>
+        </div> */}
       </div>
-      <h3 className="text-[18px] font-semibold leading-[22.5px] text-slate-900 md:title-lg mb-[12px]">
+      <h3 className="text-[18px] font-semibold leading-[22.5px] text-slate-900 md:title-lg mb-[12px] break-all">
         {title}
       </h3>
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col items-start justify-center w-full">
         {assignee ? (
           <>
             <div className="inline-flex items-center gap-3 md:mb-[24px]">
@@ -76,8 +76,12 @@ export default function EpicCard({
           </>
         ) : (
           <>
-            <div className="flex items-center justify-center gap-3 md:my-[10px]">
-              <div className="flex items-center justify-center w-[24px] h-[24px] bg-[#E0E8FF] rounded-full">
+            <div className="inline-flex items-center gap-3 md:mb-[24px]">
+              <div
+                className="flex items-center justify-center bg-[#E0E8FF]
+              rounded-[12px] bg-[#65DCA4] text-[#002113] text-[14px] font-bold w-10 h-10
+              "
+              >
                 <span
                   className="material-symbols-outlined"
                   style={{ fontSize: '15px', color: '#4F5F7B' }}
@@ -85,7 +89,14 @@ export default function EpicCard({
                   person_off
                 </span>
               </div>
-              <p className="body-md-medium">Unassigned</p>
+              <div className="inline-flex flex-col">
+                <h2 className="order-2 md:order-1 text-[10px] leading-[15px] text-[#737685] md:caption-xs">
+                  Assignee
+                </h2>
+                <h4 className="order-1 md:order-2 caption-xs text-slate-900 md:body-sm">
+                  Unassigned
+                </h4>
+              </div>
             </div>
             <div className="flex justify-end md:hidden">
               <div className="flex flex-col items-end">
@@ -101,7 +112,7 @@ export default function EpicCard({
         )}
       </div>
 
-      <div className="flex md:justify-between items-center pt-[16px] border-t border-t-[#F1F3FF] hidden md:flex">
+      <div className="hidden items-center pt-[16px] border-t border-t-[#F1F3FF]  md:flex md:justify-between md:mt-auto w-full">
         <div className="flex items-center gap-[8px]">
           <span
             className="material-symbols-outlined"
