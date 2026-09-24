@@ -73,7 +73,6 @@ export default function ListTable({ projectId }: { projectId: string }) {
     <ListTableLoadingState />
   ) : (
     <>
-      <button onClick={fetchTasks}>load tasks</button>
       <table className="rounded-lg shadow-card w-full">
         <thead className="bg-[#F1F3FF80] border-b border-b-[#C3C6D61A] h-[47px] w-full">
           <tr className="text-left">
