@@ -1,7 +1,7 @@
 import ErrorScreen from '@/app/(protected)/_components/ErrorScreen';
 import { formatDate } from '@/app/(protected)/_utils/formatDate';
 import Initials from '@/components/Initials';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import type { Task } from '@/lib/types';
 import type { Status } from '@/lib/types';
 import { useRouter } from 'next/navigation';
@@ -11,14 +11,13 @@ export default function ListTable({ projectId }: { projectId: string }) {
   const [tasks, setTasks] = useState<Task[]>([]);
   
   const [taskFetchStatus, setTaskFetchStatus] = useState<
-    'idle' | 'loading' | 'success' | 'fetchError' | 'networkError'
-  >('idle');
+    'loading' | 'success' | 'fetchError' | 'networkError'
+  >('loading');
 
   const router = useRouter();
 
-  async function fetchTasks() {
-    try {
-      setTaskFetchStatus('loading');
+const fetchTasks = useCallback(async () => {
+      try {
       const res = await fetch(`/api/tasks?projectId=${projectId}`);
       if (!res.ok) {
         setTaskFetchStatus('fetchError');
@@ -27,14 +26,19 @@ export default function ListTable({ projectId }: { projectId: string }) {
       const { tasks } = await res.json();
       setTasks(tasks);
       setTaskFetchStatus('success');
-    } catch (error) {
+    } catch {
       setTaskFetchStatus('networkError');
     }
+}, [projectId])
+
+  function retryFetchTasks(){
+    setTaskFetchStatus('loading');
+    fetchTasks()
   }
 
   useEffect(() => {
     fetchTasks();
-  }, []);
+  }, [fetchTasks]);
 
   const statusColor = {
     IN_PROGRESS: { bg: '#CDDDFF', text: '#374763' },
@@ -52,7 +56,7 @@ export default function ListTable({ projectId }: { projectId: string }) {
       <ErrorScreen
         message={` We're having trouble retrieving your project tasks right now. Please try
         again in a moment.`}
-        onRetry={() => fetchTasks()}
+        onRetry={() => retryFetchTasks()}
         buttonElement={true}
       />
     );
@@ -69,7 +73,7 @@ export default function ListTable({ projectId }: { projectId: string }) {
     );
   }
 
-  return taskFetchStatus === 'loading' || taskFetchStatus === 'idle' ? (
+  return taskFetchStatus === 'loading' ? (
     <ListTableLoadingState />
   ) : (
     <>
