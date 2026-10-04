@@ -54,8 +54,9 @@ export default function Pagination({
     const leftEllipsis = currentPage - 1 - start > 2 ? '...' : '';
     const rightEllipsis = end - (currentPage + 1) > 2 ? '...' : '';
     const showOnePageLeft =
-      leftNeighbor && leftNeighbor - start === 2 ? currentPage - 2 : '';
-    const showOnePageRight = end - rightNeighbor === 2 ? currentPage + 2 : '';
+      currentPage - 1 - start === 2 ? currentPage - 2 : '';
+    const showOnePageRight =
+      end - (currentPage + 1) === 2 ? currentPage + 2 : '';
     return [
       start,
       showOnePageLeft,
