@@ -15,19 +15,90 @@ export default function Pagination({
   onPageChange,
   pageSize,
 }: PaginationProps) {
-  const totalPages = Math.ceil(totalCount / pageSize);
+  console.log(totalCount, 'totalCount');
 
-  const pageButtons = [...Array(totalPages)].map((_, index) => (
-    <button
-      key={index + 1}
-      onClick={() => onPageChange(index + 1)}
-      className={`w-[32px] h-[32px] rounded-xs flex items-center 
-            justify-center border border-[#C3C6D64D] ${currentPage === index + 1 ? 'border border-transparent bg-[#003D9B] text-white' : 'border border-[#C3C6D64D] text-[#434654]'}
-            font-bold text-xs cursor-pointer`}
-    >
-      {index + 1}
-    </button>
-  ));
+  function pagination(
+    start = 1,
+    currentPage: number,
+    end: number,
+    treshold = 5
+  ) {
+    if (currentPage > end)
+      throw new Error('current page cannot be bigger than the total pages');
+
+    if (currentPage < start)
+      throw new Error('current page cannot be smaller than the first page');
+
+    if (end === 1) return [1];
+    const totalPages = end - start + 1;
+    // console.log(totalPages)
+    if (totalPages <= treshold) {
+      const result = [];
+      for (let i = start; i < end + 1; i++) {
+        result.push(i);
+      }
+      return result;
+    }
+    if (currentPage === start) {
+      return [start, start + 1, start + 2, '...', end];
+    }
+
+    if (currentPage === end) {
+      return [start, '...', end - 2, end - 1, end];
+    }
+
+    const leftNeighbor = currentPage - 1 !== start ? currentPage - 1 : '';
+    // console.log(leftNeighbor, 'left')
+    const rightNeighbor = currentPage + 1 !== end ? currentPage + 1 : '';
+    // console.log(rightNeighbor, 'rightNeighbor')
+    const leftEllipsis = currentPage - 1 - start > 2 ? '...' : '';
+    const rightEllipsis = end - (currentPage + 1) > 2 ? '...' : '';
+    const showOnePageLeft =
+      leftNeighbor && leftNeighbor - start === 2 ? currentPage - 2 : '';
+    const showOnePageRight = end - rightNeighbor === 2 ? currentPage + 2 : '';
+    return [
+      start,
+      showOnePageLeft,
+      leftEllipsis,
+      leftNeighbor,
+      currentPage,
+      rightNeighbor,
+      rightEllipsis,
+      showOnePageRight,
+      end,
+    ].filter((item) => item !== '');
+  }
+  // [...Array(totalPages)]
+  const totalPages = Math.ceil(totalCount / pageSize);
+  if (totalPages <= 1) return null;
+  const paginationResult = pagination(1, currentPage, totalPages);
+  console.log(paginationResult, 'pagination');
+  console.log(currentPage, 'current');
+
+  const pageButtons = paginationResult.map((page, index) => {
+    if (typeof page === 'number') {
+      return (
+        <button
+          key={index + 1}
+          onClick={() => onPageChange(page)}
+          className={`w-[32px] h-[32px] rounded-xs flex items-center 
+              justify-center border border-[#C3C6D64D] ${currentPage === page ? 'border border-transparent bg-[#003D9B] text-white' : 'border border-[#C3C6D64D] text-[#434654]'}
+              font-bold text-xs cursor-pointer`}
+        >
+          {page}
+        </button>
+      );
+    } else {
+      return (
+        <span
+          key={page}
+          className="w-[32px] h-[32px] rounded-xs flex items-center justify-center border border-[#C3C6D64D] font-bold text-xs"
+        >
+          {page}
+        </span>
+      );
+    }
+  });
 
   function handlePageChange(page: number) {
     if (page < 1 || page > totalPages) return;
