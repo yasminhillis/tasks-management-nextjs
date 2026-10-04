@@ -15,8 +15,6 @@ export default function Pagination({
   onPageChange,
   pageSize,
 }: PaginationProps) {
-  console.log(totalCount, 'totalCount');
-
   function pagination(
     start = 1,
     currentPage: number,
@@ -31,7 +29,6 @@ export default function Pagination({
 
     if (end === 1) return [1];
     const totalPages = end - start + 1;
-    // console.log(totalPages)
     if (totalPages <= treshold) {
       const result = [];
       for (let i = start; i < end + 1; i++) {
@@ -48,9 +45,7 @@ export default function Pagination({
     }
 
     const leftNeighbor = currentPage - 1 !== start ? currentPage - 1 : '';
-    // console.log(leftNeighbor, 'left')
     const rightNeighbor = currentPage + 1 !== end ? currentPage + 1 : '';
-    // console.log(rightNeighbor, 'rightNeighbor')
     const leftEllipsis = currentPage - 1 - start > 2 ? '...' : '';
     const rightEllipsis = end - (currentPage + 1) > 2 ? '...' : '';
     const showOnePageLeft =
@@ -69,7 +64,6 @@ export default function Pagination({
       end,
     ].filter((item) => item !== '');
   }
-  // [...Array(totalPages)]
   const totalPages = Math.ceil(totalCount / pageSize);
   if (totalPages <= 1) return null;
   const paginationResult = pagination(1, currentPage, totalPages);
