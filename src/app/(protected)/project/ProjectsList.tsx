@@ -20,6 +20,7 @@ type ProjectListProps = {
   isFetched: boolean;
   fetchProjects: (page: number) => void;
   pageSize: number;
+  onPageChange: (page: number) => Promise<void>
 };
 
 export default function ProjectsList({
@@ -31,6 +32,7 @@ export default function ProjectsList({
   totalCount,
   fetchProjects,
   pageSize,
+  onPageChange
 }: ProjectListProps) {
   const router = useRouter();
 
@@ -118,8 +120,8 @@ export default function ProjectsList({
             currentPage={currentPage}
             totalCount={totalCount}
             isFetched={isFetched}
-            onPageChange={fetchProjects}
             pageSize={pageSize}
+            onPageChange={onPageChange}
           />
         </>
       )}
