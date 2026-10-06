@@ -17,7 +17,7 @@ export default function Pagination({
   onPageChange,
   pageSize,
 }: PaginationProps) {
-  const totalPages = Math.ceil(totalCount / pageSize);
+  const totalPages = Math.ceil(totalCount / pageSize);  
   if (totalPages <= 1) return null;
   const truncatedPagination = getTruncatedPagination(
     1,
