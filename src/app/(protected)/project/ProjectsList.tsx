@@ -10,6 +10,7 @@ import MobilePlusButton from './_components/MobilePlusButton';
 import Header from './_components/Header';
 import { formatDate } from '../_utils/formatDate';
 import type { Project } from '@/lib/types';
+import ProjectLoading from './ProjectLoading';
 
 type ProjectListProps = {
   projects: Project[];
@@ -18,9 +19,9 @@ type ProjectListProps = {
   currentPage: number;
   totalCount: number;
   isFetched: boolean;
-  fetchProjects: (page: number) => void;
+  fetchProjects: (page: number) => Promise<void>;
   pageSize: number;
-  onPageChange: (page: number) => Promise<void>
+  onPageChange: (page: number) => void
 };
 
 export default function ProjectsList({
@@ -84,16 +85,7 @@ export default function ProjectsList({
 
   return (
     <div className="px-8">
-      {loading === 'loading' && (
-        <>
-          <Header loading={loading === 'loading'} />
-          <div className="grid grid-cols-1 md:grid-cols-3 justify-items-center gap-[24px] max-h-[524px]">
-            {[...Array(6)].map((_, i) => (
-              <LoadingCard key={i} />
-            ))}
-          </div>
-        </>
-      )}
+      {loading === 'loading' && <ProjectLoading />}
 
       {loading === 'success' && error.length === 0 && projects.length > 0 && (
         <>
