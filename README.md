@@ -205,7 +205,7 @@ This project demonstrates real-world engineering skills:
 - Scalable architecture
 - Production-level workflows
 
-## 🔮 Future Improvements
+## Future Improvements
 
 - [ ] **Notifications**: alerts for assignments, mentions, and status changes
 - [ ] **Task comments**: discussion threads on each task
