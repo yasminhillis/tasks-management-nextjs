@@ -183,9 +183,8 @@ Dedicated pages and modals for deeper management:
 git clone https://github.com/yasminhillis/tasks-management-nextjs.git
 cd project-management-system
 pnpm install
-cp .env.example .env.local
 ```
-Fill in `.env.local` with your Supabase URL and anon key, then:
+create a `.env.local` with your Supabase URL and anon key, then:
 
 ```bash
 pnpm run dev
