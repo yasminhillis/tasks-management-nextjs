@@ -2,7 +2,6 @@
 import { useRouter } from 'next/navigation';
 import ProjectCard from './_components/ProjectCard';
 import ErrorScreen from '../_components/ErrorScreen';
-import LoadingCard from './_components/LoadingCard';
 import EmptyState from '../_components/EmptyState';
 import AddProjectCard from './_components/AddProjectCard';
 import Pagination from '../_components/Pagination';

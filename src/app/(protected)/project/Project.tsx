@@ -12,6 +12,7 @@ export default function Project() {
   const [fetchingStatus, setFetchingStatus] = useState<
     'loading' | 'success' | 'failed'
   >('loading');
+
   const [projects, setProjects] = useState<Project[]>([]);
   const [mobileProjects, setMobileProjects] = useState<Project[]>([]);
   const [isFetched, setIsFetched] = useState(false);
@@ -74,7 +75,7 @@ export default function Project() {
       setIsFetched(true);
       setTotalCount(totalCount);
       setFetchingStatus('success');
-    } catch (error) {
+    } catch {
       setError('Network error. Please try again later');
       setFetchingStatus('failed');
     }
