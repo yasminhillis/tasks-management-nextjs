@@ -167,12 +167,8 @@ Dedicated pages and modals for deeper management:
 - Next.js
 - TypeScript
 - Tailwind CSS
-- Prisma
-- PostgreSQL
-- NextAuth / Auth System
-- React Query / Zustand / Redux
-- Shadcn UI
-
+- React Query 
+- Redux
 ---
 
 ## 🚀 Getting Started
