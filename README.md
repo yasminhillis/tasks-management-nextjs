@@ -1,4 +1,4 @@
-# Tasly - Task Management
+# Taskly - Task Management
 
 A modern, scalable Project Management System built to help teams organize work, track progress, and collaborate efficiently.
 
@@ -24,7 +24,6 @@ Whether you're managing a startup team, internal operations, or software develop
 - Track progress visually using boards
 - Improve collaboration between members
 - Build a scalable foundation for future growth
-
 ---
 
 ## ✨ Features
@@ -164,22 +163,33 @@ Dedicated pages and modals for deeper management:
 
 ## 🛠 Tech Stack
 
-- Next.js
-- TypeScript
-- Tailwind CSS
-- React Query 
-- Redux
+- **Framework:** Next.js (App Router), React 19, TypeScript
+- **Styling:** Tailwind CSS v4
+- **State:** Redux Toolkit
+- **Forms & validation:** React Hook Form, Zod
+- **UI:** react-select, react-datepicker
 ---
 
 ## 🚀 Getting Started
 
-```bash
-git clone https://github.com/your-username/project-management-system.git
-cd project-management-system
-npm install
-npm run dev
-```
+### Prerequisites
 
+- Node.js 20.9 or later
+- A Supabase project
+
+### Setup
+
+```bash
+git clone https://github.com/yasminhillis/tasks-management-nextjs.git
+cd project-management-system
+pnpm install
+cp .env.example .env.local
+```
+Fill in `.env.local` with your Supabase URL and anon key, then:
+
+```bash
+pnpm run dev
+```
 Open:
 
 ```bash
@@ -191,26 +201,22 @@ http://localhost:3000
 This project demonstrates real-world engineering skills:
 
 - Authentication systems
-- Relational data modeling
-- Role-based access control
 - Complex CRUD flows
 - Drag & drop UI interactions
 - Scalable architecture
 - Production-level workflows
 
-### Perfect for showcasing full-stack development ability.
+## 🔮 Future Improvements
 
-## Future Improvements
-
-Notifications system
-Comments on tasks
-File attachments
-Activity logs
-Time tracking
-Dark mode
-Analytics dashboard
-Team permissions matrix
-Mobile app
+- [ ] **Notifications**: alerts for assignments, mentions, and status changes
+- [ ] **Task comments**: discussion threads on each task
+- [ ] **File attachments**: upload documents and images to tasks
+- [ ] **Activity logs**: a history of who changed what, and when
+- [ ] **Time tracking**: log time spent on tasks
+- [ ] **Analytics dashboard**: progress and workload insights per project
+- [ ] **Team permissions matrix**: fine-grained control over what each role can do
+- [ ] **Dark mode**: a theme toggle for the whole app
+- [ ] **Mobile app**: a companion app for on-the-go task management
 
 ## 👤 Author
 
