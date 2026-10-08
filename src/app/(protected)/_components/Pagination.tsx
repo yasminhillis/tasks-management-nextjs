@@ -17,7 +17,7 @@ export default function Pagination({
   onPageChange,
   pageSize,
 }: PaginationProps) {
-  const totalPages = Math.ceil(totalCount / pageSize);  
+  const totalPages = Math.ceil(totalCount / pageSize);
   if (totalPages <= 1) return null;
   const truncatedPagination = getTruncatedPagination(
     1,
@@ -60,10 +60,7 @@ export default function Pagination({
   if (totalPages <= 1) return null;
   return (
     isFetched && (
-      <div className="hidden md:flex justify-between items-center mb-[121px]">
-        <h3>
-          Showing {pageSize} of {totalCount} epics
-        </h3>
+      <div className="hidden md:flex justify-end items-center mb-[121px]">
         <div className="flex items-center gap-2">
           <button
             disabled={currentPage === 1}
