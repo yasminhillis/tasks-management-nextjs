@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams } from 'next/navigation';
+import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
 import InfiniteScroll from '../../../_components/InfiniteScroll';
 import PageWrapper from '../../_components/PageWrapper';
 import EpicsList from './EpicsLists';
@@ -17,10 +17,25 @@ export default function Epics() {
   const [loading, setLoading] = useState<
     'idle' | 'loading' | 'success' | 'failed'
   >('idle');
-  const [desktopCurrentPage, setDesktopCurrentPage] = useState(1);
   const [mobileCurrentPage, setMobileCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const [isFetched, setIsFetched] = useState(false);
+
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const pageParam = Number(searchParams.get('page'));
+  const currentPage = Number.isInteger(pageParam) && pageParam >= 1 ? pageParam : 1;
+  const router = useRouter(); 
+
+  // console.log(pathname, 'pathname');
+  // console.log(params, 'params');
+  // console.log(router, 'router');
+
+  function handlePageChange(page: number){
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('page', String(page));
+    router.push(`${pathname}?${params.toString()}`)
+  }
 
   useEffect(() => {
     function checkScreenWidth() {
@@ -51,7 +66,6 @@ export default function Epics() {
       setDesktopEpics(data);
       setMobileEpics(data);
       setMobileCurrentPage(page);
-      setDesktopCurrentPage(page);
       setTotalCount(totalCount);
       setError('');
       setIsFetched(true);
@@ -108,8 +122,8 @@ export default function Epics() {
   }
 
   useEffect(() => {
-    fetchEpics(1);    
-  }, []);
+    fetchEpics(currentPage);    
+  }, [currentPage]);
 
   return (
     <PageWrapper>
@@ -118,10 +132,10 @@ export default function Epics() {
         epics={isMobile ? mobileEpics : desktopEpics}
         error={error}
         loading={loading}
-        currentPage={isMobile ? mobileCurrentPage : desktopCurrentPage}
+        currentPage={currentPage}
         totalCount={totalCount}
         isFetched={isFetched}
-        onPageChange={fetchEpics}
+        onPageChange={handlePageChange}
         pageSize={EPICS_PAGE_SIZE}
         onEpicUpdate={onEpicUpdate}
       />
