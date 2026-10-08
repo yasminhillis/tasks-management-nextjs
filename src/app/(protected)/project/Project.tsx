@@ -12,6 +12,7 @@ export default function Project() {
   const [fetchingStatus, setFetchingStatus] = useState<
     'loading' | 'success' | 'failed'
   >('loading');
+
   const [projects, setProjects] = useState<Project[]>([]);
   const [mobileProjects, setMobileProjects] = useState<Project[]>([]);
   const [isFetched, setIsFetched] = useState(false);
@@ -20,21 +21,8 @@ export default function Project() {
   const [isMobile, setIsMobile] = useState(false);
   const searchParams = useSearchParams()
   const router = useRouter();
-  const pathname = usePathname()
-  console.log(pathname, 'pathname33');
-  console.log(searchParams.get('page'), 'searchParams.get(page)');
-  console.log(typeof searchParams.get('page'), 'searchParams.get(page)');
-  console.log(searchParams, 'searchParams');
-  console.log(typeof searchParams, 'typeof searchParams');
-  console.log(searchParams.toString(), 'searchParams toString');
-  
+  const pathname = usePathname();
   const pageParam = Number(searchParams.get('page'));
-  // const validatePage =  Number.isInteger(pageParam) && pageParam >= 1 ? pageParam : 1
-  // console.log(totalCount, 'totalCount 6785');
-  // const totalPages = Math.ceil(totalCount / PROJECTS_PAGE_SIZE);
-  
-  // const currentPage = (validatePage > totalPages) ? totalPages : validatePage;
-
   const currentPage = Number.isInteger(pageParam) && pageParam >= 1 ? pageParam : 1;
 
   useEffect(() => {
@@ -74,7 +62,7 @@ export default function Project() {
       setIsFetched(true);
       setTotalCount(totalCount);
       setFetchingStatus('success');
-    } catch (error) {
+    } catch {
       setError('Network error. Please try again later');
       setFetchingStatus('failed');
     }
