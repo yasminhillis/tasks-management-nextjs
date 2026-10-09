@@ -26,9 +26,10 @@ export async function GET(request: Request) {
   );
 
   if (!res.ok) {
+    const error = await res.json();
     return Response.json(
-      { message: 'Fetching projects failed. Please try again' },
-      { status: 400 }
+      { message: 'Fetching projects failed. Please try again', error },
+      { status: 400 },
     );
   }
 
