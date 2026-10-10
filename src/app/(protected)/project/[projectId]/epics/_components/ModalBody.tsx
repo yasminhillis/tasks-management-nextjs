@@ -78,7 +78,6 @@ export default function ModalBody({
   async function fetchTasksInsideEpics() {
     try {
       if (!epicId) return;
-      console.log(epicId, 'epicId');
       setTasksFetchingState('loading');
       const res = await fetch(`/api/epics/${epicId}/tasks`);
 
@@ -87,8 +86,6 @@ export default function ModalBody({
         return;
       }
       const { tasks, taskCount } = await res.json();
-      console.log(tasks, 'tasks');
-
       setTasks(tasks);
       setTaskCount(taskCount);
       setTasksFetchingState('success');
@@ -413,7 +410,6 @@ export default function ModalBody({
         ) : tasksFetchingState === 'success' && tasks.length > 0 ? (
           <>
             {tasks.map((task) => {
-              console.log(task.assignee, 'task');
               return (
                 <ModalTaskListItem
                   key={task.id}

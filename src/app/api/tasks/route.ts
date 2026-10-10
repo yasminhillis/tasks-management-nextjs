@@ -18,7 +18,6 @@ export async function GET(req: NextRequest) {
 
         if (!res.ok) {
             const error = await res.json();
-            console.error(error, 'error fetching tasks by statuss');  
             return Response.json({success: false, message: 'fetching tasks failed', error}, {status: res.status})
         }
         

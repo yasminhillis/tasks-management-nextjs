@@ -24,8 +24,6 @@ export default function Pagination({
     currentPage,
     totalPages
   );
-  console.log(truncatedPagination, 'pagination');
-  console.log(currentPage, 'current');
 
   const pageButtons = truncatedPagination.map((page, index) => {
     if (typeof page === 'number') {

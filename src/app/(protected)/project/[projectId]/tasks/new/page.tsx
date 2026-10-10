@@ -10,10 +10,7 @@ export default async function AddNewTask({
   searchParams: Promise<{ status?: string, epicId?: string }>;
 }){
     const { projectId } = await params;
-    const { status, epicId } = await searchParams;
-    
-    console.log(status, 'status');
-    
+    const { status, epicId } = await searchParams;    
     
     return <PageWrapper>
         <header className="mb-8">

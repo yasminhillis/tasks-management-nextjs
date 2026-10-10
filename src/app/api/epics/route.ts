@@ -21,9 +21,7 @@ export async function GET(req: NextRequest) {
   );
 
   if (!res.ok) {
-    const error = await res.json();
-    console.log(error, 'error');
-    
+    const error = await res.json();    
     return Response.json({ message: 'Fetching epics failed', error }, { status: 404 });
   }
 

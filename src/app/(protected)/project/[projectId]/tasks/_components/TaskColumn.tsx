@@ -39,7 +39,6 @@ export default function TaskColumn({
 
       if (!res.ok) {
         const error = await res.json();
-        console.error(error, `Error fetching ${statusForRequest} column`);
         onFetchError('fetchError');
         return;
       }

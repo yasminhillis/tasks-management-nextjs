@@ -29,8 +29,6 @@ const DisplayIconAndText = ({
 type OptionType = { value: string; label: string };
 
 const customSingleValue = (props: SingleValueProps<OptionType>) => {
-  console.log(props, 'props22');
-
   return (
     <components.SingleValue {...props}>
       <DisplayIconAndText label={props.data.label} value={props.data.value} />

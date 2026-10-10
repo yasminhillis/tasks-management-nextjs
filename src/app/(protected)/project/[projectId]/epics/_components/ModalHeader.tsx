@@ -59,7 +59,6 @@ export default function ModalHeader({
 
   function handleCopy() {
     const currentUrl = window.location.href;
-    console.log(currentUrl, 'curr url');
     navigator.clipboard.writeText(currentUrl);
     setCopied(true);
     setTimeout(() => setCopied(false), 1500);

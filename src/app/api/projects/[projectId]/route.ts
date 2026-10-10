@@ -1,8 +1,6 @@
 import { getApiHeaders } from "@/lib/utils/getApiHeaders";
 
-export async function GET(req: Request,{ params }: { params: Promise<{ projectId: string }> }) {
-    console.log('kkakasoj');
-    
+export async function GET(req: Request,{ params }: { params: Promise<{ projectId: string }> }) {    
     const { projectId } = await params;
     try {
 
