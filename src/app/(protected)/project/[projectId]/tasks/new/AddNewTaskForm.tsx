@@ -46,8 +46,6 @@ export default function AddNewTaskForm({
   async function fetchEpics(page: number, limit = 5) {
     if (isLoading) return;
     setIsLoading(true);
-    console.log(page, 'PAGE');
-
     const offset = (page - 1) * limit;
     const res = await fetch(
       `/api/epics?projectId=${projectId}&limit=${limit}&offset=${offset}&order=created_at.asc`
@@ -141,13 +139,10 @@ export default function AddNewTaskForm({
     }
   }
   function handleMenuScrollToBottom(e: TouchEvent | WheelEvent) {
-    console.log('Reached the bottom of the menu!');
     setPage((prev) => prev + 1);
   }
 
-  return (
-    console.log(epics, 'epics inside return'),
-    
+  return (    
     <form
       onSubmit={handleSubmit(onSubmit)}
       className="w-full max-w-[928px] md:bg-white rounded-md shadow-card px-6 py-4 flex flex-col gap-8"

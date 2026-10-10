@@ -27,10 +27,6 @@ export default function Epics() {
   const currentPage = Number.isInteger(pageParam) && pageParam >= 1 ? pageParam : 1;
   const router = useRouter(); 
 
-  // console.log(pathname, 'pathname');
-  // console.log(params, 'params');
-  // console.log(router, 'router');
-
   function handlePageChange(page: number){
     const params = new URLSearchParams(searchParams.toString());
     params.set('page', String(page));

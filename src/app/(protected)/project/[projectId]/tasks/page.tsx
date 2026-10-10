@@ -20,7 +20,6 @@ export default function Tasks({
   const isBoard = view === 'board';
   const [projectName, setProjectName] = useState('');
   const {isMobile} = useIsMobile();
-  console.log(isMobile, 'isMobile');
 
   async function getProjectName(projectId: string) {
     const res = await fetch(`/api/projects/${projectId}`);
@@ -32,9 +31,7 @@ export default function Tasks({
     getProjectName(projectId);
   }, [projectId]);
 
-  return (
-    console.log(isMobile, 'isMobile'),
-    
+  return (    
     <PageWrapper fillHeight={isBoard}>
       <Header
         desktopTitle="Active Workboard"
