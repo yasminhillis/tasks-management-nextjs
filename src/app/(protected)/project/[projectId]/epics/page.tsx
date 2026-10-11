@@ -53,8 +53,12 @@ export default function Epics() {
       setLoading('loading');
       if (!res.ok) {
         const error = await res.json();
+        if (error.message === "page is out of range") {
+          setError(error.message)
+        } else {
+          setError(error.message || 'Epic fetching failed');
+        }
         setLoading('failed');
-        setError(error.message || 'Epic fetching failed');
         return;
       }
 
