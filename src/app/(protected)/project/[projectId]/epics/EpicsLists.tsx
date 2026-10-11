@@ -13,6 +13,7 @@ import MobilePlusButton from '../../_components/MobilePlusButton';
 import EpicModal from './_components/EpicModal';
 import { formatDate } from '@/app/(protected)/_utils/formatDate';
 import EmptyStateFooter from './_components/EmptyStateFooter';
+import Link from 'next/link';
 
 type EpicListProps = {
   epics: Epic[];
@@ -57,6 +58,14 @@ export default function EpicsList({
       navigateToFirstPage();
     }
   }, [navigateToFirstPage]);
+
+
+  if (epics.length === 0 && totalCount > 0) {
+    return <div className='flex flex-col h-full items-center justify-center'>
+      <h1>The page you requested does not exist</h1>
+      <Link href={`/project/${projectId}/epics?page=1`}>Go to epics main page</Link>
+    </div>
+  }
 
   if (
     loading === 'failed' &&
