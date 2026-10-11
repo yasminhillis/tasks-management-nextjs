@@ -24,7 +24,7 @@ type EpicListProps = {
   totalCount: number;
   onPageChange: (page: number) => void;
   pageSize: number;
-  onEpicUpdate: (id: string, data: Partial<Epic>) => void
+  onEpicUpdate: (id: string, data: Partial<Epic>) => void;
 };
 
 export default function EpicsList({
@@ -37,24 +37,32 @@ export default function EpicsList({
   totalCount,
   onPageChange,
   pageSize,
-  onEpicUpdate
+  onEpicUpdate,
 }: EpicListProps) {
   const [networkError, setNetworkError] = useState('');
-  const searchParams = useSearchParams()
+  const searchParams = useSearchParams();
   const epicId = searchParams.get('epicId') ?? '';
   const router = useRouter();
 
-  function navigateToFirstPage(){
-    router.push(`?page=1`)
+  function navigateToFirstPage() {
+    router.push(`?page=1`);
   }
 
   useEffect(() => {
-    if (loading === 'failed' && error?.length > 0 && error === 'page is out of range') {
-      navigateToFirstPage()
+    if (
+      loading === 'failed' &&
+      error?.length > 0 &&
+      error === 'page is out of range'
+    ) {
+      navigateToFirstPage();
     }
-  }, [navigateToFirstPage])
+  }, [navigateToFirstPage]);
 
-  if (loading === 'failed' && error?.length > 0 && error === 'Fetching epics failed') {
+  if (
+    loading === 'failed' &&
+    error?.length > 0 &&
+    error === 'Fetching epics failed'
+  ) {
     return (
       <ErrorScreen
         message={`We're having trouble retrieving your
@@ -65,11 +73,6 @@ export default function EpicsList({
       />
     );
   }
-
-  // if (loading === 'failed' && error?.length > 0 && error === 'page is out of range') {
-  //   // router.push(`project/${projectId}/epics?page=${lastPage}`)
-  //   navigateToFirstPage()
-  // }
 
   if (
     loading === 'success' &&
@@ -130,7 +133,7 @@ export default function EpicsList({
       </PageWrapper>
     );
   }
-  
+
   return (
     <div>
       {loading === 'success' &&
@@ -170,9 +173,11 @@ export default function EpicsList({
             />
 
             <div className="grid sm:grid-cols-2 md:grid-cols-2 justify-items-center gap-6 mb-6 md:mb-10">
-              {epics.map((epic: Epic) => (                
+              {epics.map((epic: Epic) => (
                 <EpicCard
-                  sendEpicIdToParent={() => router.push(`/project/${projectId}/epics?epicId=${epic.id}`)}
+                  sendEpicIdToParent={() =>
+                    router.push(`/project/${projectId}/epics?epicId=${epic.id}`)
+                  }
                   id={epic.epic_id}
                   key={epic.epic_id}
                   title={epic.title}
