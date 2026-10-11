@@ -44,7 +44,17 @@ export default function EpicsList({
   const epicId = searchParams.get('epicId') ?? '';
   const router = useRouter();
 
-  if (loading === 'failed' && error?.length > 0) {
+  function navigateToFirstPage(){
+    router.push(`?page=1`)
+  }
+
+  useEffect(() => {
+    if (loading === 'failed' && error?.length > 0 && error === 'page is out of range') {
+      navigateToFirstPage()
+    }
+  }, [navigateToFirstPage])
+
+  if (loading === 'failed' && error?.length > 0 && error === 'Fetching epics failed') {
     return (
       <ErrorScreen
         message={`We're having trouble retrieving your
@@ -55,6 +65,11 @@ export default function EpicsList({
       />
     );
   }
+
+  // if (loading === 'failed' && error?.length > 0 && error === 'page is out of range') {
+  //   // router.push(`project/${projectId}/epics?page=${lastPage}`)
+  //   navigateToFirstPage()
+  // }
 
   if (
     loading === 'success' &&

@@ -21,8 +21,13 @@ export async function GET(req: NextRequest) {
   );
 
   if (!res.ok) {
-    const error = await res.json();    
-    return Response.json({ message: 'Fetching epics failed', error }, { status: 404 });
+    const error = await res.json();  
+    console.log(error, 'error');
+    console.log(error.code, 'error.code');
+    if (error.code === "PGRST103"){
+      return Response.json({ message: 'page is out of range', error}, { status: 404 })
+    } 
+    return Response.json({ message: 'Fetching epics failed', error}, { status: 404 });
   }
 
   const contentRange = res.headers.get('content-range');
