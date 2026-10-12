@@ -24,6 +24,8 @@ export default function Epics() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const pageParam = Number(searchParams.get('page'));
+  console.log(pageParam, 'pageParam');
+  
   const currentPage = Number.isInteger(pageParam) && pageParam >= 1 ? pageParam : 1;
   const router = useRouter(); 
 

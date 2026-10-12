@@ -8,6 +8,7 @@ type ErrorScreenProps = {
   message: string;
   buttonElement?: boolean;
   extraStyles?: string;
+  buttonLabel?: string
 };
 
 export default function ErrorScreen({
@@ -16,6 +17,7 @@ export default function ErrorScreen({
   message,
   buttonElement,
   extraStyles,
+  buttonLabel
 }: ErrorScreenProps) {
   const router = useRouter();
 
@@ -35,7 +37,7 @@ export default function ErrorScreen({
           onClick={() => onRetry?.()}
           className="px-4 py-[8px] bg-[#0052CC] hover:bg-[#1966e1] transition-colors font-semibold text-white cursor-pointer rounded-xs"
         >
-          Retry Connection
+          {buttonLabel ? buttonLabel :'Retry Connection'}
         </button>
       ) : null}
     </div>
