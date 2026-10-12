@@ -1,6 +1,6 @@
 'use client';
 import Header from '../../_components/Header';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import EpicCard from './_components/EpicCard';
 import ErrorScreen from '@/app/(protected)/_components/ErrorScreen';
 import PageWrapper from '../../_components/PageWrapper';
@@ -13,7 +13,6 @@ import MobilePlusButton from '../../_components/MobilePlusButton';
 import EpicModal from './_components/EpicModal';
 import { formatDate } from '@/app/(protected)/_utils/formatDate';
 import EmptyStateFooter from './_components/EmptyStateFooter';
-import Link from 'next/link';
 
 type EpicListProps = {
   epics: Epic[];
@@ -44,11 +43,6 @@ export default function EpicsList({
   const searchParams = useSearchParams();
   const epicId = searchParams.get('epicId') ?? '';
   const router = useRouter();
-
-  function navigateToFirstPage() {
-    router.push(`?page=1`);
-  }
-
 
   if (epics.length === 0 && totalCount > 0 && loading === 'success' || loading === 'failed' &&
       error?.length > 0 &&
