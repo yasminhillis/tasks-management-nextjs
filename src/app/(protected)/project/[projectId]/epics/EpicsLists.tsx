@@ -49,22 +49,30 @@ export default function EpicsList({
     router.push(`?page=1`);
   }
 
-  useEffect(() => {
-    if (
-      loading === 'failed' &&
+  // useEffect(() => {
+  //   if (
+      // loading === 'failed' &&
+      // error?.length > 0 &&
+      // error === 'page is out of range'
+  //   ) {
+  //     navigateToFirstPage();
+  //   }
+  // }, [navigateToFirstPage]);
+
+
+  if (epics.length === 0 && totalCount > 0 && loading === 'success' || loading === 'failed' &&
       error?.length > 0 &&
-      error === 'page is out of range'
-    ) {
-      navigateToFirstPage();
-    }
-  }, [navigateToFirstPage]);
-
-
-  if (epics.length === 0 && totalCount > 0) {
-    return <div className='flex flex-col h-full items-center justify-center'>
-      <h1>The page you requested does not exist</h1>
-      <Link href={`/project/${projectId}/epics?page=1`}>Go to epics main page</Link>
-    </div>
+      error === 'page is out of range') {
+    // return <div className='flex flex-col h-full items-center justify-center'>
+    //   <h1>The page you requested does not exist</h1>
+    //   <Link href={`/project/${projectId}/epics?page=1`}>Go to epics main page</Link>
+    // </div>
+    return <ErrorScreen
+        message={`The page you requested does not exist.`}
+        buttonElement
+        buttonLabel='Go to epics main page'
+        onRetry={() => router.push(`/project/${projectId}/epics?page=1`)}
+      />
   }
 
   if (
