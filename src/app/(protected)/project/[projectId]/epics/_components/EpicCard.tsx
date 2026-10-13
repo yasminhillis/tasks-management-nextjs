@@ -25,6 +25,8 @@ export default function EpicCard({
   const router = useRouter();
 
   return (
+    console.log(id, 'id'),
+    
     <Card
       onClick={() => sendEpicIdToParent(id)}
       extraStyles="shadow-sm md:border-l-[4px] md:border-l-[#004E32] w-full"

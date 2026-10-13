@@ -43,6 +43,7 @@ export default function EpicsList({
   const searchParams = useSearchParams();
   const epicId = searchParams.get('epicId') ?? '';
   const router = useRouter();
+console.log(currentPage, 'currentPage');
 
   if (epics.length === 0 && totalCount > 0 && fetchStatus === 'success' || fetchStatus === 'failed' &&
       error?.length > 0 &&
@@ -51,7 +52,7 @@ export default function EpicsList({
         message={`The page you requested does not exist.`}
         buttonElement
         buttonLabel='Go to epics main page'
-        onRetry={() => router.push(`/project/${projectId}/epics?page=1`)}
+        onRetry={() => router.push(`/project/${projectId}/epics?page=${currentPage}`)}
       />
   }
 
@@ -66,7 +67,7 @@ export default function EpicsList({
                 project epics right now. Please try
                 again in a moment.`}
         buttonElement
-        onRetry={() => onPageChange(1)}
+        onRetry={() => onPageChange(currentPage)}
       />
     );
   }
@@ -173,7 +174,7 @@ export default function EpicsList({
               {epics.map((epic: Epic) => (
                 <EpicCard
                   sendEpicIdToParent={() =>
-                    router.push(`/project/${projectId}/epics?epicId=${epic.id}`)
+                    router.push(`/project/${projectId}/epics?epicId=${epic.id}&page=${currentPage}`)
                   }
                   id={epic.epic_id}
                   key={epic.epic_id}
@@ -189,7 +190,7 @@ export default function EpicsList({
               <EpicModal
                 projectId={projectId}
                 epicId={epicId}
-                onClose={() => router.push(`/project/${projectId}/epics`)}
+                onClose={() => router.push(`/project/${projectId}/epics?page=${currentPage}`)}
                 onEpicUpdate={onEpicUpdate}
               />
             )}
