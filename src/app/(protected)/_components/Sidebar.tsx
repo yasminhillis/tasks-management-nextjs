@@ -11,6 +11,7 @@ export default function Sidebar() {
   const dispatch = useAppDispatch();
 
   const pathname = usePathname();
+  console.log(pathname, 'pathname99');
 
   const isOnProjectRoute =
     pathname.split('/').length < 3 && pathname.split('/')[1] === 'project';
@@ -54,7 +55,7 @@ export default function Sidebar() {
               {items.map((item) => (
                 <Link
                   key={item.label}
-                  className={`flex items-center text-[#041B3C99]  py-[10px] cursor-pointer text-sm font-medium focus:bg-white focus:text-[#003D9B] transition-colors rounded-sm hover:text-primary-container ${isSidebarOpen ? 'px-3 gap-2' : 'justify-center px-0'} visited:bg-white md:px-3 md:rounded-sm`}
+                  className={`flex items-center py-[10px] cursor-pointer text-sm font-medium ${item.href.split('?')[0] === pathname ? 'bg-white text-[#003D9B]' : 'text-[#041B3C99] hover:text-primary-container'} transition-colors rounded-sm ${isSidebarOpen ? 'px-3 gap-2' : 'justify-center px-0'} md:px-3 md:rounded-sm`}
                   href={item.href}
                   style={{
                     fontVariationSettings: item.mobileIconFilled
