@@ -17,7 +17,7 @@ import EmptyStateFooter from './_components/EmptyStateFooter';
 type EpicListProps = {
   epics: Epic[];
   error: string;
-  loading: 'idle' | 'loading' | 'success' | 'failed';
+  fetchStatus: 'loading' | 'success' | 'failed';
   currentPage: number;
   projectId: string;
   isFetched: boolean;
@@ -31,7 +31,7 @@ export default function EpicsList({
   projectId,
   epics,
   error,
-  loading,
+  fetchStatus,
   currentPage,
   isFetched,
   totalCount,
@@ -44,7 +44,7 @@ export default function EpicsList({
   const epicId = searchParams.get('epicId') ?? '';
   const router = useRouter();
 
-  if (epics.length === 0 && totalCount > 0 && loading === 'success' || loading === 'failed' &&
+  if (epics.length === 0 && totalCount > 0 && fetchStatus === 'success' || fetchStatus === 'failed' &&
       error?.length > 0 &&
       error === 'page is out of range') {
     return <ErrorScreen
@@ -56,7 +56,7 @@ export default function EpicsList({
   }
 
   if (
-    loading === 'failed' &&
+    fetchStatus === 'failed' &&
     error?.length > 0 &&
     error === 'Fetching epics failed'
   ) {
@@ -72,7 +72,7 @@ export default function EpicsList({
   }
 
   if (
-    loading === 'success' &&
+    fetchStatus === 'success' &&
     error.length === 0 &&
     epics.length === 0 &&
     isFetched
@@ -96,7 +96,7 @@ export default function EpicsList({
     );
   }
 
-  if ((loading === 'loading' || loading === 'idle') && !isFetched) {
+  if ((fetchStatus === 'loading') && !isFetched) {
     return (
       <PageWrapper>
         <Header
@@ -105,7 +105,7 @@ export default function EpicsList({
           materialIcon="add"
           mobileTitle=""
           mobileStyles=""
-          loading={loading === 'loading' || loading === 'idle'}
+          fetchStatus={fetchStatus === 'loading' || fetchStatus === 'idle'}
           searchBar={
             <div className="flex items-center bg-[#D7E2FF] px-[12px] py-[6px] rounded-[2px]">
               <span
@@ -133,7 +133,7 @@ export default function EpicsList({
 
   return (
     <div>
-      {loading === 'success' &&
+      {fetchStatus === 'success' &&
         error.length === 0 &&
         epics?.length > 0 &&
         isFetched && (
