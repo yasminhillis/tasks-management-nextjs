@@ -105,7 +105,7 @@ export default function EpicsList({
           materialIcon="add"
           mobileTitle=""
           mobileStyles=""
-          fetchStatus={fetchStatus === 'loading' || fetchStatus === 'idle'}
+          fetchStatus={fetchStatus === 'loading'}
           searchBar={
             <div className="flex items-center bg-[#D7E2FF] px-[12px] py-[6px] rounded-[2px]">
               <span
