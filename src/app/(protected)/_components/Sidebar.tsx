@@ -11,7 +11,6 @@ export default function Sidebar() {
   const dispatch = useAppDispatch();
 
   const pathname = usePathname();
-  console.log(pathname, 'pathname99');
 
   const isOnProjectRoute =
     pathname.split('/').length < 3 && pathname.split('/')[1] === 'project';
