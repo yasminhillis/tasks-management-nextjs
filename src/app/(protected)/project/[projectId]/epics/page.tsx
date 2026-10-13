@@ -14,9 +14,9 @@ export default function Epics() {
   const [mobileEpics, setMobileEpics] = useState<Epic[]>([]);
   const [isMobile, setIsMobile] = useState(false);
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState<
-    'idle' | 'loading' | 'success' | 'failed'
-  >('idle');
+  const [fetchStatus, setFetchStatus] = useState<
+   'loading' | 'success' | 'failed'
+  >('loading');
   const [mobileCurrentPage, setMobileCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const [isFetched, setIsFetched] = useState(false);
@@ -52,7 +52,6 @@ export default function Epics() {
       const res = await fetch(
         `/api/epics?projectId=${projectId}&limit=${EPICS_PAGE_SIZE}&offset=${offset}&order=created_at.asc`
       );
-      setLoading('loading');
       if (!res.ok) {
         const error = await res.json();
         if (error.message === "page is out of range") {
@@ -60,7 +59,7 @@ export default function Epics() {
         } else {
           setError(error.message || 'Epic fetching failed');
         }
-        setLoading('failed');
+        setFetchStatus('failed');
         return;
       }
 
@@ -71,10 +70,10 @@ export default function Epics() {
       setTotalCount(totalCount);
       setError('');
       setIsFetched(true);
-      setLoading('success');
+      setFetchStatus('success');
     } catch (error) {
       setError('Network error. Please try again later');
-      setLoading('failed');
+      setFetchStatus('failed');
     }
   }
 
@@ -88,7 +87,7 @@ export default function Epics() {
 
       if (!res.ok) {
         const error = await res.json();
-        setLoading('failed');
+        setFetchStatus('failed');
         setError(error.message || 'Epic fetching failed');
         return;
       }
@@ -102,10 +101,10 @@ export default function Epics() {
       setMobileCurrentPage(page);
       setTotalCount(totalCount);
       setIsFetched(true);
-      setLoading('success');
+      setFetchStatus('success');
     } catch (error) {
       setError('Network error. Please try again later');
-      setLoading('failed');
+      setFetchStatus('failed');
     }
   }
 
@@ -133,7 +132,7 @@ export default function Epics() {
         projectId={projectId}
         epics={isMobile ? mobileEpics : desktopEpics}
         error={error}
-        loading={loading}
+        fetchStatus={fetchStatus}
         currentPage={currentPage}
         totalCount={totalCount}
         isFetched={isFetched}

@@ -11,7 +11,7 @@ type HeaderProps = {
   materialIcon?: string;
   mobileStyles?: string;
   searchBar?: React.ReactNode;
-  loading?: boolean;
+  fetchStatus?: boolean;
   handleBtnClick?: () => void;
   headerControls?: React.ReactNode;
 };
@@ -26,11 +26,11 @@ export default function Header({
   materialIcon,
   mobileStyles,
   searchBar,
-  loading,
+  fetchStatus,
   handleBtnClick,
   headerControls
 }: HeaderProps) {
-  if (loading) {
+  if (fetchStatus) {
     return (
       <div className="font-sans">
         <div className="md:hidden mb-8">
