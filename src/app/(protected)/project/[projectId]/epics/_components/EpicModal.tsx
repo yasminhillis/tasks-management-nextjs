@@ -24,6 +24,9 @@ export default function EpicModal({ epicId, projectId, onClose, onEpicUpdate }: 
   const [epic, setEpic] = useState<Epic | null>(null);
   const [membersData, setMembersData] = useState<MemberData[]>([])
   const [membersStatus, setMembersStatus] = useState<'idle' | 'loading' | 'failed' | 'success'>('idle')
+// console.log(`/api/epics/${epicId}?projectId=${projectId}`),
+console.log(epicId, 'epic id'),
+console.log(projectId, 'projectId'),
 
   useEffect(() => {
     const fetchEpic = async () => {      
