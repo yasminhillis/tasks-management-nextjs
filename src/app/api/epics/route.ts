@@ -16,9 +16,8 @@ export async function GET(req: NextRequest) {
 
   // const url = `${process.env.SUPABASE_URL}/rest/v1/project_epics?project_id=eq.${projectId}&limit=${limit}&offset=${offset}&order=${order}&title=ilike.%25${title}%25`;
   // console.log(url, 'url');
-  const url = title
-    ? `${process.env.SUPABASE_URL}/rest/v1/project_epics?project_id=eq.${projectId}&limit=${limit}&offset=${offset}&order=${order}&title=ilike.%25${title}%25`
-    : `${process.env.SUPABASE_URL}/rest/v1/project_epics?project_id=eq.${projectId}&limit=${limit}&offset=${offset}&order=${order}`;
+  const url = `${process.env.SUPABASE_URL}/rest/v1/project_epics?project_id=eq.${projectId}&limit=${limit}&offset=${offset}&order=${order}${title ? `&title=ilike.%25${title}%25` : ''}`;
+
   console.log(url, 'url 222ddd');
 
   const res = await fetch(url, {
