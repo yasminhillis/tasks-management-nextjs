@@ -35,12 +35,12 @@ export async function GET(req: NextRequest) {
     if (error.code === 'PGRST103') {
       return Response.json(
         { message: 'page is out of range', error },
-        { status: 404 }
+        { status: res.status }
       );
     }
     return Response.json(
       { message: 'Fetching epics failed', error },
-      { status: 404 }
+      { status: res.status }
     );
   }
 
@@ -49,5 +49,5 @@ export async function GET(req: NextRequest) {
 
   const epics = await res.json();
   // console.log(epics);
-  return Response.json({ data: epics, totalCount }, { status: 200 });
+  return Response.json({ data: epics, totalCount }, { status: res.status });
 }
