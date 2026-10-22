@@ -1,6 +1,6 @@
 'use client';
 import Header from '../../_components/Header';
-import { ReactEventHandler, ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import EpicCard from './_components/EpicCard';
 import ErrorScreen from '@/app/(protected)/_components/ErrorScreen';
 import PageWrapper from '../../_components/PageWrapper';
@@ -48,41 +48,6 @@ export default function EpicsList({
   const searchParams = useSearchParams();
   const epicId = searchParams.get('epicId') ?? '';
   const router = useRouter();
-  console.log(currentPage, 'currentPage');
-
-  // async function search() {
-  //   const offset = (currentPage - 1) * pageSize;
-  //   const res = await fetch(
-  //     `/api/epics?projectId=${projectId}&limit=${pageSize}&offset=${offset}&order=created_at.asc&title=${title}`
-  //   );
-  //   if (!res.ok) {
-  //     const error = await res.json();
-  //     if (error.message === 'page is out of range') {
-  //       return (
-  //         <ErrorScreen
-  //           message={`The page you requested does not exist.`}
-  //           buttonElement
-  //           buttonLabel="Go to epics main page"
-  //           onRetry={() =>
-  //             router.push(`/project/${projectId}/epics?page=${currentPage}`)
-  //           }
-  //         />
-  //       );
-  //     } else {
-  //       <ErrorScreen
-  //         message={`We're having trouble retrieving your
-  //               project epics right now. Please try
-  //               again in a moment.`}
-  //         buttonElement
-  //         onRetry={() => onPageChange(currentPage)}
-  //       />;
-  //     }
-  //   }
-  //   const { data, totalCount } = await res.json();
-    
-  // }
-
-
 
   if (
     (epics.length === 0 && totalCount > 0 && fetchStatus === 'success') ||
@@ -177,10 +142,6 @@ export default function EpicsList({
       </PageWrapper>
     );
   }
-
- 
-
-  // console.log(title, 'title55');
 
   function debounce(
     handler: (e: React.ChangeEvent<HTMLInputElement>) => void,

@@ -29,10 +29,7 @@ export default function Epics() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const pageParam = Number(searchParams.get('page'));
-  console.log(pageParam, 'pageParam');
-  const titleFromURL = searchParams.get('search') || ''
-  console.log(titleFromURL, 'titleFromURL');
-  
+  const titleFromURL = searchParams.get('search') || '';
   const currentPage =
     Number.isInteger(pageParam) && pageParam >= 1 ? pageParam : 1;
   const router = useRouter();
@@ -44,31 +41,22 @@ export default function Epics() {
   }
 
   const [title, setTitle] = useState(titleFromURL);
- 
 
   function handleTitleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const title = e.target.value;
-    // console.log(title, 'title');
-    // console.log(title.length, 'title');
-  
-    // handlePageChange(1);
-    // const params = new URLSearchParams(searchParams.toString());
-    // params.set('search', String(title));
-    // console.log(currentPage, 'current page');
-    // router.push(`${pathname}?${params.toString()}`);
-    navigateToFirstPageAndSetSearchParam(title)
+    navigateToFirstPageAndSetSearchParam(title);
     setTitle(title);
   }
 
-  function navigateToFirstPageAndSetSearchParam(title: string){
+  function navigateToFirstPageAndSetSearchParam(title: string) {
     const params = new URLSearchParams(searchParams.toString());
     if (title) {
-      params.set('search', String(title))
+      params.set('search', String(title));
     } else {
-      params.delete('search')
+      params.delete('search');
     }
     params.set('page', '1');
-    router.replace(`${pathname}?${params.toString()}`)
+    router.replace(`${pathname}?${params.toString()}`);
   }
 
   useEffect(() => {
@@ -97,7 +85,6 @@ export default function Epics() {
         setFetchStatus('failed');
         return;
       }
-
       const { data, totalCount } = await res.json();
       setDesktopEpics(data);
       setMobileEpics(data);
