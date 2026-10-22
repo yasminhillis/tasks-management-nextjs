@@ -26,7 +26,7 @@ type EpicListProps = {
   pageSize: number;
   onEpicUpdate: (id: string, data: Partial<Epic>) => void;
   title: string;
-  handleTitleChange: (e: ChangeEvent<HTMLInputElement, Element>) => void
+  handleTitleChange: (e: ChangeEvent<HTMLInputElement, Element>) => void;
 };
 
 export default function EpicsList({
@@ -41,10 +41,10 @@ export default function EpicsList({
   pageSize,
   onEpicUpdate,
   title,
-  handleTitleChange
+  handleTitleChange,
 }: EpicListProps) {
   const [networkError, setNetworkError] = useState('');
-  
+
   const searchParams = useSearchParams();
   const epicId = searchParams.get('epicId') ?? '';
   const router = useRouter();
@@ -87,7 +87,8 @@ export default function EpicsList({
     fetchStatus === 'success' &&
     error.length === 0 &&
     epics.length === 0 &&
-    isFetched
+    isFetched &&
+    title.length === 0
   ) {
     return (
       <EmptyState
@@ -105,6 +106,51 @@ export default function EpicsList({
         onButtonClick={() => router.push(`/project/${projectId}/epics/new`)}
         footer={<EmptyStateFooter />}
       />
+    );
+  }
+
+  if (
+    fetchStatus === 'success' &&
+    error.length === 0 &&
+    epics.length === 0 &&
+    isFetched &&
+    title.length > 0
+  ) {
+    return (
+      // <PageWrapper>
+      <div className="flex flex-col">
+        <Header
+          desktopTitle="Project Epics"
+          buttonLabel="New Epic"
+          handleBtnClick={() => router.push(`/project/${projectId}/epics/new`)}
+          materialIcon="add"
+          mobileTitle=""
+          mobileStyles=""
+          searchBar={
+            <div className="flex items-center bg-[#D7E2FF] px-[12px] py-[6px] rounded-[2px]">
+              <span
+                className="material-symbols-outlined"
+                style={{ fontSize: '16px', color: '#737685' }}
+              >
+                search
+              </span>
+              <input
+                type="text"
+                value={title}
+                onChange={handleTitleChange}
+                placeholder="Search epics..."
+                className="text-[14px] text-[#737685] px-[12px] py-[10px] outline-none"
+              />
+            </div>
+          }
+        />
+        {/* <div className='flex flex-1 items-center justify-center bg-red-100'> */}
+        <h1 className="title-md text-[#4F5F7B] text-[16px]">
+          No epics found matching your search
+        </h1>
+        {/* </div> */}
+      </div>
+      // </PageWrapper>
     );
   }
 
