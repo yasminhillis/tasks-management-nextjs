@@ -1,6 +1,6 @@
 'use client';
 import Header from '../../_components/Header';
-import { useState } from 'react';
+import { ReactEventHandler, ChangeEvent, useEffect, useState } from 'react';
 import EpicCard from './_components/EpicCard';
 import ErrorScreen from '@/app/(protected)/_components/ErrorScreen';
 import PageWrapper from '../../_components/PageWrapper';
@@ -25,6 +25,8 @@ type EpicListProps = {
   onPageChange: (page: number) => void;
   pageSize: number;
   onEpicUpdate: (id: string, data: Partial<Epic>) => void;
+  title: string;
+  handleTitleChange: (e: ChangeEvent<HTMLInputElement, Element>) => void
 };
 
 export default function EpicsList({
@@ -38,22 +40,66 @@ export default function EpicsList({
   onPageChange,
   pageSize,
   onEpicUpdate,
+  title,
+  handleTitleChange
 }: EpicListProps) {
   const [networkError, setNetworkError] = useState('');
+  
   const searchParams = useSearchParams();
   const epicId = searchParams.get('epicId') ?? '';
   const router = useRouter();
-console.log(currentPage, 'currentPage');
+  console.log(currentPage, 'currentPage');
 
-  if (epics.length === 0 && totalCount > 0 && fetchStatus === 'success' || fetchStatus === 'failed' &&
+  // async function search() {
+  //   const offset = (currentPage - 1) * pageSize;
+  //   const res = await fetch(
+  //     `/api/epics?projectId=${projectId}&limit=${pageSize}&offset=${offset}&order=created_at.asc&title=${title}`
+  //   );
+  //   if (!res.ok) {
+  //     const error = await res.json();
+  //     if (error.message === 'page is out of range') {
+  //       return (
+  //         <ErrorScreen
+  //           message={`The page you requested does not exist.`}
+  //           buttonElement
+  //           buttonLabel="Go to epics main page"
+  //           onRetry={() =>
+  //             router.push(`/project/${projectId}/epics?page=${currentPage}`)
+  //           }
+  //         />
+  //       );
+  //     } else {
+  //       <ErrorScreen
+  //         message={`We're having trouble retrieving your
+  //               project epics right now. Please try
+  //               again in a moment.`}
+  //         buttonElement
+  //         onRetry={() => onPageChange(currentPage)}
+  //       />;
+  //     }
+  //   }
+  //   const { data, totalCount } = await res.json();
+    
+  // }
+
+
+
+  if (
+    (epics.length === 0 && totalCount > 0 && fetchStatus === 'success') ||
+    (fetchStatus === 'failed' &&
       error?.length > 0 &&
-      error === 'page is out of range') {
-    return <ErrorScreen
+      error === 'page is out of range')
+  ) {
+    return (
+      <ErrorScreen
         message={`The page you requested does not exist.`}
         buttonElement
-        buttonLabel='Go to epics main page'
-        onRetry={() => router.push(`/project/${projectId}/epics?page=${currentPage}`)}
+        buttonLabel="Go to epics main page"
+        onRetry={() =>
+          router.push(`/project/${projectId}/epics?page=${currentPage}`)
+        }
       />
+    );
   }
 
   if (
@@ -97,7 +143,7 @@ console.log(currentPage, 'currentPage');
     );
   }
 
-  if ((fetchStatus === 'loading') && !isFetched) {
+  if (fetchStatus === 'loading' && !isFetched) {
     return (
       <PageWrapper>
         <Header
@@ -132,6 +178,21 @@ console.log(currentPage, 'currentPage');
     );
   }
 
+ 
+
+  // console.log(title, 'title55');
+
+  function debounce(
+    handler: (e: React.ChangeEvent<HTMLInputElement>) => void,
+    time: number
+  ) {
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    return function () {
+      clearTimeout(timer);
+      timer = setTimeout(() => handler, time);
+    };
+  }
+
   return (
     <div>
       {fetchStatus === 'success' &&
@@ -163,6 +224,8 @@ console.log(currentPage, 'currentPage');
                   </span>
                   <input
                     type="text"
+                    value={title}
+                    onChange={handleTitleChange}
                     placeholder="Search epics..."
                     className="text-[14px] text-[#737685] px-[12px] py-[10px] outline-none"
                   />
@@ -174,7 +237,9 @@ console.log(currentPage, 'currentPage');
               {epics.map((epic: Epic) => (
                 <EpicCard
                   sendEpicIdToParent={() =>
-                    router.push(`/project/${projectId}/epics?epicId=${epic.id}&page=${currentPage}`)
+                    router.push(
+                      `/project/${projectId}/epics?epicId=${epic.id}&page=${currentPage}`
+                    )
                   }
                   id={epic.epic_id}
                   key={epic.epic_id}
@@ -190,7 +255,9 @@ console.log(currentPage, 'currentPage');
               <EpicModal
                 projectId={projectId}
                 epicId={epicId}
-                onClose={() => router.push(`/project/${projectId}/epics?page=${currentPage}`)}
+                onClose={() =>
+                  router.push(`/project/${projectId}/epics?page=${currentPage}`)
+                }
                 onEpicUpdate={onEpicUpdate}
               />
             )}

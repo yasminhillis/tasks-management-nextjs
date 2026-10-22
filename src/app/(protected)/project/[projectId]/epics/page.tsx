@@ -1,6 +1,11 @@
 'use client';
 
-import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from 'next/navigation';
 import InfiniteScroll from '../../../_components/InfiniteScroll';
 import PageWrapper from '../../_components/PageWrapper';
 import EpicsList from './EpicsLists';
@@ -15,7 +20,7 @@ export default function Epics() {
   const [isMobile, setIsMobile] = useState(false);
   const [error, setError] = useState('');
   const [fetchStatus, setFetchStatus] = useState<
-   'loading' | 'success' | 'failed'
+    'loading' | 'success' | 'failed'
   >('loading');
   const [mobileCurrentPage, setMobileCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
@@ -25,14 +30,45 @@ export default function Epics() {
   const searchParams = useSearchParams();
   const pageParam = Number(searchParams.get('page'));
   console.log(pageParam, 'pageParam');
+  const titleFromURL = searchParams.get('search') || ''
+  console.log(titleFromURL, 'titleFromURL');
   
-  const currentPage = Number.isInteger(pageParam) && pageParam >= 1 ? pageParam : 1;
-  const router = useRouter(); 
+  const currentPage =
+    Number.isInteger(pageParam) && pageParam >= 1 ? pageParam : 1;
+  const router = useRouter();
 
-  function handlePageChange(page: number){
+  function handlePageChange(page: number) {
     const params = new URLSearchParams(searchParams.toString());
     params.set('page', String(page));
-    router.push(`${pathname}?${params.toString()}`)
+    router.push(`${pathname}?${params.toString()}`);
+  }
+
+  const [title, setTitle] = useState(titleFromURL);
+ 
+
+  function handleTitleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const title = e.target.value;
+    // console.log(title, 'title');
+    // console.log(title.length, 'title');
+  
+    // handlePageChange(1);
+    // const params = new URLSearchParams(searchParams.toString());
+    // params.set('search', String(title));
+    // console.log(currentPage, 'current page');
+    // router.push(`${pathname}?${params.toString()}`);
+    navigateToFirstPageAndSetSearchParam(title)
+    setTitle(title);
+  }
+
+  function navigateToFirstPageAndSetSearchParam(title: string){
+    const params = new URLSearchParams(searchParams.toString());
+    if (title) {
+      params.set('search', String(title))
+    } else {
+      params.delete('search')
+    }
+    params.set('page', '1');
+    router.replace(`${pathname}?${params.toString()}`)
   }
 
   useEffect(() => {
@@ -48,14 +84,13 @@ export default function Epics() {
   async function fetchEpics(page: number) {
     try {
       const offset = (page - 1) * EPICS_PAGE_SIZE;
-
-      const res = await fetch(
-        `/api/epics?projectId=${projectId}&limit=${EPICS_PAGE_SIZE}&offset=${offset}&order=created_at.asc`
-      );
+      const url = `/api/epics?projectId=${projectId}&limit=${EPICS_PAGE_SIZE}&offset=${offset}&order=created_at.asc&title=${encodeURIComponent(titleFromURL)}`;
+      console.log(url, 'starturl444444444444444444444444444444444');
+      const res = await fetch(url);
       if (!res.ok) {
         const error = await res.json();
-        if (error.message === "page is out of range") {
-          setError(error.message)
+        if (error.message === 'page is out of range') {
+          setError(error.message);
         } else {
           setError(error.message || 'Epic fetching failed');
         }
@@ -109,22 +144,22 @@ export default function Epics() {
   }
 
   function updateEpics(epics: Epic[], id: string, data: Partial<Epic>) {
-    return epics.map(epic => {
+    return epics.map((epic) => {
       if (epic.id === id) {
-        return {...epic, ...data}
+        return { ...epic, ...data };
       }
-      return epic
-    })
+      return epic;
+    });
   }
 
-  function onEpicUpdate(id: string, data: Partial<Epic>){
-    setDesktopEpics(prev => updateEpics(prev, id, data))
-    setMobileEpics(prev => updateEpics(prev, id, data))
+  function onEpicUpdate(id: string, data: Partial<Epic>) {
+    setDesktopEpics((prev) => updateEpics(prev, id, data));
+    setMobileEpics((prev) => updateEpics(prev, id, data));
   }
 
   useEffect(() => {
-    fetchEpics(currentPage);    
-  }, [currentPage]);
+    fetchEpics(currentPage);
+  }, [currentPage, titleFromURL]);
 
   return (
     <PageWrapper>
@@ -139,6 +174,8 @@ export default function Epics() {
         onPageChange={handlePageChange}
         pageSize={EPICS_PAGE_SIZE}
         onEpicUpdate={onEpicUpdate}
+        title={title}
+        handleTitleChange={handleTitleChange}
       />
       <InfiniteScroll
         totalCount={totalCount}
