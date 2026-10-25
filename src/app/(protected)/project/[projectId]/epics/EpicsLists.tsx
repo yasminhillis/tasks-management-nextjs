@@ -6,7 +6,7 @@ import ErrorScreen from '@/app/(protected)/_components/ErrorScreen';
 import PageWrapper from '../../_components/PageWrapper';
 import EpicCardSkeleton from './EpicCardSkeleton';
 import EmptyState from '@/app/(protected)/_components/EmptyState';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Pagination from '@/app/(protected)/_components/Pagination';
 import type { Epic } from '@/lib/types/index';
 import MobilePlusButton from '../../_components/MobilePlusButton';
@@ -48,6 +48,21 @@ export default function EpicsList({
   const searchParams = useSearchParams();
   const epicId = searchParams.get('epicId') ?? '';
   const router = useRouter();
+  const pathname = usePathname()
+  function addEpicIdToSearchParams(epicId: string) {
+    const params = new URLSearchParams(searchParams.toString());
+    console.log(params, 'params from addEpicIdToSearchParams');
+    params.set('epicId', String(epicId))
+    router.push(`${pathname}?${params.toString()}`)
+  }
+
+  function removeEpicIdToSearchParams() {
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete('epicId')
+    router.push(`${pathname}?${params.toString()}`)
+  }
+
+ 
 
   if (
     (epics.length === 0 && totalCount > 0 && fetchStatus === 'success') ||
@@ -144,11 +159,9 @@ export default function EpicsList({
             </div>
           }
         />
-        {/* <div className='flex flex-1 items-center justify-center bg-red-100'> */}
-        <h1 className="title-md text-[#4F5F7B] text-[16px]">
-          No epics found matching your search
-        </h1>
-        {/* </div> */}
+        <div className="flex flex-1 items-center justify-center bg-red-100">
+          <h1>No epics found matching your search</h1>
+        </div>
       </div>
       // </PageWrapper>
     );
@@ -244,9 +257,10 @@ export default function EpicsList({
               {epics.map((epic: Epic) => (
                 <EpicCard
                   sendEpicIdToParent={() =>
-                    router.push(
-                      `/project/${projectId}/epics?epicId=${epic.id}&page=${currentPage}`
-                    )
+                     addEpicIdToSearchParams(epic.id)
+                    // router.push(
+                    //   `/project/${projectId}/epics?epicId=${epic.id}&page=${currentPage}`
+                    // )
                   }
                   id={epic.epic_id}
                   key={epic.epic_id}
@@ -263,7 +277,8 @@ export default function EpicsList({
                 projectId={projectId}
                 epicId={epicId}
                 onClose={() =>
-                  router.push(`/project/${projectId}/epics?page=${currentPage}`)
+                  // router.push(`/project/${projectId}/epics?page=${currentPage}`)
+                  removeEpicIdToSearchParams()
                 }
                 onEpicUpdate={onEpicUpdate}
               />
