@@ -1,6 +1,6 @@
 'use client';
 import Header from '../../_components/Header';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent } from 'react';
 import EpicCard from './_components/EpicCard';
 import ErrorScreen from '@/app/(protected)/_components/ErrorScreen';
 import PageWrapper from '../../_components/PageWrapper';
@@ -43,26 +43,22 @@ export default function EpicsList({
   title,
   handleTitleChange,
 }: EpicListProps) {
-  const [networkError, setNetworkError] = useState('');
-
   const searchParams = useSearchParams();
   const epicId = searchParams.get('epicId') ?? '';
   const router = useRouter();
-  const pathname = usePathname()
+  const pathname = usePathname();
+
   function addEpicIdToSearchParams(epicId: string) {
     const params = new URLSearchParams(searchParams.toString());
-    console.log(params, 'params from addEpicIdToSearchParams');
-    params.set('epicId', String(epicId))
-    router.push(`${pathname}?${params.toString()}`)
+    params.set('epicId', String(epicId));
+    router.push(`${pathname}?${params.toString()}`);
   }
 
   function removeEpicIdToSearchParams() {
     const params = new URLSearchParams(searchParams.toString());
-    params.delete('epicId')
-    router.push(`${pathname}?${params.toString()}`)
+    params.delete('epicId');
+    router.push(`${pathname}?${params.toString()}`);
   }
-
- 
 
   if (
     (epics.length === 0 && totalCount > 0 && fetchStatus === 'success') ||
@@ -132,7 +128,6 @@ export default function EpicsList({
     title.length > 0
   ) {
     return (
-      // <PageWrapper>
       <div className="flex flex-col">
         <Header
           desktopTitle="Project Epics"
@@ -163,7 +158,6 @@ export default function EpicsList({
           <h1>No epics found matching your search</h1>
         </div>
       </div>
-      // </PageWrapper>
     );
   }
 
@@ -220,11 +214,6 @@ export default function EpicsList({
         epics?.length > 0 &&
         isFetched && (
           <>
-            {networkError.length > 0 && (
-              <div className="fixed bottom-5 right-5 max-w-sm px-4 py-3 md:bottom-6 md:right-6 max-md:bottom-16 max-md:right-0 max-md:mx-3 max-md:rounded-lg max-md:left-0 max-md:max-w-full text-red-500 bg-red-600/10  border border-red-500 flex items-center justify-center rounded-lg gap-2">
-                <h3>{networkError}</h3>
-              </div>
-            )}
             <Header
               desktopTitle="Project Epics"
               buttonLabel="New Epic"
@@ -256,12 +245,7 @@ export default function EpicsList({
             <div className="grid sm:grid-cols-2 md:grid-cols-2 justify-items-center gap-6 mb-6 md:mb-10">
               {epics.map((epic: Epic) => (
                 <EpicCard
-                  sendEpicIdToParent={() =>
-                     addEpicIdToSearchParams(epic.id)
-                    // router.push(
-                    //   `/project/${projectId}/epics?epicId=${epic.id}&page=${currentPage}`
-                    // )
-                  }
+                  sendEpicIdToParent={() => addEpicIdToSearchParams(epic.id)}
                   id={epic.epic_id}
                   key={epic.epic_id}
                   title={epic.title}
@@ -276,10 +260,7 @@ export default function EpicsList({
               <EpicModal
                 projectId={projectId}
                 epicId={epicId}
-                onClose={() =>
-                  // router.push(`/project/${projectId}/epics?page=${currentPage}`)
-                  removeEpicIdToSearchParams()
-                }
+                onClose={() => removeEpicIdToSearchParams()}
                 onEpicUpdate={onEpicUpdate}
               />
             )}
