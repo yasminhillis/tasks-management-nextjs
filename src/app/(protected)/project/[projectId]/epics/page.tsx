@@ -41,7 +41,9 @@ export default function Epics() {
   }
 
   const [title, setTitle] = useState(titleFromURL);
-
+  // console.log(title, 'title 5555555555555');
+  // console.log(titleFromURL, 'titleFromURL 6666666666666666');
+  
   function handleTitleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const title = e.target.value;
     navigateToFirstPageAndSetSearchParam(title);
@@ -72,7 +74,7 @@ export default function Epics() {
   async function fetchEpics(page: number) {
     try {
       const offset = (page - 1) * EPICS_PAGE_SIZE;
-      const url = `/api/epics?projectId=${projectId}&limit=${EPICS_PAGE_SIZE}&offset=${offset}&order=created_at.asc&title=${encodeURIComponent(titleFromURL)}`;
+      const url = `/api/epics?projectId=${projectId}&limit=${EPICS_PAGE_SIZE}&offset=${offset}&order=created_at.asc&title=${encodeURIComponent(titleFromURL.trim())}`;
       console.log(url, 'starturl444444444444444444444444444444444');
       const res = await fetch(url);
       if (!res.ok) {
