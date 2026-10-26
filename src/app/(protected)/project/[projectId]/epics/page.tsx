@@ -41,9 +41,10 @@ export default function Epics() {
   }
 
   const [title, setTitle] = useState(titleFromURL);
+  const [searchTerm, setSearchTerm] = useState('');
   // console.log(title, 'title 5555555555555');
   // console.log(titleFromURL, 'titleFromURL 6666666666666666');
-  
+
   function handleTitleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const title = e.target.value;
     navigateToFirstPageAndSetSearchParam(title);
@@ -77,10 +78,16 @@ export default function Epics() {
       const url = `/api/epics?projectId=${projectId}&limit=${EPICS_PAGE_SIZE}&offset=${offset}&order=created_at.asc&title=${encodeURIComponent(titleFromURL.trim())}`;
       console.log(url, 'starturl444444444444444444444444444444444');
       const res = await fetch(url);
+      console.log(res, 'res');
+
       if (!res.ok) {
         const error = await res.json();
+        console.log(error, 'error in front');
+
         if (error.message === 'page is out of range') {
           setError(error.message);
+        } else if (error.message === 'No epics in this project') {
+          setError(error.message || 'No epics in this project');
         } else {
           setError(error.message || 'Epic fetching failed');
         }
@@ -90,6 +97,7 @@ export default function Epics() {
       const { data, totalCount } = await res.json();
       setDesktopEpics(data);
       setMobileEpics(data);
+      setSearchTerm(titleFromURL);
       setMobileCurrentPage(page);
       setTotalCount(totalCount);
       setError('');
@@ -165,6 +173,7 @@ export default function Epics() {
         onEpicUpdate={onEpicUpdate}
         title={title}
         handleTitleChange={handleTitleChange}
+        searchTerm={searchTerm}
       />
       <InfiniteScroll
         totalCount={totalCount}

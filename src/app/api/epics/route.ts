@@ -21,16 +21,24 @@ export async function GET(req: NextRequest) {
       Prefer: 'count=exact',
     },
   });
-
+  console.log(res, 'res 999');
+  
   if (!res.ok) {
     const error = await res.json();
+    console.log(error, 'error');
+    
     if (error.code === 'PGRST103') {
       return Response.json(
         { message: 'page is out of range', error },
         { status: res.status }
       );
-    }
-    return Response.json(
+    } else if (error.code === '42703') {
+      return Response.json(
+        {
+          message: 'No epics in this project', error
+        }, {status: res.status}
+      )
+    } else return Response.json(
       { message: 'Fetching epics failed', error },
       { status: res.status }
     );
@@ -40,5 +48,7 @@ export async function GET(req: NextRequest) {
   const totalCount = contentRange ? parseInt(contentRange.split('/')[1]) : 0;
 
   const epics = await res.json();
+  console.log(res.status, 'status');
+  
   return Response.json({ data: epics, totalCount }, { status: res.status });
 }
