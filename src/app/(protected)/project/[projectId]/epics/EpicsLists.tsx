@@ -27,6 +27,7 @@ type EpicListProps = {
   onEpicUpdate: (id: string, data: Partial<Epic>) => void;
   title: string;
   handleTitleChange: (e: ChangeEvent<HTMLInputElement, Element>) => void;
+  searchTerm: string
 };
 
 export default function EpicsList({
@@ -42,11 +43,15 @@ export default function EpicsList({
   onEpicUpdate,
   title,
   handleTitleChange,
+  searchTerm
 }: EpicListProps) {
   const searchParams = useSearchParams();
   const epicId = searchParams.get('epicId') ?? '';
   const router = useRouter();
   const pathname = usePathname();
+
+  console.log(error.length, 'errror');
+  
 
   function addEpicIdToSearchParams(epicId: string) {
     const params = new URLSearchParams(searchParams.toString());
@@ -94,11 +99,12 @@ export default function EpicsList({
     );
   }
 
-  if (
+   if (
     fetchStatus === 'success' &&
     error.length === 0 &&
     epics.length === 0 &&
     isFetched &&
+<<<<<<< Updated upstream
     title.length === 0
   ) {
     return (
@@ -126,6 +132,9 @@ export default function EpicsList({
     epics.length === 0 &&
     isFetched &&
     title.length > 0
+=======
+    searchTerm.length > 0 && totalCount === 0 
+>>>>>>> Stashed changes
   ) {
     return (
       <div className="flex flex-col">
@@ -158,6 +167,30 @@ export default function EpicsList({
           <h1>No epics found matching your search</h1>
         </div>
       </div>
+    );
+  }
+
+  if (
+    fetchStatus === 'success' && 
+     totalCount === 0 && epics.length === 0 && isFetched 
+  ) {   
+    console.log('here'); 
+    return (
+      <EmptyState
+        imageSrc="/emptyEpic.png"
+        imageWidth={288}
+        imageHeight={288}
+        imageAlt="empty epic list"
+        title="No epics in this project yet."
+        description="Break down your large project into manageable
+                    epics to track progress better and maintain
+                    architectural clarity."
+        imageStyles=""
+        buttonLabel="Create First Epic"
+        materialButtonIcon="electric_bolt"
+        onButtonClick={() => router.push(`/project/${projectId}/epics/new`)}
+        footer={<EmptyStateFooter />}
+      />
     );
   }
 
