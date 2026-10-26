@@ -77,7 +77,7 @@ export default function EpicsList({
         buttonElement
         buttonLabel="Go to epics main page"
         onRetry={() =>
-          router.push(`/project/${projectId}/epics?page=${currentPage}`)
+          router.push(`/project/${projectId}/epics?page=1`)
         }
       />
     );
@@ -104,37 +104,7 @@ export default function EpicsList({
     error.length === 0 &&
     epics.length === 0 &&
     isFetched &&
-<<<<<<< Updated upstream
-    title.length === 0
-  ) {
-    return (
-      <EmptyState
-        imageSrc="/emptyEpic.png"
-        imageWidth={288}
-        imageHeight={288}
-        imageAlt="empty epic list"
-        title="No epics in this project yet."
-        description="Break down your large project into manageable
-                    epics to track progress better and maintain
-                    architectural clarity."
-        imageStyles=""
-        buttonLabel="Create First Epic"
-        materialButtonIcon="electric_bolt"
-        onButtonClick={() => router.push(`/project/${projectId}/epics/new`)}
-        footer={<EmptyStateFooter />}
-      />
-    );
-  }
-
-  if (
-    fetchStatus === 'success' &&
-    error.length === 0 &&
-    epics.length === 0 &&
-    isFetched &&
-    title.length > 0
-=======
     searchTerm.length > 0 && totalCount === 0 
->>>>>>> Stashed changes
   ) {
     return (
       <div className="flex flex-col">
