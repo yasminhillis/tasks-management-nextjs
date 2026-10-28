@@ -13,6 +13,8 @@ import MobilePlusButton from '../../_components/MobilePlusButton';
 import EpicModal from './_components/EpicModal';
 import { formatDate } from '@/app/(protected)/_utils/formatDate';
 import EmptyStateFooter from './_components/EmptyStateFooter';
+import SearchResultLoadingSkeleton from './_components/SearchResultLoadingSkeleton';
+import NoSearchResult from './_components/NoSearchResult';
 
 type EpicListProps = {
   epics: Epic[];
@@ -27,7 +29,7 @@ type EpicListProps = {
   onEpicUpdate: (id: string, data: Partial<Epic>) => void;
   title: string;
   handleTitleChange: (e: ChangeEvent<HTMLInputElement, Element>) => void;
-  searchTerm: string
+  searchTerm: string;
 };
 
 export default function EpicsList({
@@ -43,15 +45,16 @@ export default function EpicsList({
   onEpicUpdate,
   title,
   handleTitleChange,
-  searchTerm
+  searchTerm,
 }: EpicListProps) {
+  console.log(fetchStatus, 'fetchStatus');
+
   const searchParams = useSearchParams();
   const epicId = searchParams.get('epicId') ?? '';
   const router = useRouter();
   const pathname = usePathname();
 
   console.log(error.length, 'errror');
-  
 
   function addEpicIdToSearchParams(epicId: string) {
     const params = new URLSearchParams(searchParams.toString());
@@ -65,6 +68,67 @@ export default function EpicsList({
     router.push(`${pathname}?${params.toString()}`);
   }
 
+  function renderBody() {
+    // console.log( fetchStatus === 'success' &&
+    // error.length === 0 &&
+    // epics.length === 0 &&
+    // isFetched &&
+    // searchTerm.length > 0 && totalCount === 0);
+
+    // console.log( fetchStatus === 'success', ' fetchStatus === success' );
+    // console.log( error.length === 0, 'error.length === 0' );
+    // console.log(epics.length === 0, 'epics.length === 0');
+    console.log(epics, 'epic999');
+    console.log(searchTerm, 'searchTerm4534524');
+    // console.log(isFetched, 'isFetched');
+    if (fetchStatus === 'loading') return <SearchResultLoadingSkeleton />;
+
+    if (epics.length === 0 && searchTerm.length > 0 && totalCount === 0)
+      return <NoSearchResult />;
+    // console.log('here888');
+
+    // console.log(totalCount, 'totalCount');
+
+    return (
+      <>
+        <div className="grid sm:grid-cols-2 md:grid-cols-2 justify-items-center gap-6 mb-6 md:mb-10">
+          {epics.map((epic: Epic) => (
+            <EpicCard
+              sendEpicIdToParent={() => addEpicIdToSearchParams(epic.id)}
+              id={epic.epic_id}
+              key={epic.epic_id}
+              title={epic.title}
+              assignee={epic.assignee?.name}
+              createdBy={epic.created_by.name}
+              deadline={epic.deadline}
+              createdAt={formatDate(epic.created_at)}
+            />
+          ))}
+        </div>
+
+        {epicId && (
+          <EpicModal
+            projectId={projectId}
+            epicId={epicId}
+            onClose={() => removeEpicIdToSearchParams()}
+            onEpicUpdate={onEpicUpdate}
+          />
+        )}
+
+        <MobilePlusButton
+          handleBtnClick={() => router.push(`/project/${projectId}/epics/new`)}
+        />
+        <Pagination
+          currentPage={currentPage}
+          totalCount={totalCount}
+          isFetched={isFetched}
+          onPageChange={onPageChange}
+          pageSize={pageSize}
+        />
+      </>
+    );
+  }
+
   if (
     (epics.length === 0 && totalCount > 0 && fetchStatus === 'success') ||
     (fetchStatus === 'failed' &&
@@ -76,9 +140,7 @@ export default function EpicsList({
         message={`The page you requested does not exist.`}
         buttonElement
         buttonLabel="Go to epics main page"
-        onRetry={() =>
-          router.push(`/project/${projectId}/epics?page=1`)
-        }
+        onRetry={() => router.push(`/project/${projectId}/epics?page=1`)}
       />
     );
   }
@@ -99,52 +161,72 @@ export default function EpicsList({
     );
   }
 
-   if (
-    fetchStatus === 'success' &&
-    error.length === 0 &&
-    epics.length === 0 &&
-    isFetched &&
-    searchTerm.length > 0 && totalCount === 0 
+  if (
+    fetchStatus === 'failed' &&
+    error?.length > 0 &&
+    error === 'Network error. Please try again later'
   ) {
     return (
-      <div className="flex flex-col">
-        <Header
-          desktopTitle="Project Epics"
-          buttonLabel="New Epic"
-          handleBtnClick={() => router.push(`/project/${projectId}/epics/new`)}
-          materialIcon="add"
-          mobileTitle=""
-          mobileStyles=""
-          searchBar={
-            <div className="flex items-center bg-[#D7E2FF] px-[12px] py-[6px] rounded-[2px]">
-              <span
-                className="material-symbols-outlined"
-                style={{ fontSize: '16px', color: '#737685' }}
-              >
-                search
-              </span>
-              <input
-                type="text"
-                value={title}
-                onChange={handleTitleChange}
-                placeholder="Search epics..."
-                className="text-[14px] text-[#737685] px-[12px] py-[10px] outline-none"
-              />
-            </div>
-          }
-        />
-        <div className="flex flex-1 items-center justify-center bg-red-100">
-          <h1>No epics found matching your search</h1>
-        </div>
-      </div>
+      // <ErrorScreen
+      // title="You're offline"
+      //   message={``}
+      //   buttonElement
+      //   onRetry={() => onPageChange(currentPage)}
+      // />
+
+      <ErrorScreen
+        title="You're offline"
+        message={`Network error. Please check your connection and try again.`}
+        buttonElement={true}
+        onRetry={() => onPageChange(currentPage)}
+      />
     );
   }
 
+  // if (
+
+  // ) {
+  //   return (
+  // <div className="flex flex-col">
+  //   <Header
+  //     desktopTitle="Project Epics"
+  //     buttonLabel="New Epic"
+  //     handleBtnClick={() => router.push(`/project/${projectId}/epics/new`)}
+  //     materialIcon="add"
+  //     mobileTitle=""
+  //     mobileStyles=""
+  //     searchBar={
+  //       <div className="flex items-center bg-[#D7E2FF] px-[12px] py-[6px] rounded-[2px]">
+  //         <span
+  //           className="material-symbols-outlined"
+  //           style={{ fontSize: '16px', color: '#737685' }}
+  //         >
+  //           search
+  //         </span>
+  //         <input
+  //           type="text"
+  //           value={title}
+  //           onChange={handleTitleChange}
+  //           placeholder="Search epics..."
+  //           className="text-[14px] text-[#737685] px-[12px] py-[10px] outline-none"
+  //         />
+  //       </div>
+  //     }
+  //   />
+  //   <div className="flex flex-1 items-center justify-center bg-red-100">
+  //     <h1>No epics found matching your search</h1>
+  //   </div>
+  // </div>
+  //   );
+  // }
+
   if (
     fetchStatus === 'success' && 
-     totalCount === 0 && epics.length === 0 && isFetched 
-  ) {   
-    console.log('here'); 
+    totalCount === 0 &&
+    epics.length === 0 &&
+    searchTerm.length === 0
+  ) {
+    console.log('here');
     return (
       <EmptyState
         imageSrc="/emptyEpic.png"
@@ -164,7 +246,7 @@ export default function EpicsList({
     );
   }
 
-  if (fetchStatus === 'loading' && !isFetched) {
+  if (!isFetched) {
     return (
       <PageWrapper>
         <Header
@@ -199,6 +281,39 @@ export default function EpicsList({
     );
   }
 
+  // if (fetchStatus === 'loading') {
+  //   return (
+  //     <>
+  //       {/* <Header
+  //         desktopTitle="Project Epics"
+  //         buttonLabel="New Epic"
+  //         handleBtnClick={() => router.push(`/project/${projectId}/epics/new`)}
+  //         materialIcon="add"
+  //         mobileTitle=""
+  //         mobileStyles=""
+  //         searchBar={
+  //           <div className="flex items-center bg-[#D7E2FF] px-[12px] py-[6px] rounded-[2px]">
+  //             <span
+  //               className="material-symbols-outlined"
+  //               style={{ fontSize: '16px', color: '#737685' }}
+  //             >
+  //               search
+  //             </span>
+  //             <input
+  //               type="text"
+  //               value={title}
+  //               onChange={handleTitleChange}
+  //               placeholder="Search epics..."
+  //               className="text-[14px] text-[#737685] px-[12px] py-[10px] outline-none"
+  //             />
+  //           </div>
+  //         }
+  //       /> */}
+
+  //     </>
+  //   );
+  // }
+
   function debounce(
     handler: (e: React.ChangeEvent<HTMLInputElement>) => void,
     time: number
@@ -210,78 +325,40 @@ export default function EpicsList({
     };
   }
 
+  const header = (
+    <Header
+      desktopTitle="Project Epics"
+      buttonLabel="New Epic"
+      handleBtnClick={() => router.push(`/project/${projectId}/epics/new`)}
+      materialIcon="add"
+      mobileTitle=""
+      mobileStyles=""
+      searchBar={
+        <div className="flex items-center bg-[#D7E2FF] px-[12px] py-[6px] rounded-[2px]">
+          <span
+            className="material-symbols-outlined"
+            style={{ fontSize: '16px', color: '#737685' }}
+          >
+            search
+          </span>
+          <input
+            type="text"
+            value={title}
+            onChange={handleTitleChange}
+            placeholder="Search epics..."
+            className="text-[14px] text-[#737685] px-[12px] py-[10px] outline-none"
+          />
+        </div>
+      }
+    />
+  );
+
   return (
     <div>
-      {fetchStatus === 'success' &&
-        error.length === 0 &&
-        epics?.length > 0 &&
-        isFetched && (
-          <>
-            <Header
-              desktopTitle="Project Epics"
-              buttonLabel="New Epic"
-              handleBtnClick={() =>
-                router.push(`/project/${projectId}/epics/new`)
-              }
-              materialIcon="add"
-              mobileTitle=""
-              mobileStyles=""
-              searchBar={
-                <div className="flex items-center bg-[#D7E2FF] px-[12px] py-[6px] rounded-[2px]">
-                  <span
-                    className="material-symbols-outlined"
-                    style={{ fontSize: '16px', color: '#737685' }}
-                  >
-                    search
-                  </span>
-                  <input
-                    type="text"
-                    value={title}
-                    onChange={handleTitleChange}
-                    placeholder="Search epics..."
-                    className="text-[14px] text-[#737685] px-[12px] py-[10px] outline-none"
-                  />
-                </div>
-              }
-            />
-
-            <div className="grid sm:grid-cols-2 md:grid-cols-2 justify-items-center gap-6 mb-6 md:mb-10">
-              {epics.map((epic: Epic) => (
-                <EpicCard
-                  sendEpicIdToParent={() => addEpicIdToSearchParams(epic.id)}
-                  id={epic.epic_id}
-                  key={epic.epic_id}
-                  title={epic.title}
-                  assignee={epic.assignee?.name}
-                  createdBy={epic.created_by.name}
-                  deadline={epic.deadline}
-                  createdAt={formatDate(epic.created_at)}
-                />
-              ))}
-            </div>
-            {epicId && (
-              <EpicModal
-                projectId={projectId}
-                epicId={epicId}
-                onClose={() => removeEpicIdToSearchParams()}
-                onEpicUpdate={onEpicUpdate}
-              />
-            )}
-
-            <MobilePlusButton
-              handleBtnClick={() =>
-                router.push(`/project/${projectId}/epics/new`)
-              }
-            />
-            <Pagination
-              currentPage={currentPage}
-              totalCount={totalCount}
-              isFetched={isFetched}
-              onPageChange={onPageChange}
-              pageSize={pageSize}
-            />
-          </>
-        )}
+      <>
+        {header}
+        {renderBody()}
+      </>
     </div>
   );
 }
