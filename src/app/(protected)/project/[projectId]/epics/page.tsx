@@ -20,7 +20,7 @@ export default function Epics() {
   const [isMobile, setIsMobile] = useState(false);
   const [error, setError] = useState('');
   const [fetchStatus, setFetchStatus] = useState<
-    'loading' | 'success' | 'failed'
+   'loading' | 'success' | 'failed'
   >('loading');
   const [mobileCurrentPage, setMobileCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
@@ -75,6 +75,7 @@ export default function Epics() {
   async function fetchEpics(page: number) {
     try {
       const offset = (page - 1) * EPICS_PAGE_SIZE;
+      setFetchStatus('loading')
       const url = `/api/epics?projectId=${projectId}&limit=${EPICS_PAGE_SIZE}&offset=${offset}&order=created_at.asc&title=${encodeURIComponent(titleFromURL.trim())}`;
       console.log(url, 'starturl444444444444444444444444444444444');
       const res = await fetch(url);
@@ -112,7 +113,7 @@ export default function Epics() {
   async function loadMore(page: number) {
     try {
       const offset = (page - 1) * EPICS_PAGE_SIZE;
-
+      // setFetchStatus('loading')
       const res = await fetch(
         `/api/epics?projectId=${projectId}&limit=${EPICS_PAGE_SIZE}&offset=${offset}&order=created_at.asc`
       );
