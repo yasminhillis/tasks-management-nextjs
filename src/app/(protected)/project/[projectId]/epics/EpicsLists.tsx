@@ -47,14 +47,10 @@ export default function EpicsList({
   handleTitleChange,
   searchTerm,
 }: EpicListProps) {
-  console.log(fetchStatus, 'fetchStatus');
-
   const searchParams = useSearchParams();
   const epicId = searchParams.get('epicId') ?? '';
   const router = useRouter();
   const pathname = usePathname();
-
-  console.log(error.length, 'errror');
 
   function addEpicIdToSearchParams(epicId: string) {
     const params = new URLSearchParams(searchParams.toString());
@@ -69,25 +65,10 @@ export default function EpicsList({
   }
 
   function renderBody() {
-    // console.log( fetchStatus === 'success' &&
-    // error.length === 0 &&
-    // epics.length === 0 &&
-    // isFetched &&
-    // searchTerm.length > 0 && totalCount === 0);
-
-    // console.log( fetchStatus === 'success', ' fetchStatus === success' );
-    // console.log( error.length === 0, 'error.length === 0' );
-    // console.log(epics.length === 0, 'epics.length === 0');
-    console.log(epics, 'epic999');
-    console.log(searchTerm, 'searchTerm4534524');
-    // console.log(isFetched, 'isFetched');
     if (fetchStatus === 'loading') return <SearchResultLoadingSkeleton />;
 
     if (epics.length === 0 && searchTerm.length > 0 && totalCount === 0)
       return <NoSearchResult />;
-    // console.log('here888');
-
-    // console.log(totalCount, 'totalCount');
 
     return (
       <>
@@ -167,13 +148,6 @@ export default function EpicsList({
     error === 'Network error. Please try again later'
   ) {
     return (
-      // <ErrorScreen
-      // title="You're offline"
-      //   message={``}
-      //   buttonElement
-      //   onRetry={() => onPageChange(currentPage)}
-      // />
-
       <ErrorScreen
         title="You're offline"
         message={`Network error. Please check your connection and try again.`}
@@ -182,43 +156,6 @@ export default function EpicsList({
       />
     );
   }
-
-  // if (
-
-  // ) {
-  //   return (
-  // <div className="flex flex-col">
-  //   <Header
-  //     desktopTitle="Project Epics"
-  //     buttonLabel="New Epic"
-  //     handleBtnClick={() => router.push(`/project/${projectId}/epics/new`)}
-  //     materialIcon="add"
-  //     mobileTitle=""
-  //     mobileStyles=""
-  //     searchBar={
-  //       <div className="flex items-center bg-[#D7E2FF] px-[12px] py-[6px] rounded-[2px]">
-  //         <span
-  //           className="material-symbols-outlined"
-  //           style={{ fontSize: '16px', color: '#737685' }}
-  //         >
-  //           search
-  //         </span>
-  //         <input
-  //           type="text"
-  //           value={title}
-  //           onChange={handleTitleChange}
-  //           placeholder="Search epics..."
-  //           className="text-[14px] text-[#737685] px-[12px] py-[10px] outline-none"
-  //         />
-  //       </div>
-  //     }
-  //   />
-  //   <div className="flex flex-1 items-center justify-center bg-red-100">
-  //     <h1>No epics found matching your search</h1>
-  //   </div>
-  // </div>
-  //   );
-  // }
 
   if (
     fetchStatus === 'success' && 
@@ -280,39 +217,6 @@ export default function EpicsList({
       </PageWrapper>
     );
   }
-
-  // if (fetchStatus === 'loading') {
-  //   return (
-  //     <>
-  //       {/* <Header
-  //         desktopTitle="Project Epics"
-  //         buttonLabel="New Epic"
-  //         handleBtnClick={() => router.push(`/project/${projectId}/epics/new`)}
-  //         materialIcon="add"
-  //         mobileTitle=""
-  //         mobileStyles=""
-  //         searchBar={
-  //           <div className="flex items-center bg-[#D7E2FF] px-[12px] py-[6px] rounded-[2px]">
-  //             <span
-  //               className="material-symbols-outlined"
-  //               style={{ fontSize: '16px', color: '#737685' }}
-  //             >
-  //               search
-  //             </span>
-  //             <input
-  //               type="text"
-  //               value={title}
-  //               onChange={handleTitleChange}
-  //               placeholder="Search epics..."
-  //               className="text-[14px] text-[#737685] px-[12px] py-[10px] outline-none"
-  //             />
-  //           </div>
-  //         }
-  //       /> */}
-
-  //     </>
-  //   );
-  // }
 
   function debounce(
     handler: (e: React.ChangeEvent<HTMLInputElement>) => void,

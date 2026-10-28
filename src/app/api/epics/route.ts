@@ -32,13 +32,7 @@ export async function GET(req: NextRequest) {
         { message: 'page is out of range', error },
         { status: res.status }
       );
-    } else if (error.code === '42703') {
-      return Response.json(
-        {
-          message: 'No epics in this project', error
-        }, {status: res.status}
-      )
-    } else return Response.json(
+    } return Response.json(
       { message: 'Fetching epics failed', error },
       { status: res.status }
     );
