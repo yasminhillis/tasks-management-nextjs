@@ -163,7 +163,6 @@ export default function EpicsList({
     epics.length === 0 &&
     searchTerm.length === 0
   ) {
-    console.log('here');
     return (
       <EmptyState
         imageSrc="/emptyEpic.png"
