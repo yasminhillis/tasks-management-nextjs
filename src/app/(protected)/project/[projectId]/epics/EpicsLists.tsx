@@ -148,6 +148,9 @@ export default function EpicsList({
     error === 'Network error. Please try again later'
   ) {
     return (
+      // console.log(currentPage, 'current page'),
+      // console.log(onPageChange(currentPage), 'onPageChange(currentPage)'),
+      
       <ErrorScreen
         title="You're offline"
         message={`Network error. Please check your connection and try again.`}
@@ -215,17 +218,6 @@ export default function EpicsList({
         </div>
       </PageWrapper>
     );
-  }
-
-  function debounce(
-    handler: (e: React.ChangeEvent<HTMLInputElement>) => void,
-    time: number
-  ) {
-    let timer: ReturnType<typeof setTimeout> | undefined;
-    return function () {
-      clearTimeout(timer);
-      timer = setTimeout(() => handler, time);
-    };
   }
 
   const header = (

@@ -20,7 +20,7 @@ export default function Epics() {
   const [isMobile, setIsMobile] = useState(false);
   const [error, setError] = useState('');
   const [fetchStatus, setFetchStatus] = useState<
-   'loading' | 'success' | 'failed'
+    'loading' | 'success' | 'failed'
   >('loading');
   const [mobileCurrentPage, setMobileCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
@@ -29,7 +29,7 @@ export default function Epics() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const pageParam = Number(searchParams.get('page'));
-  const titleFromURL = searchParams.get('search') || '';
+  const titleFromURL = (searchParams.get('search') || '').trim();
   const currentPage =
     Number.isInteger(pageParam) && pageParam >= 1 ? pageParam : 1;
   const router = useRouter();
@@ -45,18 +45,34 @@ export default function Epics() {
 
   function handleTitleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const title = e.target.value;
-    navigateToFirstPageAndSetSearchParam(title);
+    // navigateToFirstPageAndSetSearchParam(title);
+    const params = new URLSearchParams(searchParams.toString());
+    // console.log(
+    //   title === titleFromURL,
+    //   'title === titleFromURL',
+    //   title,
+    //   titleFromURL
+    // );
+
     setTitle(title);
   }
 
   function navigateToFirstPageAndSetSearchParam(title: string) {
+    // if (title.length === 0 && title === titleFromURL) return;
+    const trimmed = title.trim();
+    if (trimmed === titleFromURL) return;
     const params = new URLSearchParams(searchParams.toString());
-    if (title) {
-      params.set('search', String(title));
+    if (trimmed) {
+      params.set('search', String(trimmed));
     } else {
       params.delete('search');
     }
-    params.set('page', '1');
+    console.log(title === titleFromURL, 'title === titleFromURL');
+    
+    if (title === titleFromURL) {
+      params.set('page', String(currentPage));
+    } else params.set('page', '1');
+
     router.replace(`${pathname}?${params.toString()}`);
   }
 
@@ -71,9 +87,13 @@ export default function Epics() {
   }, []);
 
   async function fetchEpics(page: number) {
+    // console.log();
+        
+    // if (title === titleFromURL.trim() || title.trim() === titleFromURL) return
+
     try {
       const offset = (page - 1) * EPICS_PAGE_SIZE;
-      setFetchStatus('loading')
+      setFetchStatus('loading');
       const url = `/api/epics?projectId=${projectId}&limit=${EPICS_PAGE_SIZE}&offset=${offset}&order=created_at.asc&title=${encodeURIComponent(titleFromURL.trim())}`;
       const res = await fetch(url);
 
@@ -150,6 +170,16 @@ export default function Epics() {
   useEffect(() => {
     fetchEpics(currentPage);
   }, [currentPage, titleFromURL]);
+
+  useEffect(() => {
+    // let timer;
+    // clearTimeout(timer)
+    const timer = setTimeout(
+      () => navigateToFirstPageAndSetSearchParam(title),
+      500
+    );
+    return () => clearTimeout(timer);
+  }, [title]);
 
   return (
     <PageWrapper>
