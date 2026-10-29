@@ -45,7 +45,6 @@ export default function Epics() {
 
   function handleTitleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const title = e.target.value;
-    const params = new URLSearchParams(searchParams.toString());
     setTitle(title);
   }
 
@@ -54,15 +53,11 @@ export default function Epics() {
     if (trimmed === titleFromURL) return;
     const params = new URLSearchParams(searchParams.toString());
     if (trimmed) {
-      params.set('search', String(trimmed));
+      params.set('search', trimmed);
     } else {
       params.delete('search');
     }
-    console.log(title === titleFromURL, 'title === titleFromURL');
-
-    if (title === titleFromURL) {
-      params.set('page', String(currentPage));
-    } else params.set('page', '1');
+    params.set('page', '1');
 
     router.replace(`${pathname}?${params.toString()}`);
   }
@@ -81,7 +76,7 @@ export default function Epics() {
     try {
       const offset = (page - 1) * EPICS_PAGE_SIZE;
       setFetchStatus('loading');
-      const url = `/api/epics?projectId=${projectId}&limit=${EPICS_PAGE_SIZE}&offset=${offset}&order=created_at.asc&title=${encodeURIComponent(titleFromURL.trim())}`;
+      const url = `/api/epics?projectId=${projectId}&limit=${EPICS_PAGE_SIZE}&offset=${offset}&order=created_at.asc&title=${encodeURIComponent(titleFromURL)}`;
       const res = await fetch(url);
 
       if (!res.ok) {
