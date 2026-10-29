@@ -147,10 +147,7 @@ export default function EpicsList({
     error?.length > 0 &&
     error === 'Network error. Please try again later'
   ) {
-    return (
-      // console.log(currentPage, 'current page'),
-      // console.log(onPageChange(currentPage), 'onPageChange(currentPage)'),
-      
+    return (    
       <ErrorScreen
         title="You're offline"
         message={`Network error. Please check your connection and try again.`}

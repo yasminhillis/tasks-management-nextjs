@@ -45,20 +45,11 @@ export default function Epics() {
 
   function handleTitleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const title = e.target.value;
-    // navigateToFirstPageAndSetSearchParam(title);
     const params = new URLSearchParams(searchParams.toString());
-    // console.log(
-    //   title === titleFromURL,
-    //   'title === titleFromURL',
-    //   title,
-    //   titleFromURL
-    // );
-
     setTitle(title);
   }
 
   function navigateToFirstPageAndSetSearchParam(title: string) {
-    // if (title.length === 0 && title === titleFromURL) return;
     const trimmed = title.trim();
     if (trimmed === titleFromURL) return;
     const params = new URLSearchParams(searchParams.toString());
@@ -68,7 +59,7 @@ export default function Epics() {
       params.delete('search');
     }
     console.log(title === titleFromURL, 'title === titleFromURL');
-    
+
     if (title === titleFromURL) {
       params.set('page', String(currentPage));
     } else params.set('page', '1');
@@ -87,10 +78,6 @@ export default function Epics() {
   }, []);
 
   async function fetchEpics(page: number) {
-    // console.log();
-        
-    // if (title === titleFromURL.trim() || title.trim() === titleFromURL) return
-
     try {
       const offset = (page - 1) * EPICS_PAGE_SIZE;
       setFetchStatus('loading');
@@ -172,8 +159,6 @@ export default function Epics() {
   }, [currentPage, titleFromURL]);
 
   useEffect(() => {
-    // let timer;
-    // clearTimeout(timer)
     const timer = setTimeout(
       () => navigateToFirstPageAndSetSearchParam(title),
       500
