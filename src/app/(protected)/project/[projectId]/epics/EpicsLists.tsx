@@ -67,8 +67,70 @@ export default function EpicsList({
   function renderBody() {
     if (fetchStatus === 'loading') return <SearchResultLoadingSkeleton />;
 
-    if (epics.length === 0 && searchTerm.length > 0 && totalCount === 0)
+    if (epics.length === 0 && searchTerm.length > 0 && totalCount === 0 && fetchStatus === 'success')
       return <NoSearchResult />;
+
+    if (
+      (epics.length === 0 && totalCount > 0 && fetchStatus === 'success') ||
+      (fetchStatus === 'failed' &&
+        error?.length > 0 &&
+        error === 'page is out of range')
+    ) {
+      return (
+        <ErrorScreen
+          message={`The page you requested does not exist.`}
+          buttonElement
+          buttonLabel="Go to epics main page"
+          onRetry={() => router.push(`/project/${projectId}/epics?page=1`)}
+        />
+      );
+    }
+
+    if (
+      fetchStatus === 'failed' &&
+      error?.length > 0 &&
+      error === 'Fetching epics failed'
+    ) {
+      return (
+        <ErrorScreen
+          message={`We're having trouble retrieving your
+                project epics right now. Please try
+                again in a moment.`}
+          buttonElement
+          onRetry={() => onPageChange(currentPage)}
+        />
+      );
+    }
+
+    if (
+      fetchStatus === 'failed' &&
+      error?.length > 0 &&
+      error === 'Network error. Please try again later'
+    ) {
+      return (
+        <ErrorScreen
+          title="You're offline"
+          message={`Network error. Please check your connection and try again.`}
+          buttonElement={true}
+          onRetry={() => onPageChange(currentPage)}
+        />
+      );
+    }
+
+    if (
+      fetchStatus === 'failed' &&
+      error?.length > 0
+    ) {
+      return (
+        <ErrorScreen
+          message={`We're having trouble retrieving your
+                project epics right now. Please try
+                again in a moment.`}
+          buttonElement
+          onRetry={() => onPageChange(currentPage)}
+        />
+      );
+    }
 
     return (
       <>
@@ -111,54 +173,7 @@ export default function EpicsList({
   }
 
   if (
-    (epics.length === 0 && totalCount > 0 && fetchStatus === 'success') ||
-    (fetchStatus === 'failed' &&
-      error?.length > 0 &&
-      error === 'page is out of range')
-  ) {
-    return (
-      <ErrorScreen
-        message={`The page you requested does not exist.`}
-        buttonElement
-        buttonLabel="Go to epics main page"
-        onRetry={() => router.push(`/project/${projectId}/epics?page=1`)}
-      />
-    );
-  }
-
-  if (
-    fetchStatus === 'failed' &&
-    error?.length > 0 &&
-    error === 'Fetching epics failed'
-  ) {
-    return (
-      <ErrorScreen
-        message={`We're having trouble retrieving your
-                project epics right now. Please try
-                again in a moment.`}
-        buttonElement
-        onRetry={() => onPageChange(currentPage)}
-      />
-    );
-  }
-
-  if (
-    fetchStatus === 'failed' &&
-    error?.length > 0 &&
-    error === 'Network error. Please try again later'
-  ) {
-    return (    
-      <ErrorScreen
-        title="You're offline"
-        message={`Network error. Please check your connection and try again.`}
-        buttonElement={true}
-        onRetry={() => onPageChange(currentPage)}
-      />
-    );
-  }
-
-  if (
-    fetchStatus === 'success' && 
+    fetchStatus === 'success' &&
     totalCount === 0 &&
     epics.length === 0 &&
     searchTerm.length === 0
@@ -182,7 +197,7 @@ export default function EpicsList({
     );
   }
 
-  if (!isFetched) {
+  if (!isFetched && fetchStatus === 'loading') {
     return (
       <PageWrapper>
         <Header
