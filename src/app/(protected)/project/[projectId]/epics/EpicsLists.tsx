@@ -30,6 +30,7 @@ type EpicListProps = {
   title: string;
   handleTitleChange: (e: ChangeEvent<HTMLInputElement, Element>) => void;
   searchTerm: string;
+  onRetry: (page: number) => Promise<void>
 };
 
 export default function EpicsList({
@@ -46,6 +47,7 @@ export default function EpicsList({
   title,
   handleTitleChange,
   searchTerm,
+  onRetry
 }: EpicListProps) {
   const searchParams = useSearchParams();
   const epicId = searchParams.get('epicId') ?? '';
@@ -97,7 +99,7 @@ export default function EpicsList({
                 project epics right now. Please try
                 again in a moment.`}
           buttonElement
-          onRetry={() => onPageChange(currentPage)}
+          onRetry={() => onRetry(currentPage)}
         />
       );
     }
@@ -112,7 +114,7 @@ export default function EpicsList({
           title="You're offline"
           message={`Network error. Please check your connection and try again.`}
           buttonElement={true}
-          onRetry={() => onPageChange(currentPage)}
+          onRetry={() => onRetry(currentPage)}
         />
       );
     }
@@ -127,7 +129,7 @@ export default function EpicsList({
                 project epics right now. Please try
                 again in a moment.`}
           buttonElement
-          onRetry={() => onPageChange(currentPage)}
+          onRetry={() => onRetry(currentPage)}
         />
       );
     }

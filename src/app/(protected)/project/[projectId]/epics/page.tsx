@@ -177,6 +177,7 @@ export default function Epics() {
         title={title}
         handleTitleChange={handleTitleChange}
         searchTerm={searchTerm}
+        onRetry={fetchEpics}
       />
       <InfiniteScroll
         totalCount={totalCount}
