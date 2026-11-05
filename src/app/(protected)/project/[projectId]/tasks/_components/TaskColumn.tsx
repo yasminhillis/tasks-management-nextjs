@@ -5,6 +5,7 @@ import ColumnEmptyState from './ColumnEmptyState';
 import ColumnPopulatedState from './ColumnPopulatedState';
 import ColumnLoadingState from './ColumnLoadingState';
 import { shimmer } from '../../../_components/loadingStyle';
+import { COLUMN_PAGE_SIZE } from '@/lib/constants';
 
 type TaskColumnProps = {
   statusForRequest: string;
@@ -30,11 +31,12 @@ export default function TaskColumn({
   >('idle');
   const router = useRouter();
 
-  async function fetchTasksByStatus() {
+  async function fetchTasksByStatus(page: number) {
     try {
       setFetchStatus('loading');
+      const offset = (page - 1) * COLUMN_PAGE_SIZE;
       const res = await fetch(
-        `/api/tasks?projectId=${projectId}&status=${statusForRequest}`
+        `/api/tasks?projectId=${projectId}&status=${statusForRequest}&limit=${COLUMN_PAGE_SIZE}&offset=${offset}`
       );
 
       if (!res.ok) {
@@ -53,7 +55,7 @@ export default function TaskColumn({
   }
 
   useEffect(() => {
-    fetchTasksByStatus();
+    fetchTasksByStatus(1);
   }, [projectId]);
 
   return (    

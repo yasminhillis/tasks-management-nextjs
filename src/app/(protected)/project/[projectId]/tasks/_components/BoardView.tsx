@@ -55,6 +55,7 @@ export default function BoardView({ projectId }: { projectId: string }) {
           onFetchError={setError}
           error={error}
         />
+
       ))}
     </div>
   );
