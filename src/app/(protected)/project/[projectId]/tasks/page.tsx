@@ -39,9 +39,6 @@ export default function Tasks({
     setSearchTerm(title)
   }
 
-  // console.log(searchTerm, 'searchTerm3423');
-  
-
   return (    
     <PageWrapper fillHeight={isBoard}>
       <Header
