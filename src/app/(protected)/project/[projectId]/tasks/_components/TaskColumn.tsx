@@ -14,6 +14,7 @@ type TaskColumnProps = {
   statusColor: string;
   onFetchError: (error: 'fetchError' | 'networkError') => void;
   error: 'fetchError' | 'networkError' | null;
+  searchTerm: string | null;
 };
 
 export default function TaskColumn({
@@ -23,6 +24,7 @@ export default function TaskColumn({
   statusColor,
   onFetchError,
   error,
+  searchTerm,
 }: TaskColumnProps) {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [taskCount, setTaskCount] = useState(0);
@@ -31,34 +33,41 @@ export default function TaskColumn({
   >('idle');
   const router = useRouter();
 
-  async function fetchTasksByStatus(page: number) {
+  async function fetchTasksByStatus(page: number, title?: string | null) {
     try {
       setFetchStatus('loading');
       const offset = (page - 1) * COLUMN_PAGE_SIZE;
-      const res = await fetch(
-        `/api/tasks?projectId=${projectId}&status=${statusForRequest}&limit=${COLUMN_PAGE_SIZE}&offset=${offset}`
-      );
+      let url = `/api/tasks?projectId=${projectId}&status=${statusForRequest}&limit=${COLUMN_PAGE_SIZE}&offset=${offset}`;
+      if (title && title !== null)
+        url = `/api/tasks?projectId=${projectId}&status=${statusForRequest}&limit=${COLUMN_PAGE_SIZE}&offset=${offset}&title=${encodeURIComponent(title)}`;
+      // console.log(url, 'url 999');
+
+      const res = await fetch(url);
 
       if (!res.ok) {
-        const error = await res.json();
         onFetchError('fetchError');
         return;
       }
-      setFetchStatus('success');
       const { tasks, taskCount } = await res.json();
       setTasks(tasks ?? []);
       setTaskCount(taskCount);
+      setFetchStatus('success');
     } catch (error) {
       onFetchError('networkError');
       return;
     }
   }
+  // console.log(searchTerm, 'seatch tem 233123');
 
   useEffect(() => {
-    fetchTasksByStatus(1);
-  }, [projectId]);
+    fetchTasksByStatus(1, searchTerm);
+  }, [projectId, searchTerm]);
 
-  return (    
+  // useEffect(() => {
+  //   fetchTasksByStatus(1, searchTerm)
+  // }, [searchTerm])
+
+  return (
     <div className="flex flex-col gap-4 h-full w-[288px] max-h-[757px] min-h-0">
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
@@ -68,9 +77,9 @@ export default function TaskColumn({
           ></div>
           <h2 className="label-xs-status">{statusForDisplay}</h2>
           <div
-            className={`badge-count ${fetchStatus === 'loading' ? `${shimmer} w-[18px] h-[19px]`: ''} px-[6px] py-[2px] rounded-xs ${statusForDisplay === 'BLOCKED' ? 'bg-[#FFDAD6] text-[#93000A]' : 'bg-[#0052CC1A]'}`}
+            className={`badge-count ${fetchStatus === 'loading' ? `${shimmer} w-[18px] h-[19px]` : ''} px-[6px] py-[2px] rounded-xs ${statusForDisplay === 'BLOCKED' ? 'bg-[#FFDAD6] text-[#93000A]' : 'bg-[#0052CC1A]'}`}
           >
-           {fetchStatus === 'success' ? taskCount : ''}
+            {fetchStatus === 'success' ? taskCount : ''}
           </div>
         </div>
 
@@ -109,10 +118,9 @@ export default function TaskColumn({
         Add New Task
       </button>
 
-      {fetchStatus !== 'idle' &&
+      {
       fetchStatus === 'loading' &&
-      error === null &&
-      tasks.length === 0 ? (
+      error === null ? (
         <ColumnLoadingState />
       ) : taskCount === 0 && fetchStatus === 'success' && error === null ? (
         <ColumnEmptyState
