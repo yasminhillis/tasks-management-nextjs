@@ -40,7 +40,6 @@ export default function TaskColumn({
       let url = `/api/tasks?projectId=${projectId}&status=${statusForRequest}&limit=${COLUMN_PAGE_SIZE}&offset=${offset}`;
       if (title && title !== null)
         url = `/api/tasks?projectId=${projectId}&status=${statusForRequest}&limit=${COLUMN_PAGE_SIZE}&offset=${offset}&title=${encodeURIComponent(title)}`;
-      // console.log(url, 'url 999');
 
       const res = await fetch(url);
 
@@ -57,7 +56,6 @@ export default function TaskColumn({
       return;
     }
   }
-  // console.log(searchTerm, 'seatch tem 233123');
 
   useEffect(() => {
     fetchTasksByStatus(1, searchTerm);
