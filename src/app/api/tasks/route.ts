@@ -14,10 +14,16 @@ export async function GET(req: NextRequest) {
         if (status) {
             url += `&status=eq.${status}`
         }
+
+        console.log(title, 'title');
+        
         
         if (title) {
             url += `&title=ilike.%25${encodeURIComponent(title)}%25`
         }
+
+        console.log(url, 'url in backend');
+        
 
         const resHeaders = await getApiHeaders();
 

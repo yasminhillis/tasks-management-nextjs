@@ -20,6 +20,9 @@ export default function Tasks({
   const isBoard = view === 'board';
   const [projectName, setProjectName] = useState('');
   const {isMobile} = useIsMobile();
+  const titleFromURL = searchParams.get('search');
+  const [searchTerm, setSearchTerm] = useState(titleFromURL)
+  
 
   async function getProjectName(projectId: string) {
     const res = await fetch(`/api/projects/${projectId}`);
@@ -30,6 +33,14 @@ export default function Tasks({
   useEffect(() => {
     getProjectName(projectId);
   }, [projectId]);
+
+  function handleSearchInputChange(e: React.ChangeEvent<HTMLInputElement>){
+    const title = e.target.value; 
+    setSearchTerm(title)
+  }
+
+  // console.log(searchTerm, 'searchTerm3423');
+  
 
   return (    
     <PageWrapper fillHeight={isBoard}>
@@ -52,6 +63,7 @@ export default function Tasks({
                 type="text"
                 placeholder="Search tasks..."
                 className="text-[14px] text-[#737685] px-[12px] py-[10px] outline-none"
+                onChange={handleSearchInputChange}
               />
             </div>
             { isMobile ? <button className="btn-primary-sm flex justify-center items-center gap-2 w-full">
@@ -66,7 +78,7 @@ export default function Tasks({
       {isMobile ? (
         <MobileView projectId={projectId} />
       ) : view === 'board' ? (
-        <BoardView projectId={projectId} />
+        <BoardView projectId={projectId} searchTerm={searchTerm}/>
       ) : view === 'list' ? (
         <ListView projectId={projectId} />
       ) : null}

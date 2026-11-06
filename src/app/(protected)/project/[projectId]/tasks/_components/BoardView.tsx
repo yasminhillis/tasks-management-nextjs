@@ -3,11 +3,13 @@ import TaskColumn from './TaskColumn';
 import ErrorScreen from '@/app/(protected)/_components/ErrorScreen';
 import { useState } from 'react';
 
-export default function BoardView({ projectId }: { projectId: string }) {
+export default function BoardView({ projectId, searchTerm }: { projectId: string, searchTerm: string | null }) {
   const [error, setError] = useState<'fetchError' | 'networkError' | null>(
     null
   );
 
+  console.log(searchTerm, 'searchTerm from board');
+  
   if (error === 'fetchError') {
     return (
       <ErrorScreen
@@ -54,6 +56,7 @@ export default function BoardView({ projectId }: { projectId: string }) {
           statusForDisplay={status.replaceAll('_', ' ')}
           onFetchError={setError}
           error={error}
+          searchTerm={searchTerm}
         />
 
       ))}
