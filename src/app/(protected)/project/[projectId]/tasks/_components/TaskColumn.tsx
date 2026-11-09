@@ -66,7 +66,7 @@ export default function TaskColumn({
     }
     fetchTasksByStatus(1, searchTerm, controller.signal);
     return () => controller.abort();
-  }, [projectId, searchTerm]);
+  }, [projectId, searchTerm, statusForRequest, onFetchError]);
 
   return (
     <div className="flex flex-col gap-4 h-full w-[288px] max-h-[757px] min-h-0">
