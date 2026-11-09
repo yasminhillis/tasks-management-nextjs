@@ -7,8 +7,6 @@ export default function BoardView({ projectId, searchTerm }: { projectId: string
   const [error, setError] = useState<'fetchError' | 'networkError' | null>(
     null
   );
-
-  console.log(searchTerm, 'searchTerm from board');
   
   if (error === 'fetchError') {
     return (
