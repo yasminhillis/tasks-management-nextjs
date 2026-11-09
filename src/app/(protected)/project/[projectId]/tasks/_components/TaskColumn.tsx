@@ -33,34 +33,8 @@ export default function TaskColumn({
   >('idle');
   const router = useRouter();
 
-  function sleep(delay: number){
-    return new Promise(resolve => setTimeout(resolve, delay))
-  }
-
-  async function fetchTasksByStatus(page: number, title: string | null, signal: AbortSignal) {
-    try {
-      setFetchStatus('loading');
-      if (title === 'yasmin') await sleep(4000)
-      const offset = (page - 1) * COLUMN_PAGE_SIZE;
-      let url = `/api/tasks?projectId=${projectId}&status=${statusForRequest}&limit=${COLUMN_PAGE_SIZE}&offset=${offset}`;
-      if (title && title !== null)
-        url = `/api/tasks?projectId=${projectId}&status=${statusForRequest}&limit=${COLUMN_PAGE_SIZE}&offset=${offset}&title=${encodeURIComponent(title)}`;
-
-      const res = await fetch(url, {signal});
-
-      if (!res.ok) {
-        onFetchError('fetchError');
-        return;
-      }
-      const { tasks, taskCount } = await res.json();
-      setTasks(tasks ?? []);
-      setTaskCount(taskCount);
-      setFetchStatus('success');
-    } catch (error) {
-      if (error instanceof DOMException && error.name ==='AbortError') return;
-      onFetchError('networkError');
-      return;
-    }
+  function sleep(delay: number) {
+    return new Promise((resolve) => setTimeout(resolve, delay));
   }
 
   // async function runWithDelay(fn: Promise<void>, delay: number){
@@ -68,11 +42,40 @@ export default function TaskColumn({
   //   await new Promise((fn) => setTimeout(() => fn, delay))
   // }
 
-
   useEffect(() => {
     const controller = new AbortController();
+    async function fetchTasksByStatus(
+      page: number,
+      title: string | null,
+      signal: AbortSignal
+    ) {
+      try {
+        setFetchStatus('loading');
+        if (title === 'yasmin') await sleep(4000);
+        const offset = (page - 1) * COLUMN_PAGE_SIZE;
+        let url = `/api/tasks?projectId=${projectId}&status=${statusForRequest}&limit=${COLUMN_PAGE_SIZE}&offset=${offset}`;
+        if (title && title !== null)
+          url = `/api/tasks?projectId=${projectId}&status=${statusForRequest}&limit=${COLUMN_PAGE_SIZE}&offset=${offset}&title=${encodeURIComponent(title)}`;
+
+        const res = await fetch(url, { signal });
+
+        if (!res.ok) {
+          onFetchError('fetchError');
+          return;
+        }
+        const { tasks, taskCount } = await res.json();
+        setTasks(tasks ?? []);
+        setTaskCount(taskCount);
+        setFetchStatus('success');
+      } catch (error) {
+        if (error instanceof DOMException && error.name === 'AbortError')
+          return;
+        onFetchError('networkError');
+        return;
+      }
+    }
     fetchTasksByStatus(1, searchTerm, controller.signal);
-    return () => controller.abort()
+    return () => controller.abort();
     // runWithDelay(fetchTasksByStatus(1, 'task'), 300)
     // runWithDelay(fetchTasksByStatus(1, 'yasmin'), 4000)
   }, [projectId, searchTerm]);
@@ -132,9 +135,7 @@ export default function TaskColumn({
         Add New Task
       </button>
 
-      {
-      fetchStatus === 'loading' &&
-      error === null ? (
+      {fetchStatus === 'loading' && error === null ? (
         <ColumnLoadingState />
       ) : taskCount === 0 && fetchStatus === 'success' && error === null ? (
         <ColumnEmptyState
