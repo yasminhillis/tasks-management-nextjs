@@ -5,7 +5,7 @@ import PageWrapper from '../../_components/PageWrapper';
 import BoardView from './_components/BoardView';
 import ListView from './_components/ListView';
 import ViewSelect from './_components/ViewSelect';
-import { useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import useIsMobile from '@/hooks/use-is-mobile';
 import MobileView from './_components/MobileView';
 
@@ -15,12 +15,14 @@ export default function Tasks({
   params: Promise<{ projectId: string }>;
 }) {
   const { projectId } = use(params);
+  const router = useRouter(); 
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const view = searchParams.get('view');
   const isBoard = view === 'board';
   const [projectName, setProjectName] = useState('');
   const {isMobile} = useIsMobile();
-  const titleFromURL = searchParams.get('search');
+  const titleFromURL = searchParams.get('search') ?? '';
   const [searchTerm, setSearchTerm] = useState(titleFromURL)
   
 
@@ -32,11 +34,18 @@ export default function Tasks({
 
   useEffect(() => {
     getProjectName(projectId);
-  }, [projectId]);
+  }, [projectId, titleFromURL]);
 
   function handleSearchInputChange(e: React.ChangeEvent<HTMLInputElement>){
+    const params = new URLSearchParams(searchParams.toString()); 
     const title = e.target.value; 
-    setSearchTerm(title)
+    if (title) {
+      params.set('search', title)
+    } else {
+      params.delete('search')
+    }
+    router.push(`${pathname}?${params.toString()}`)
+    // setSearchTerm(title)
   }
 
   return (    
@@ -61,6 +70,7 @@ export default function Tasks({
                 placeholder="Search tasks..."
                 className="text-[14px] text-[#737685] px-[12px] py-[10px] outline-none"
                 onChange={handleSearchInputChange}
+                value={titleFromURL}
               />
             </div>
             { isMobile ? <button className="btn-primary-sm flex justify-center items-center gap-2 w-full">
@@ -75,7 +85,7 @@ export default function Tasks({
       {isMobile ? (
         <MobileView projectId={projectId} />
       ) : view === 'board' ? (
-        <BoardView projectId={projectId} searchTerm={searchTerm}/>
+        <BoardView projectId={projectId} searchTerm={titleFromURL}/>
       ) : view === 'list' ? (
         <ListView projectId={projectId} />
       ) : null}
