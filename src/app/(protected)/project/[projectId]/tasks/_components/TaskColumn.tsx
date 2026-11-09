@@ -44,7 +44,7 @@ export default function TaskColumn({
         setFetchStatus('loading');
         const offset = (page - 1) * COLUMN_PAGE_SIZE;
         let url = `/api/tasks?projectId=${projectId}&status=${statusForRequest}&limit=${COLUMN_PAGE_SIZE}&offset=${offset}`;
-        if (title && title !== null)
+        if (title)
           url = `/api/tasks?projectId=${projectId}&status=${statusForRequest}&limit=${COLUMN_PAGE_SIZE}&offset=${offset}&title=${encodeURIComponent(title)}`;
 
         const res = await fetch(url, { signal });
