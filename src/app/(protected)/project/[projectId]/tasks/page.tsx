@@ -8,7 +8,7 @@ import ViewSelect from './_components/ViewSelect';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import useIsMobile from '@/hooks/use-is-mobile';
 import MobileView from './_components/MobileView';
-
+import { DEBOUNCE_DELAY } from '@/lib/constants';
 export default function Tasks({
   params,
 }: {
@@ -23,6 +23,8 @@ export default function Tasks({
   const [projectName, setProjectName] = useState('');
   const {isMobile} = useIsMobile();
   const titleFromURL = searchParams.get('search') ?? '';
+  const [debouncedTitle, setDebouncedTitle] = useState(titleFromURL)
+  const [inputTitle, setInputTitle] = useState(titleFromURL)
  
   async function getProjectName(projectId: string) {
     const res = await fetch(`/api/projects/${projectId}`);
@@ -31,12 +33,21 @@ export default function Tasks({
   }  
 
   useEffect(() => {
+    const timer = setTimeout(() => setDebouncedTitle(titleFromURL), DEBOUNCE_DELAY)
+    return () => clearTimeout(timer)
+  }, [titleFromURL])
+
+  console.log(debouncedTitle, 'debounced title');
+  
+
+  useEffect(() => {
     getProjectName(projectId);
   }, [projectId]);
 
   function handleSearchInputChange(e: React.ChangeEvent<HTMLInputElement>){
     const params = new URLSearchParams(searchParams.toString()); 
     const title = e.target.value; 
+    setInputTitle(title)
     if (title) {
       params.set('search', title)
     } else {
@@ -67,7 +78,7 @@ export default function Tasks({
                 placeholder="Search tasks..."
                 className="text-[14px] text-[#737685] px-[12px] py-[10px] outline-none"
                 onChange={handleSearchInputChange}
-                value={titleFromURL}
+                value={inputTitle}
               />
             </div>
             { isMobile ? <button className="btn-primary-sm flex justify-center items-center gap-2 w-full">
@@ -82,7 +93,7 @@ export default function Tasks({
       {isMobile ? (
         <MobileView projectId={projectId} />
       ) : view === 'board' ? (
-        <BoardView projectId={projectId} searchTerm={titleFromURL}/>
+        <BoardView projectId={projectId} searchTerm={debouncedTitle}/>
       ) : view === 'list' ? (
         <ListView projectId={projectId} />
       ) : null}
