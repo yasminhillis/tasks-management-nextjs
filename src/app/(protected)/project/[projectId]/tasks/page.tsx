@@ -35,10 +35,7 @@ export default function Tasks({
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedTitle(titleFromURL), DEBOUNCE_DELAY)
     return () => clearTimeout(timer)
-  }, [titleFromURL])
-
-  console.log(debouncedTitle, 'debounced title');
-  
+  }, [titleFromURL])  
 
   useEffect(() => {
     getProjectName(projectId);
