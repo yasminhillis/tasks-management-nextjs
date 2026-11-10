@@ -32,7 +32,7 @@ export default function Tasks({
 
   useEffect(() => {
     getProjectName(projectId);
-  }, [projectId, titleFromURL]);
+  }, [projectId]);
 
   function handleSearchInputChange(e: React.ChangeEvent<HTMLInputElement>){
     const params = new URLSearchParams(searchParams.toString()); 
