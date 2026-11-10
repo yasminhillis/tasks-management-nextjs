@@ -23,14 +23,12 @@ export default function Tasks({
   const [projectName, setProjectName] = useState('');
   const {isMobile} = useIsMobile();
   const titleFromURL = searchParams.get('search') ?? '';
-  const [searchTerm, setSearchTerm] = useState(titleFromURL)
-  
-
+ 
   async function getProjectName(projectId: string) {
     const res = await fetch(`/api/projects/${projectId}`);
     const { projectName: name } = await res.json();
     setProjectName(name);
-  }
+  }  
 
   useEffect(() => {
     getProjectName(projectId);
@@ -45,7 +43,6 @@ export default function Tasks({
       params.delete('search')
     }
     router.push(`${pathname}?${params.toString()}`)
-    // setSearchTerm(title)
   }
 
   return (    
