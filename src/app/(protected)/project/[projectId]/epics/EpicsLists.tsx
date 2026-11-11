@@ -60,7 +60,7 @@ export default function EpicsList({
     router.push(`${pathname}?${params.toString()}`);
   }
 
-  function removeEpicIdToSearchParams() {
+  function removeEpicIdFromSearchParams() {
     const params = new URLSearchParams(searchParams.toString());
     params.delete('epicId');
     router.push(`${pathname}?${params.toString()}`);
@@ -155,7 +155,7 @@ export default function EpicsList({
           <EpicModal
             projectId={projectId}
             epicId={epicId}
-            onClose={() => removeEpicIdToSearchParams()}
+            onClose={() => removeEpicIdFromSearchParams()}
             onEpicUpdate={onEpicUpdate}
           />
         )}
