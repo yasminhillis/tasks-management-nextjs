@@ -154,14 +154,6 @@ export default function Epics() {
     fetchEpics(currentPage);
   }, [currentPage, titleFromURL]);
 
-  // useEffect(() => {
-  //   const timer = setTimeout(
-  //     () => navigateToFirstPageAndSetSearchParam(title),
-  //     500
-  //   );
-  //   return () => clearTimeout(timer);
-  // }, [title]);
-
   const debouncedTitle = useDebounce(title);
   useEffect(() => {
     navigateToFirstPageAndSetSearchParam(debouncedTitle);
