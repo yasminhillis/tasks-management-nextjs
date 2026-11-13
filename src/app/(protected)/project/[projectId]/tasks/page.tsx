@@ -24,7 +24,6 @@ export default function Tasks({
   const [projectName, setProjectName] = useState('');
   const { isMobile } = useIsMobile();
   const titleFromURL = searchParams.get('search') ?? '';
-  // const [debouncedTitle, setDebouncedTitle] = useState(titleFromURL)
   const [inputTitle, setInputTitle] = useState(titleFromURL);
 
   async function getProjectName(projectId: string) {
@@ -32,11 +31,6 @@ export default function Tasks({
     const { projectName: name } = await res.json();
     setProjectName(name);
   }
-
-  // useEffect(() => {
-  //   const timer = setTimeout(() => setDebouncedTitle(titleFromURL), DEBOUNCE_DELAY)
-  //   return () => clearTimeout(timer)
-  // }, [titleFromURL])
 
   useEffect(() => {
     getProjectName(projectId);
