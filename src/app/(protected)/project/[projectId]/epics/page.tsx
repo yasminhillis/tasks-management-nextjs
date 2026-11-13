@@ -12,6 +12,7 @@ import EpicsList from './EpicsLists';
 import { useEffect, useState } from 'react';
 import type { Epic } from '@/lib/types';
 import { EPICS_PAGE_SIZE } from '@/lib/constants';
+import { useDebounce } from '../hooks/useDebounce';
 
 export default function Epics() {
   const { projectId } = useParams<{ projectId: string }>();
@@ -153,13 +154,18 @@ export default function Epics() {
     fetchEpics(currentPage);
   }, [currentPage, titleFromURL]);
 
+  // useEffect(() => {
+  //   const timer = setTimeout(
+  //     () => navigateToFirstPageAndSetSearchParam(title),
+  //     500
+  //   );
+  //   return () => clearTimeout(timer);
+  // }, [title]);
+
+  const debouncedTitle = useDebounce(title);
   useEffect(() => {
-    const timer = setTimeout(
-      () => navigateToFirstPageAndSetSearchParam(title),
-      500
-    );
-    return () => clearTimeout(timer);
-  }, [title]);
+    navigateToFirstPageAndSetSearchParam(debouncedTitle);
+  }, [debouncedTitle]);
 
   return (
     <PageWrapper>

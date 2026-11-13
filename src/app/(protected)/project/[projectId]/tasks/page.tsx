@@ -8,52 +8,58 @@ import ViewSelect from './_components/ViewSelect';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import useIsMobile from '@/hooks/use-is-mobile';
 import MobileView from './_components/MobileView';
-import { DEBOUNCE_DELAY } from '@/lib/constants';
+import { useDebounce } from '../hooks/useDebounce';
+
 export default function Tasks({
   params,
 }: {
   params: Promise<{ projectId: string }>;
 }) {
   const { projectId } = use(params);
-  const router = useRouter(); 
+  const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const view = searchParams.get('view');
   const isBoard = view === 'board';
   const [projectName, setProjectName] = useState('');
-  const {isMobile} = useIsMobile();
+  const { isMobile } = useIsMobile();
   const titleFromURL = searchParams.get('search') ?? '';
-  const [debouncedTitle, setDebouncedTitle] = useState(titleFromURL)
-  const [inputTitle, setInputTitle] = useState(titleFromURL)
- 
+  // const [debouncedTitle, setDebouncedTitle] = useState(titleFromURL)
+  const [inputTitle, setInputTitle] = useState(titleFromURL);
+
   async function getProjectName(projectId: string) {
     const res = await fetch(`/api/projects/${projectId}`);
     const { projectName: name } = await res.json();
     setProjectName(name);
-  }  
+  }
 
-  useEffect(() => {
-    const timer = setTimeout(() => setDebouncedTitle(titleFromURL), DEBOUNCE_DELAY)
-    return () => clearTimeout(timer)
-  }, [titleFromURL])  
+  // useEffect(() => {
+  //   const timer = setTimeout(() => setDebouncedTitle(titleFromURL), DEBOUNCE_DELAY)
+  //   return () => clearTimeout(timer)
+  // }, [titleFromURL])
 
   useEffect(() => {
     getProjectName(projectId);
   }, [projectId]);
 
-  function handleSearchInputChange(e: React.ChangeEvent<HTMLInputElement>){
-    const params = new URLSearchParams(searchParams.toString()); 
-    const title = e.target.value; 
-    setInputTitle(title)
-    if (title) {
-      params.set('search', title)
-    } else {
-      params.delete('search')
-    }
-    router.push(`${pathname}?${params.toString()}`)
+  function handleSearchInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setInputTitle(e.target.value)   
   }
 
-  return (    
+  const debouncedInput = useDebounce(inputTitle);
+  useEffect(() => {
+    const trimmed = debouncedInput.trim()
+    if (trimmed === titleFromURL) return;
+    const params = new URLSearchParams(searchParams.toString());
+    if (trimmed) {
+      params.set('search', trimmed);
+    } else {
+      params.delete('search');
+    }
+    router.replace(`${pathname}?${params.toString()}`);
+  }, [debouncedInput]);
+
+  return (
     <PageWrapper fillHeight={isBoard}>
       <Header
         desktopTitle="Active Workboard"
@@ -61,9 +67,12 @@ export default function Tasks({
         desktopDescriptionExtraStyles="font-normal text-[14px] text-[#64748B]"
         mobileTitle="Active Workboard"
         searchBar={
-          <div className={`flex ${isMobile ? 'flex-col gap-4' : 'items-center'} w-full md:w-[256px]`}>
-            
-            <div className={`pl-[12px] flex items-center bg-[#D7E2FF] h-[36px] ${isMobile ? 'rounded-md' : 'rounded-[2px]'} ${isMobile ? '' : 'flex-1'}`}>
+          <div
+            className={`flex ${isMobile ? 'flex-col gap-4' : 'items-center'} w-full md:w-[256px]`}
+          >
+            <div
+              className={`pl-[12px] flex items-center bg-[#D7E2FF] h-[36px] ${isMobile ? 'rounded-md' : 'rounded-[2px]'} ${isMobile ? '' : 'flex-1'}`}
+            >
               <span
                 className="material-symbols-outlined"
                 style={{ fontSize: '16px', color: '#737685' }}
@@ -78,10 +87,17 @@ export default function Tasks({
                 value={inputTitle}
               />
             </div>
-            { isMobile ? <button className="btn-primary-sm flex justify-center items-center gap-2 w-full">
-              <span className="material-symbols-outlined" style={{'fontSize': '16px'}}>add</span>
-              Create Task
-              </button> :  null }
+            {isMobile ? (
+              <button className="btn-primary-sm flex justify-center items-center gap-2 w-full">
+                <span
+                  className="material-symbols-outlined"
+                  style={{ fontSize: '16px' }}
+                >
+                  add
+                </span>
+                Create Task
+              </button>
+            ) : null}
           </div>
         }
         headerControls={<ViewSelect />}
@@ -90,7 +106,7 @@ export default function Tasks({
       {isMobile ? (
         <MobileView projectId={projectId} />
       ) : view === 'board' ? (
-        <BoardView projectId={projectId} searchTerm={debouncedTitle}/>
+        <BoardView projectId={projectId} searchTerm={titleFromURL} />
       ) : view === 'list' ? (
         <ListView projectId={projectId} />
       ) : null}
