@@ -1,9 +1,9 @@
 import ListTable from './ListTable';
 
-export default function ListView({ projectId }: { projectId: string }) {
+export default function ListView({ projectId, searchTerm }: { projectId: string, searchTerm: string }) {
   return (
     <>
-      <ListTable projectId={projectId} />
+      <ListTable projectId={projectId} searchTerm={searchTerm}/>
     </>
   );
 }

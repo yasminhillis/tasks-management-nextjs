@@ -9,6 +9,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import useIsMobile from '@/hooks/use-is-mobile';
 import MobileView from './_components/MobileView';
 import { DEBOUNCE_DELAY } from '@/lib/constants';
+
 export default function Tasks({
   params,
 }: {
@@ -50,8 +51,10 @@ export default function Tasks({
     } else {
       params.delete('search')
     }
-    router.push(`${pathname}?${params.toString()}`)
+    router.replace(`${pathname}?${params.toString()}`)
   }
+
+  const debounced = useDebounce();
 
   return (    
     <PageWrapper fillHeight={isBoard}>
@@ -90,9 +93,9 @@ export default function Tasks({
       {isMobile ? (
         <MobileView projectId={projectId} />
       ) : view === 'board' ? (
-        <BoardView projectId={projectId} searchTerm={debouncedTitle}/>
+        <BoardView projectId={projectId} searchTerm={debouncedTitle} />
       ) : view === 'list' ? (
-        <ListView projectId={projectId} />
+        <ListView projectId={projectId} searchTerm={debouncedTitle} />
       ) : null}
     </PageWrapper>
   );
