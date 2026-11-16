@@ -7,37 +7,61 @@ import type { Status } from '@/lib/types';
 import { useRouter } from 'next/navigation';
 import ListTableLoadingState from './ListTableLoadingState';
 
-export default function ListTable({ projectId }: { projectId: string }) {
+export default function ListTable({
+  projectId,
+  searchTerm,
+}: {
+  projectId: string;
+  searchTerm: string;
+}) {
   const [tasks, setTasks] = useState<Task[]>([]);
-  
+
   const [taskFetchStatus, setTaskFetchStatus] = useState<
     'loading' | 'success' | 'fetchError' | 'networkError'
   >('loading');
 
   const router = useRouter();
 
-const fetchTasks = useCallback(async () => {
-      try {
-      const res = await fetch(`/api/tasks?projectId=${projectId}`);
-      if (!res.ok) {
-        setTaskFetchStatus('fetchError');
-        return;
-      }
-      const { tasks } = await res.json();
-      setTasks(tasks);
-      setTaskFetchStatus('success');
-    } catch {
-      setTaskFetchStatus('networkError');
-    }
-}, [projectId])
+  async function sleep() {
+    return new Promise((resolve) => setTimeout(resolve, 4000));
+  }
 
-  function retryFetchTasks(){
+  const fetchTasks = useCallback(
+    async (signal: AbortSignal) => {
+      try {
+        let url = `/api/tasks?projectId=${projectId}`;
+        if (searchTerm)
+          url = `/api/tasks?projectId=${projectId}&title=${encodeURIComponent(searchTerm)}`;
+        if (searchTerm === 'new') await sleep();
+        const res = await fetch(url, { signal: signal });
+        if (!res.ok) {
+          setTaskFetchStatus('fetchError');
+          return;
+        }
+        const { tasks } = await res.json();
+        setTasks(tasks);
+        setTaskFetchStatus('success');
+      } catch(error: unknown) {
+        console.log(error);
+        if (error instanceof Error && error.name === 'AbortError') return 
+        setTaskFetchStatus('networkError');
+      }
+    },
+    [projectId, searchTerm]
+  );
+
+  function retryFetchTasks() {
     setTaskFetchStatus('loading');
-    fetchTasks()
+    const controller = new AbortController();
+
+    fetchTasks(controller.signal);
   }
 
   useEffect(() => {
-    fetchTasks();
+    const controller = new AbortController();
+
+    fetchTasks(controller.signal);
+    return () => controller.abort();
   }, [fetchTasks]);
 
   const statusColor = {
@@ -63,11 +87,12 @@ const fetchTasks = useCallback(async () => {
   }
 
   if (taskFetchStatus === 'networkError') {
+    const controller = new AbortController();
     return (
       <ErrorScreen
         title="You're offline"
         message={`You're offline. Please check your connection and try again`}
-        onRetry={() => fetchTasks()}
+        onRetry={() => fetchTasks(controller.signal)}
         buttonElement={true}
       />
     );
@@ -137,12 +162,8 @@ const fetchTasks = useCallback(async () => {
                   <div
                     className="table-status-badge status-pill bg-blue-300 whitespace-nowrap"
                     style={{
-                      backgroundColor:
-                        statusColor[task.status as Status]
-                          ?.bg,
-                      color:
-                        statusColor[task.status as Status]
-                          ?.text,
+                      backgroundColor: statusColor[task.status as Status]?.bg,
+                      color: statusColor[task.status as Status]?.text,
                     }}
                   >
                     {task.status?.replaceAll('_', ' ')}

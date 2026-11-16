@@ -8,7 +8,11 @@ import ViewSelect from './_components/ViewSelect';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import useIsMobile from '@/hooks/use-is-mobile';
 import MobileView from './_components/MobileView';
+<<<<<<< HEAD
+import { DEBOUNCE_DELAY } from '@/lib/constants';
+=======
 import { useDebounce } from '../hooks/useDebounce';
+>>>>>>> origin/main
 
 export default function Tasks({
   params,
@@ -36,6 +40,23 @@ export default function Tasks({
     getProjectName(projectId);
   }, [projectId]);
 
+<<<<<<< HEAD
+  function handleSearchInputChange(e: React.ChangeEvent<HTMLInputElement>){
+    const params = new URLSearchParams(searchParams.toString()); 
+    const title = e.target.value; 
+    setInputTitle(title)
+    if (title) {
+      params.set('search', title)
+    } else {
+      params.delete('search')
+    }
+    router.replace(`${pathname}?${params.toString()}`)
+  }
+
+  const debounced = useDebounce();
+
+  return (    
+=======
   function handleSearchInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     setInputTitle(e.target.value)   
   }
@@ -54,6 +75,7 @@ export default function Tasks({
   }, [debouncedInput]);
 
   return (
+>>>>>>> origin/main
     <PageWrapper fillHeight={isBoard}>
       <Header
         desktopTitle="Active Workboard"
@@ -100,9 +122,13 @@ export default function Tasks({
       {isMobile ? (
         <MobileView projectId={projectId} />
       ) : view === 'board' ? (
+<<<<<<< HEAD
+        <BoardView projectId={projectId} searchTerm={debouncedTitle} />
+=======
         <BoardView projectId={projectId} searchTerm={titleFromURL} />
+>>>>>>> origin/main
       ) : view === 'list' ? (
-        <ListView projectId={projectId} />
+        <ListView projectId={projectId} searchTerm={debouncedTitle} />
       ) : null}
     </PageWrapper>
   );
