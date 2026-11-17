@@ -21,6 +21,8 @@ export async function GET(req: NextRequest) {
         
         const resHeaders = await getApiHeaders();
 
+        // await new Promise((r) => setTimeout(r, 3000));
+
         const res = await fetch(url, {
             headers: {...resHeaders, Prefer: 'count=exact'}
         });
