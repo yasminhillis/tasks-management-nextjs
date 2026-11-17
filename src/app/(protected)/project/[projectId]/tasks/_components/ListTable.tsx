@@ -42,7 +42,6 @@ export default function ListTable({
         setTasks(tasks);
         setTaskFetchStatus('success');
       } catch(error: unknown) {
-        console.log(error);
         if (error instanceof Error && error.name === 'AbortError') return 
         setTaskFetchStatus('networkError');
       }
