@@ -20,10 +20,12 @@ export default function ListTable({
     'loading' | 'success' | 'fetchError' | 'networkError'
   >('loading');
 
+  const [retryCount, setRetryCount] = useState(0)
+
   const router = useRouter();
 
   async function sleep() {
-    return new Promise((resolve) => setTimeout(resolve, 4000));
+    return new Promise((resolve) => setTimeout(resolve, 7000));
   }
 
   const fetchTasks = useCallback(
@@ -32,7 +34,10 @@ export default function ListTable({
         let url = `/api/tasks?projectId=${projectId}`;
         if (searchTerm)
           url = `/api/tasks?projectId=${projectId}&title=${encodeURIComponent(searchTerm)}`;
-        if (searchTerm === 'new') await sleep();
+        // await sleep()
+        // if (searchTerm === 'new') await sleep();
+        // if (searchTerm === 'yasmin') await sleep();
+
         const res = await fetch(url, { signal: signal });
         if (!res.ok) {
           setTaskFetchStatus('fetchError');
@@ -51,9 +56,9 @@ export default function ListTable({
 
   function retryFetchTasks() {
     setTaskFetchStatus('loading');
-    const controller = new AbortController();
-
-    fetchTasks(controller.signal);
+    setRetryCount(prev => prev + 1)
+    // const controller = new AbortController();
+    // fetchTasks(controller.signal);
   }
 
   useEffect(() => {
@@ -61,7 +66,7 @@ export default function ListTable({
 
     fetchTasks(controller.signal);
     return () => controller.abort();
-  }, [fetchTasks]);
+  }, [fetchTasks, retryCount]);
 
   const statusColor = {
     IN_PROGRESS: { bg: '#CDDDFF', text: '#374763' },
@@ -86,12 +91,11 @@ export default function ListTable({
   }
 
   if (taskFetchStatus === 'networkError') {
-    const controller = new AbortController();
     return (
       <ErrorScreen
         title="You're offline"
         message={`You're offline. Please check your connection and try again`}
-        onRetry={() => fetchTasks(controller.signal)}
+        onRetry={() => retryFetchTasks()}
         buttonElement={true}
       />
     );
