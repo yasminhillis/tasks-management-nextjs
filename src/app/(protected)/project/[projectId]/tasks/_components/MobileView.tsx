@@ -291,7 +291,7 @@ const tasks = [
 export default function MobileView({ projectId }: {projectId: string}){
     return <ul className="flex flex-col gap-3">
         {
-          tasks.map(task => <MobileTaskCard taskId={task.task_id} title={task.title} assigneeName={task.assignee?.name ?? 'Unassigned'} dueDate={task.due_date} status={task.status}/>)
+          tasks.map(task => <MobileTaskCard key={task.task_id} taskId={task.task_id} title={task.title} assigneeName={task.assignee?.name ?? 'Unassigned'} dueDate={task.due_date} status={task.status}/>)
         }
     </ul>
 }
