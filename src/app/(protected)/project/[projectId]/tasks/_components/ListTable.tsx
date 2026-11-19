@@ -32,12 +32,7 @@ export default function ListTable({
     async (signal: AbortSignal) => {
       try {
         let url = `/api/tasks?projectId=${projectId}`;
-        if (searchTerm)
-          url = `/api/tasks?projectId=${projectId}&title=${encodeURIComponent(searchTerm)}`;
-        // await sleep()
-        // if (searchTerm === 'new') await sleep();
-        // if (searchTerm === 'yasmin') await sleep();
-
+        if (searchTerm) url = `/api/tasks?projectId=${projectId}&title=${encodeURIComponent(searchTerm)}`;
         const res = await fetch(url, { signal: signal });
         if (!res.ok) {
           setTaskFetchStatus('fetchError');
@@ -57,13 +52,10 @@ export default function ListTable({
   function retryFetchTasks() {
     setTaskFetchStatus('loading');
     setRetryCount(prev => prev + 1)
-    // const controller = new AbortController();
-    // fetchTasks(controller.signal);
   }
 
   useEffect(() => {
     const controller = new AbortController();
-
     fetchTasks(controller.signal);
     return () => controller.abort();
   }, [fetchTasks, retryCount]);
