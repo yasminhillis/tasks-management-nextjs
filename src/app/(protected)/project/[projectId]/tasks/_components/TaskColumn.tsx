@@ -13,7 +13,6 @@ type TaskColumnProps = {
   projectId: string;
   statusColor: string;
   onFetchError: (error: 'fetchError' | 'networkError') => void;
-  error: 'fetchError' | 'networkError' | null;
   searchTerm: string | null;
 };
 
@@ -23,7 +22,6 @@ export default function TaskColumn({
   projectId,
   statusColor,
   onFetchError,
-  error,
   searchTerm,
 }: TaskColumnProps) {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -123,26 +121,11 @@ export default function TaskColumn({
 
       {fetchStatus === 'loading' ? (
         <ColumnLoadingState />
-      ) : isEmpty && isSearching ? (
-        <div className="border-dashed-custom flex flex-col justify-center items-center flex-1 min-h-0 w-full bg-surface-low">
-          <div
-            className="w-8 h-8 rounded-full flex items-center justify-center mb-3"
-            style={{ backgroundColor: `${statusColor}1A` }}
-          >
-            <span
-              className="material-symbols-outlined"
-              style={{ fontSize: '16px', color: statusColor }}
-            >
-              inbox
-            </span>
-          </div>
-          <h3 className="body-lg-medium">No search results</h3>
-          <p className="hint">No search results available for this status</p>
-        </div>
       ) : isEmpty ? (
         <ColumnEmptyState
           statusColor={statusColor}
           statusForDisplay={statusForDisplay}
+          isSearching={isSearching}
         />
       ) : (
         <ColumnPopulatedState
