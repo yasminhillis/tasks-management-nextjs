@@ -44,14 +44,14 @@ export default function Tasks({
   useEffect(() => {
     const trimmed = debouncedInput.trim()
     if (trimmed === titleFromURL) return;
-    const params = new URLSearchParams(searchParams.toString());
+    const nextParams = new URLSearchParams(searchParams.toString());
     if (trimmed) {
-      params.set('search', trimmed);
+      nextParams.set('search', trimmed);
     } else {
-      params.delete('search');
+      nextParams.delete('search');
     }
-    router.replace(`${pathname}?${params.toString()}`);
-  }, [debouncedInput]);
+    router.replace(`${pathname}?${nextParams.toString()}`);
+  }, [debouncedInput, titleFromURL, searchParams, router, pathname]);
 
   return (
     <PageWrapper fillHeight={isBoard}>

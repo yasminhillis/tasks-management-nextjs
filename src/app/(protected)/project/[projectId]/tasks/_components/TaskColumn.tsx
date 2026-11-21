@@ -28,9 +28,9 @@ export default function TaskColumn({
 }: TaskColumnProps) {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [taskCount, setTaskCount] = useState(0);
-  const [fetchStatus, setFetchStatus] = useState<
-    'idle' | 'loading' | 'success'
-  >('idle');
+  const [fetchStatus, setFetchStatus] = useState<'loading' | 'success'>(
+    'loading'
+  );
   const router = useRouter();
 
   useEffect(() => {
@@ -41,7 +41,7 @@ export default function TaskColumn({
       signal: AbortSignal
     ) {
       try {
-        setFetchStatus('loading');
+        // setFetchStatus('loading');
         const offset = (page - 1) * COLUMN_PAGE_SIZE;
         let url = `/api/tasks?projectId=${projectId}&status=${statusForRequest}&limit=${COLUMN_PAGE_SIZE}&offset=${offset}`;
         if (title)
@@ -68,6 +68,8 @@ export default function TaskColumn({
     return () => controller.abort();
   }, [projectId, searchTerm, statusForRequest, onFetchError]);
 
+  const isSearching = !!searchTerm;
+  const isEmpty = tasks.length === 0;
   return (
     <div className="flex flex-col gap-4 h-full w-[288px] max-h-[757px] min-h-0">
       <div className="flex items-center justify-between gap-2">
@@ -119,19 +121,35 @@ export default function TaskColumn({
         Add New Task
       </button>
 
-      {fetchStatus === 'loading' && error === null ? (
+      {fetchStatus === 'loading' ? (
         <ColumnLoadingState />
-      ) : taskCount === 0 && fetchStatus === 'success' && error === null ? (
+      ) : isEmpty && isSearching ? (
+        <div className="border-dashed-custom flex flex-col justify-center items-center flex-1 min-h-0 w-full bg-surface-low">
+          <div
+            className="w-8 h-8 rounded-full flex items-center justify-center mb-3"
+            style={{ backgroundColor: `${statusColor}1A` }}
+          >
+            <span
+              className="material-symbols-outlined"
+              style={{ fontSize: '16px', color: statusColor }}
+            >
+              inbox
+            </span>
+          </div>
+          <h3 className="body-lg-medium">No search results</h3>
+          <p className="hint">No search results available for this status</p>
+        </div>
+      ) : isEmpty ? (
         <ColumnEmptyState
           statusColor={statusColor}
           statusForDisplay={statusForDisplay}
         />
-      ) : fetchStatus === 'success' && error === null ? (
+      ) : (
         <ColumnPopulatedState
           tasks={tasks}
           statusForDisplay={statusForDisplay}
         />
-      ) : null}
+      ) }
     </div>
   );
 }
