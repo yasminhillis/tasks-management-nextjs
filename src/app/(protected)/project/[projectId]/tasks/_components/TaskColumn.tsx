@@ -13,7 +13,6 @@ type TaskColumnProps = {
   projectId: string;
   statusColor: string;
   onFetchError: (error: 'fetchError' | 'networkError') => void;
-  error: 'fetchError' | 'networkError' | null;
   searchTerm: string | null;
 };
 
@@ -23,7 +22,6 @@ export default function TaskColumn({
   projectId,
   statusColor,
   onFetchError,
-  error,
   searchTerm,
 }: TaskColumnProps) {
   const [tasks, setTasks] = useState<Task[]>([]);

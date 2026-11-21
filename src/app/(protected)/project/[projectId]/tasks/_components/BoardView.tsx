@@ -53,7 +53,6 @@ export default function BoardView({ projectId, searchTerm }: { projectId: string
           statusForRequest={status}
           statusForDisplay={status.replaceAll('_', ' ')}
           onFetchError={setError}
-          error={error}
           searchTerm={searchTerm}
         />
 
