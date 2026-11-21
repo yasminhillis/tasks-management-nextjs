@@ -6,6 +6,7 @@ import type { Task } from '@/lib/types';
 import type { Status } from '@/lib/types';
 import { useRouter } from 'next/navigation';
 import ListTableLoadingState from './ListTableLoadingState';
+import ListViewSearchEmptyState from './ListViewSearchEmptyState';
 
 export default function ListTable({
   projectId,
@@ -117,7 +118,7 @@ export default function ListTable({
           </tr>
         </thead>
         <tbody>
-          {isEmpty && isSearching ? <div>no search results</div> : isEmpty ? (
+          {isEmpty && isSearching ? <ListViewSearchEmptyState /> : isEmpty ? (
             <tr>
               <td colSpan={5}>
                 <div className="flex flex-col items-center justify-center gap-4 h-[280px]">
