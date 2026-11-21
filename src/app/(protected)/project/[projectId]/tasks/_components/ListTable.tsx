@@ -93,6 +93,9 @@ export default function ListTable({
     );
   }
 
+  const isSearching = !!searchTerm; 
+  const isEmpty = tasks.length === 0
+
   return taskFetchStatus === 'loading' ? (
     <ListTableLoadingState />
   ) : (
@@ -114,7 +117,7 @@ export default function ListTable({
           </tr>
         </thead>
         <tbody>
-          {tasks.length === 0 && taskFetchStatus === 'success' ? (
+          {isEmpty && isSearching ? <div>no search results</div> : isEmpty ? (
             <tr>
               <td colSpan={5}>
                 <div className="flex flex-col items-center justify-center gap-4 h-[280px]">
