@@ -68,6 +68,8 @@ export default function TaskColumn({
     return () => controller.abort();
   }, [projectId, searchTerm, statusForRequest, onFetchError]);
 
+  const isSearching = !!searchTerm;
+  const isEmpty = tasks.length === 0;
   return (
     <div className="flex flex-col gap-4 h-full w-[288px] max-h-[757px] min-h-0">
       <div className="flex items-center justify-between gap-2">
@@ -119,11 +121,9 @@ export default function TaskColumn({
         Add New Task
       </button>
 
-      {fetchStatus === 'loading' && error === null ? (
+      {fetchStatus === 'loading' ? (
         <ColumnLoadingState />
-      ) : fetchStatus === 'success' && searchTerm && searchTerm.length > 0 && tasks.length === 0 ? (
-        <>
-        <div></div>
+      ) : isEmpty && isSearching ? (
         <div className="border-dashed-custom flex flex-col justify-center items-center flex-1 min-h-0 w-full bg-surface-low">
           <div
             className="w-8 h-8 rounded-full flex items-center justify-center mb-3"
@@ -139,24 +139,17 @@ export default function TaskColumn({
           <h3 className="body-lg-medium">No search results</h3>
           <p className="hint">No search results available for this status</p>
         </div>
-        </>
-      ): taskCount === 0 && fetchStatus === 'success' && error === null ? (
+      ) : isEmpty ? (
         <ColumnEmptyState
           statusColor={statusColor}
           statusForDisplay={statusForDisplay}
         />
-      ) : fetchStatus === 'success' && error === null ? (
+      ) : (
         <ColumnPopulatedState
           tasks={tasks}
           statusForDisplay={statusForDisplay}
         />
-      ) : fetchStatus === 'success' && searchTerm && searchTerm.length > 0 && tasks.length > 0 ? (
-        <ColumnPopulatedState
-          tasks={tasks}
-          statusForDisplay={statusForDisplay}
-        />
-      ) 
-      : null}
+      ) }
     </div>
   );
 }
