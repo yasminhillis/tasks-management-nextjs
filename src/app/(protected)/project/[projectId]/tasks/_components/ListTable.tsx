@@ -25,10 +25,6 @@ export default function ListTable({
 
   const router = useRouter();
 
-  async function sleep() {
-    return new Promise((resolve) => setTimeout(resolve, 7000));
-  }
-
   const fetchTasks = useCallback(
     async (signal: AbortSignal) => {
       try {
