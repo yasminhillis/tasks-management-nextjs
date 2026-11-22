@@ -18,8 +18,10 @@ export default function ListTable({
   const [tasks, setTasks] = useState<Task[]>([]);
 
   const [taskFetchStatus, setTaskFetchStatus] = useState<
-    'loading' | 'success' | 'fetchError' | 'networkError'
+  'loading' | 'success' | 'fetchError' | 'networkError'
   >('loading');
+  const [loadedTerm, setLoadedTerm] = useState('')
+
 
   const [retryCount, setRetryCount] = useState(0)
 
@@ -30,6 +32,7 @@ export default function ListTable({
       try {
         let url = `/api/tasks?projectId=${projectId}`;
         if (searchTerm) url = `/api/tasks?projectId=${projectId}&title=${encodeURIComponent(searchTerm)}`;
+        setTaskFetchStatus('loading')
         const res = await fetch(url, { signal: signal });
         if (!res.ok) {
           setTaskFetchStatus('fetchError');
@@ -37,6 +40,7 @@ export default function ListTable({
         }
         const { tasks } = await res.json();
         setTasks(tasks);
+        setLoadedTerm(searchTerm ?? '')
         setTaskFetchStatus('success');
       } catch(error: unknown) {
         if (error instanceof Error && error.name === 'AbortError') return 
@@ -91,9 +95,11 @@ export default function ListTable({
   }
 
   const isSearching = !!searchTerm; 
-  const isEmpty = tasks.length === 0
+  const isEmpty = tasks.length === 0; 
+  const currentTerm = searchTerm ?? '';
+  const isLoading = taskFetchStatus !== 'success' || currentTerm !== loadedTerm
 
-  return taskFetchStatus === 'loading' ? (
+  return isLoading ? (
     <ListTableLoadingState />
   ) : (
     <>
@@ -114,7 +120,7 @@ export default function ListTable({
           </tr>
         </thead>
         <tbody>
-          {isEmpty && isSearching ? <ListViewSearchEmptyState /> : isEmpty ? (
+          {isEmpty && isSearching ? <ListViewSearchEmptyState /> : isEmpty && !isSearching ? (
             <tr>
               <td colSpan={5}>
                 <div className="flex flex-col items-center justify-center gap-4 h-[280px]">

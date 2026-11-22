@@ -29,6 +29,8 @@ export default function TaskColumn({
   const [fetchStatus, setFetchStatus] = useState<'loading' | 'success'>(
     'loading'
   );
+
+  const [loadedTerm, setLoadedTerm] = useState('');
   const router = useRouter();
 
   useEffect(() => {
@@ -39,7 +41,6 @@ export default function TaskColumn({
       signal: AbortSignal
     ) {
       try {
-        // setFetchStatus('loading');
         const offset = (page - 1) * COLUMN_PAGE_SIZE;
         let url = `/api/tasks?projectId=${projectId}&status=${statusForRequest}&limit=${COLUMN_PAGE_SIZE}&offset=${offset}`;
         if (title)
@@ -53,6 +54,7 @@ export default function TaskColumn({
         }
         const { tasks, taskCount } = await res.json();
         setTasks(tasks ?? []);
+        setLoadedTerm(title ?? '');
         setTaskCount(taskCount);
         setFetchStatus('success');
       } catch (error) {
@@ -66,6 +68,8 @@ export default function TaskColumn({
     return () => controller.abort();
   }, [projectId, searchTerm, statusForRequest, onFetchError]);
 
+  const currentTerm = searchTerm ?? '';
+  const isLoading = fetchStatus !== 'success' || loadedTerm !== currentTerm;
   const isSearching = !!searchTerm;
   const isEmpty = tasks.length === 0;
   return (
@@ -78,9 +82,9 @@ export default function TaskColumn({
           ></div>
           <h2 className="label-xs-status">{statusForDisplay}</h2>
           <div
-            className={`badge-count ${fetchStatus === 'loading' ? `${shimmer} w-[18px] h-[19px]` : ''} px-[6px] py-[2px] rounded-xs ${statusForDisplay === 'BLOCKED' ? 'bg-[#FFDAD6] text-[#93000A]' : 'bg-[#0052CC1A]'}`}
+            className={`badge-count ${isLoading ? `${shimmer} w-[18px] h-[19px]` : ''} px-[6px] py-[2px] rounded-xs ${statusForDisplay === 'BLOCKED' ? 'bg-[#FFDAD6] text-[#93000A]' : 'bg-[#0052CC1A]'}`}
           >
-            {fetchStatus === 'success' ? taskCount : ''}
+            {isLoading ? '' : taskCount}
           </div>
         </div>
 
@@ -119,7 +123,7 @@ export default function TaskColumn({
         Add New Task
       </button>
 
-      {fetchStatus === 'loading' ? (
+      {isLoading ? (
         <ColumnLoadingState />
       ) : isEmpty ? (
         <ColumnEmptyState
@@ -132,7 +136,7 @@ export default function TaskColumn({
           tasks={tasks}
           statusForDisplay={statusForDisplay}
         />
-      ) }
+      )}
     </div>
   );
 }
