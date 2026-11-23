@@ -1,11 +1,10 @@
-import { useEffect, useState } from 'react';
-import type { Task } from '@/lib/types';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import ColumnEmptyState from './ColumnEmptyState';
 import ColumnPopulatedState from './ColumnPopulatedState';
 import ColumnLoadingState from './ColumnLoadingState';
 import { shimmer } from '../../../_components/loadingStyle';
-import { COLUMN_PAGE_SIZE } from '@/lib/constants';
+import type { Task } from '@/lib/types';
 
 type TaskColumnProps = {
   statusForRequest: string;
@@ -14,6 +13,10 @@ type TaskColumnProps = {
   statusColor: string;
   onFetchError: (error: 'fetchError' | 'networkError') => void;
   searchTerm: string | null;
+  tasks: Task[];
+  loadedTerm: string | null;
+  taskCount: {}; 
+  fetchStatus: 'loading' | 'success'
 };
 
 export default function TaskColumn({
@@ -23,55 +26,18 @@ export default function TaskColumn({
   statusColor,
   onFetchError,
   searchTerm,
+  tasks,
+  loadedTerm,
+  taskCount,
+  fetchStatus
 }: TaskColumnProps) {
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [taskCount, setTaskCount] = useState(0);
-  const [fetchStatus, setFetchStatus] = useState<'loading' | 'success'>(
-    'loading'
-  );
-
-  const [loadedTerm, setLoadedTerm] = useState('');
+  
   const router = useRouter();
-
-  useEffect(() => {
-    const controller = new AbortController();
-    async function fetchTasksByStatus(
-      page: number,
-      title: string | null,
-      signal: AbortSignal
-    ) {
-      try {
-        const offset = (page - 1) * COLUMN_PAGE_SIZE;
-        let url = `/api/tasks?projectId=${projectId}&status=${statusForRequest}&limit=${COLUMN_PAGE_SIZE}&offset=${offset}`;
-        if (title)
-          url = `/api/tasks?projectId=${projectId}&status=${statusForRequest}&limit=${COLUMN_PAGE_SIZE}&offset=${offset}&title=${encodeURIComponent(title)}`;
-
-        const res = await fetch(url, { signal });
-
-        if (!res.ok) {
-          onFetchError('fetchError');
-          return;
-        }
-        const { tasks, taskCount } = await res.json();
-        setTasks(tasks ?? []);
-        setLoadedTerm(title ?? '');
-        setTaskCount(taskCount);
-        setFetchStatus('success');
-      } catch (error) {
-        if (error instanceof DOMException && error.name === 'AbortError')
-          return;
-        onFetchError('networkError');
-        return;
-      }
-    }
-    fetchTasksByStatus(1, searchTerm, controller.signal);
-    return () => controller.abort();
-  }, [projectId, searchTerm, statusForRequest, onFetchError]);
-
+  
   const currentTerm = searchTerm ?? '';
   const isLoading = fetchStatus !== 'success' || loadedTerm !== currentTerm;
   const isSearching = !!searchTerm;
-  const isEmpty = tasks.length === 0;
+  const isEmpty = tasks?.length === 0;
   return (
     <div className="flex flex-col gap-4 h-full w-[288px] max-h-[757px] min-h-0">
       <div className="flex items-center justify-between gap-2">
@@ -84,7 +50,7 @@ export default function TaskColumn({
           <div
             className={`badge-count ${isLoading ? `${shimmer} w-[18px] h-[19px]` : ''} px-[6px] py-[2px] rounded-xs ${statusForDisplay === 'BLOCKED' ? 'bg-[#FFDAD6] text-[#93000A]' : 'bg-[#0052CC1A]'}`}
           >
-            {isLoading ? '' : taskCount}
+            {/* {isLoading ? '' : taskCount[statusForRequest]} */}
           </div>
         </div>
 
