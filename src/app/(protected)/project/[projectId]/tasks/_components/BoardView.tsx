@@ -17,60 +17,83 @@ export default function BoardView({
   );
 
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [loadedTerm, setLoadedTerm] = useState('');
-  const [taskCount, setTaskCount] = useState<Record<string, number>>({'': 0});
-  const [fetchStatus, setFetchStatus] = useState<'loading' | 'success'>(
-    'loading'
-  );
+  const [loadedTerm, setLoadedTerm] = useState<string | null>('');
+  const [taskCount, setTaskCount] = useState<Record<string, number>>({ '': 0 });
+  const [fetchStatus, setFetchStatus] = useState<
+    'loading' | 'success' | 'idle'
+  >('idle');
+
+  const [retryCount, setRetryCount] = useState(0);
 
   /// {todo: []}
 
-  const [taskMap, setTaskMap] = useState<Record<string, Task[]>>({'': []}) 
+  const [taskMap, setTaskMap] = useState<Record<string, Task[]>>({ '': [] });
 
   const statusArr = Object.values(Status).map((status) => status);
 
   async function fetchTasksByStatus(
     page: number,
     title: string | null,
-    signal: AbortSignal, 
+    signal: AbortSignal,
     statusForRequest: string
   ) {
-    try {
-      const offset = (page - 1) * COLUMN_PAGE_SIZE;
-      let url = `/api/tasks?projectId=${projectId}&status=${statusForRequest}&limit=${COLUMN_PAGE_SIZE}&offset=${offset}`;
-      if (title)
-        url = `/api/tasks?projectId=${projectId}&status=${statusForRequest}&limit=${COLUMN_PAGE_SIZE}&offset=${offset}&title=${encodeURIComponent(title)}`;
+    const offset = (page - 1) * COLUMN_PAGE_SIZE;
+    let url = `/api/tasks?projectId=${projectId}&status=${statusForRequest}&limit=${COLUMN_PAGE_SIZE}&offset=${offset}`;
+    if (title)
+      url = `/api/tasks?projectId=${projectId}&status=${statusForRequest}&limit=${COLUMN_PAGE_SIZE}&offset=${offset}&title=${encodeURIComponent(title)}`;
 
-      const res = await fetch(url, { signal });
+    const res = await fetch(url, { signal });
 
-      if (!res.ok) {
-        // onFetchError('fetchError');
-        setError('fetchError');
-        return;
-      }
-      const { tasks, taskCount } = await res.json();
-      // setTasks(tasks ?? []);
-      setTaskMap(prev => ({...prev, [statusForRequest]: tasks}))
-      setLoadedTerm(title ?? '');
-      setTaskCount((prev) => ({...prev, [statusForRequest]: taskCount}));
-      setFetchStatus('success');
-    } catch (error) {
-      if (error instanceof DOMException && error.name === 'AbortError') return;
-      // onFetchError('networkError');
-      setError('fetchError');
-      return;
+    if (!res.ok) {
+      // onFetchError('fetchError');
+      // setError('fetchError');
+      // return;
+      throw new Error('fetchError');
     }
+    const { tasks, taskCount } = await res.json();
+    // setTaskMap(prev => ({...prev, [statusForRequest]: tasks}))
+    // setTaskCount((prev) => ({...prev, [statusForRequest]: taskCount}));
+    // setFetchStatus('success');
+    return { tasks, taskCount };
   }
 
   useEffect(() => {
     const controller = new AbortController();
-    // fetchTasksByStatus(1, searchTerm, controller.signal, '');
-    const promises = statusArr.map(status => fetchTasksByStatus(1, searchTerm, controller.signal, status))
-    Promise.all(promises).then(results => console.log(results, 'results88')).catch(err => console.log(err, 'err'));
-    // console.log(promises, 'promises');
-    
+    async function buildBoard() {
+      setFetchStatus('loading');
+      const promises = statusArr.map((status) =>
+        fetchTasksByStatus(1, searchTerm, controller.signal, status)
+      );
+      await Promise.all(promises)
+        .then((results) => {
+          // console.log(results, 'results88');
+
+          for (let i = 0; i < results.length; i++) {
+            setTaskMap((prev) => ({
+              ...prev,
+              [statusArr[i]]: results[i]?.tasks,
+            }));
+            setTaskCount((prev) => ({
+              ...prev,
+              [statusArr[i]]: results[i].taskCount,
+            }));
+          }
+          // results.map((result) => )
+          // setTaskMap[]
+          setFetchStatus('success');
+          setLoadedTerm(searchTerm);
+          console.log('batch finished, aborted:', controller.signal.aborted);
+        })
+        .catch((err) => {
+          if (controller.signal.aborted) return;
+          console.log(err, 'err');
+          setError(err instanceof TypeError ? 'networkError' : 'fetchError');
+        });
+    }
+
+    buildBoard();
     return () => controller.abort();
-  }, [projectId, searchTerm, error]);
+  }, [projectId, searchTerm, retryCount]);
 
   if (error === 'fetchError') {
     return (
@@ -78,7 +101,10 @@ export default function BoardView({
         message={`We're having trouble retrieving your
                  project tasks right now. Please try again in a moment`}
         buttonElement={true}
-        onRetry={() => setError(null)}
+        onRetry={() => {
+          setError(null);
+          setRetryCount((prev) => prev + 1);
+        }}
       />
     );
   }
@@ -89,15 +115,17 @@ export default function BoardView({
         title="You're offline"
         message={`Network error. Please check your connection and try again.`}
         buttonElement={true}
-        onRetry={() => setError(null)}
+        onRetry={() => {
+          setError(null);
+          setRetryCount((prev) => prev + 1);
+        }}
       />
     );
   }
 
   // console.log(statusArr, 'status arr');
-  console.log(taskMap);
-  // console.log(taskCount);
-  
+  console.log(taskMap, 'task map 99999');
+  console.log(taskCount, 'task count 21324');
 
   const statusColorMap = {
     TO_DO: '#94A3B8',
@@ -123,7 +151,7 @@ export default function BoardView({
           searchTerm={searchTerm}
           tasks={taskMap[status]}
           loadedTerm={loadedTerm}
-          taskCount={taskCount}
+          taskCount={taskCount[status]}
           fetchStatus={fetchStatus}
         />
       ))}
