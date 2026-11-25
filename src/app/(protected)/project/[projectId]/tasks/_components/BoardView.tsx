@@ -16,7 +16,6 @@ export default function BoardView({
     null
   );
 
-  const [tasks, setTasks] = useState<Task[]>([]);
   const [loadedTerm, setLoadedTerm] = useState<string | null>('');
   const [taskCount, setTaskCount] = useState<Record<string, number>>({ '': 0 });
   const [fetchStatus, setFetchStatus] = useState<
@@ -24,8 +23,6 @@ export default function BoardView({
   >('idle');
 
   const [retryCount, setRetryCount] = useState(0);
-
-  /// {todo: []}
 
   const [taskMap, setTaskMap] = useState<Record<string, Task[]>>({ '': [] });
 
@@ -45,15 +42,9 @@ export default function BoardView({
     const res = await fetch(url, { signal });
 
     if (!res.ok) {
-      // onFetchError('fetchError');
-      // setError('fetchError');
-      // return;
       throw new Error('fetchError');
     }
     const { tasks, taskCount } = await res.json();
-    // setTaskMap(prev => ({...prev, [statusForRequest]: tasks}))
-    // setTaskCount((prev) => ({...prev, [statusForRequest]: taskCount}));
-    // setFetchStatus('success');
     return { tasks, taskCount };
   }
 
@@ -66,8 +57,6 @@ export default function BoardView({
       );
       await Promise.all(promises)
         .then((results) => {
-          // console.log(results, 'results88');
-
           for (let i = 0; i < results.length; i++) {
             setTaskMap((prev) => ({
               ...prev,
@@ -78,11 +67,8 @@ export default function BoardView({
               [statusArr[i]]: results[i].taskCount,
             }));
           }
-          // results.map((result) => )
-          // setTaskMap[]
           setFetchStatus('success');
           setLoadedTerm(searchTerm);
-          console.log('batch finished, aborted:', controller.signal.aborted);
         })
         .catch((err) => {
           if (controller.signal.aborted) return;
@@ -123,10 +109,6 @@ export default function BoardView({
     );
   }
 
-  // console.log(statusArr, 'status arr');
-  console.log(taskMap, 'task map 99999');
-  console.log(taskCount, 'task count 21324');
-
   const statusColorMap = {
     TO_DO: '#94A3B8',
     IN_PROGRESS: '#0052CC',
@@ -147,7 +129,6 @@ export default function BoardView({
           projectId={projectId}
           statusForRequest={status}
           statusForDisplay={status.replaceAll('_', ' ')}
-          onFetchError={setError}
           searchTerm={searchTerm}
           tasks={taskMap[status]}
           loadedTerm={loadedTerm}

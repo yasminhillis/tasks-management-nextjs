@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import ColumnEmptyState from './ColumnEmptyState';
 import ColumnPopulatedState from './ColumnPopulatedState';
@@ -11,7 +10,6 @@ type TaskColumnProps = {
   statusForDisplay: string;
   projectId: string;
   statusColor: string;
-  onFetchError: (error: 'fetchError' | 'networkError') => void;
   searchTerm: string | null;
   tasks: Task[];
   loadedTerm: string | null;
@@ -24,7 +22,6 @@ export default function TaskColumn({
   statusForDisplay,
   projectId,
   statusColor,
-  onFetchError,
   searchTerm,
   tasks,
   loadedTerm,
@@ -33,19 +30,11 @@ export default function TaskColumn({
 }: TaskColumnProps) {
   
   const router = useRouter();
-  console.log(tasks, 'tasks ldsfkdslfm');
-  console.log(fetchStatus, 'fetchStatus  oue2983');
-  
-  
   const currentTerm = searchTerm ?? '';
   const isLoading = fetchStatus !== 'success' || loadedTerm !== currentTerm;
   const isSearching = !!searchTerm;
   const isEmpty = tasks?.length === 0;
 
-  console.log(loadedTerm, 'loaded term');
-  console.log(currentTerm, 'current term');
-  console.log(taskCount, 'taskCount');
-  
   return (
     <div className="flex flex-col gap-4 h-full w-[288px] max-h-[757px] min-h-0">
       <div className="flex items-center justify-between gap-2">
