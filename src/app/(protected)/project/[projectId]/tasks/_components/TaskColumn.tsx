@@ -15,8 +15,8 @@ type TaskColumnProps = {
   searchTerm: string | null;
   tasks: Task[];
   loadedTerm: string | null;
-  taskCount: {}; 
-  fetchStatus: 'loading' | 'success'
+  taskCount: number; 
+  fetchStatus: 'loading' | 'success' | 'idle'
 };
 
 export default function TaskColumn({
@@ -33,11 +33,19 @@ export default function TaskColumn({
 }: TaskColumnProps) {
   
   const router = useRouter();
+  console.log(tasks, 'tasks ldsfkdslfm');
+  console.log(fetchStatus, 'fetchStatus  oue2983');
+  
   
   const currentTerm = searchTerm ?? '';
   const isLoading = fetchStatus !== 'success' || loadedTerm !== currentTerm;
   const isSearching = !!searchTerm;
   const isEmpty = tasks?.length === 0;
+
+  console.log(loadedTerm, 'loaded term');
+  console.log(currentTerm, 'current term');
+  console.log(taskCount, 'taskCount');
+  
   return (
     <div className="flex flex-col gap-4 h-full w-[288px] max-h-[757px] min-h-0">
       <div className="flex items-center justify-between gap-2">
@@ -50,7 +58,7 @@ export default function TaskColumn({
           <div
             className={`badge-count ${isLoading ? `${shimmer} w-[18px] h-[19px]` : ''} px-[6px] py-[2px] rounded-xs ${statusForDisplay === 'BLOCKED' ? 'bg-[#FFDAD6] text-[#93000A]' : 'bg-[#0052CC1A]'}`}
           >
-            {/* {isLoading ? '' : taskCount[statusForRequest]} */}
+            {isLoading ? '' : taskCount}
           </div>
         </div>
 
