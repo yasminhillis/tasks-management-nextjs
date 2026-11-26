@@ -9,6 +9,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import useIsMobile from '@/hooks/use-is-mobile';
 import MobileView from './_components/MobileView';
 import { useDebounce } from '../hooks/useDebounce';
+import TaskDetailsModal from '../_components/TaskDetailsModal';
 
 export default function Tasks({
   params,
@@ -96,6 +97,7 @@ export default function Tasks({
         }
         headerControls={<ViewSelect />}
       />
+      <TaskDetailsModal taskId='a485ea1f-4c8d-42bf-91f2-cb9f6792de46' />
 
       {isMobile ? (
         <MobileView projectId={projectId} />
